@@ -1,23 +1,54 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+
+const Index = () => import('../views/Index.vue')
+const Login = () => import('../views/Login.vue')
+const Home = () => import('../views/Home.vue')
+const Tikuguanli = () => import('../views/Tikuguanli.vue')
+const Kaoshiguanli = () => import('../views/Kaoshiguanli.vue')
+const Shitiguanli = () => import('../views/Shitiguanli.vue')
 
 const router = createRouter({
+  /* 环境变量 */
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView
+      name: 'index',
+      component: Index,
+      children: [
+        {
+          path: 'home',
+          name: 'home',
+          component: Home,
+        },
+        {
+          path: 'tiku/guanli',
+          name: 'tikuguanli',
+          component: Tikuguanli,
+        },
+        {
+          path: 'kaoshi/guanli',
+          name: 'kaoshiguanli',
+          component: Kaoshiguanli,
+        },
+        {
+          path: 'shiti/guanli',
+          name: 'shitiguanli',
+          component: Shitiguanli,
+        },
+      ]
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
+      path: '/login',
+      name: 'login',
+      component: Login
     }
   ]
 })
+
+/* 全局前置守卫 */
+/* router.beforeEach((to, from, next) => {
+
+}) */
 
 export default router
