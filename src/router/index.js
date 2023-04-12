@@ -4,8 +4,16 @@ const Index = () => import('../views/Index.vue')
 const Login = () => import('../views/Login.vue')
 const Home = () => import('../views/Home.vue')
 const Tikuguanli = () => import('../views/Tikuguanli.vue')
+const Tikuadd = () => import('../views/Tikuadd.vue')
 const Kaoshiguanli = () => import('../views/Kaoshiguanli.vue')
 const Shitiguanli = () => import('../views/Shitiguanli.vue')
+
+const Sys = () => import('../views/Sys.vue')
+const Sysconfig = () => import('../views/Sysconfig.vue')
+const Sysdepart = () => import('../views/Sysdepart.vue')
+const Sysrole = () => import('../views/Sysrole.vue')
+const Sysuser = () => import('../views/Sysuser.vue')
+
 
 const router = createRouter({
   /* 环境变量 */
@@ -27,6 +35,11 @@ const router = createRouter({
           component: Tikuguanli,
         },
         {
+          path: 'add',
+          name: 'tikuadd',
+          component: Tikuadd
+        },
+        {
           path: 'kaoshi/guanli',
           name: 'kaoshiguanli',
           component: Kaoshiguanli,
@@ -36,6 +49,26 @@ const router = createRouter({
           name: 'shitiguanli',
           component: Shitiguanli,
         },
+        {
+          path: 'sys/config',
+          name: 'sysconfig',
+          component: Sysconfig,
+        },
+        {
+          path: 'sys/depart',
+          name: 'sysdepart',
+          component: Sysdepart,
+        },
+        {
+          path: 'sys/role',
+          name: 'sysrole',
+          component: Sysrole,
+        },
+        {
+          path: 'sys/user',
+          name: 'sysuser',
+          component: Sysuser,
+        }
       ]
     },
     {
