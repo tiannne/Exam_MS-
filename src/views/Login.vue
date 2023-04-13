@@ -55,7 +55,7 @@ export default {
                     login(this.ruleForm.username,this.ruleForm.pass)
                     .then((res)=>{
                         if(res.data.code == 0){
-                            this.$store.commit('setToken',res.data.data.token)
+                            this.$store.commit('userToken/setToken',res.data.data.token)
                             this.$router.push('/')
                             this.$message.success("恭喜你登录成功")
                         }
