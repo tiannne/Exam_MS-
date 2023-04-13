@@ -2,17 +2,17 @@
   <div>
     <el-row>
       <el-col>
-        <el-input v-model="input" placeholder="搜索题库名称" size="large" />
+        <el-input v-model="input" placeholder="搜索题库名称"  />
       </el-col>
     </el-row>
     <el-row>
       <el-col>
-        <el-button type="primary" size="large" @click="add">
+        <el-button type="primary"  @click="add">
           <el-icon><Plus /></el-icon>添加
         </el-button>
       </el-col>
     </el-row>
-    <el-select v-model="value" class="m-2" placeholder="已选10项" size="large">
+    <el-select v-model="value" class="m-2" placeholder="已选10项" >
       <el-option value="删除" @click="del" />
     </el-select>
     <el-table
@@ -30,7 +30,6 @@
       <el-table-column prop="address" label="创建时间" align="center" />
     </el-table>
     <div>
-      <div class="demo">
         <el-pagination
           v-model:current-page="currentPage4"
           v-model:page-size="pageSize4"
@@ -43,7 +42,6 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
         />
-      </div>
     </div>
   </div>
 </template>
@@ -132,8 +130,8 @@ const add = () => {
 .btn {
   margin: 20px 0;
 }
-.demo {
-  margin-top: 40px;
+.el-pagination{
+    margin-top: 40px;
 }
 
 .el-icon {
