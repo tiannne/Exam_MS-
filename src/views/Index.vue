@@ -37,6 +37,17 @@
        </template>
        <el-menu-item index="/sys/config">系统配置</el-menu-item>
        <el-menu-item index="/sys/depart">部门管理</el-menu-item>
+      </el-sub-menu>
+     </el-menu>
+     <el-menu background-color="#304156" text-color="#bfcbd9" router :default-active="activeIndex"
+      class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
+     <el-sub-menu index="/home">
+       <template #title>
+        <el-icon>
+         <Ticket />
+        </el-icon>
+        <span>用户管理</span>
+       </template>
        <el-menu-item index="/sys/role">角色管理</el-menu-item>
        <el-menu-item index="/sys/user">用户管理</el-menu-item>
       </el-sub-menu>

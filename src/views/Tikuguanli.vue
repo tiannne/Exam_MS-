@@ -30,7 +30,6 @@
       <el-table-column prop="address" label="创建时间" align="center" />
     </el-table>
     <div>
-      <div class="demo">
         <el-pagination
           v-model:current-page="currentPage4"
           v-model:page-size="pageSize4"
@@ -43,7 +42,6 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
         />
-      </div>
     </div>
   </div>
 </template>
@@ -132,8 +130,8 @@ const add = () => {
 .btn {
   margin: 20px 0;
 }
-.demo {
-  margin-top: 40px;
+.el-pagination{
+    margin-top: 40px;
 }
 
 .el-icon {
