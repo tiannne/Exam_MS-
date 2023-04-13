@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useUserTokenStore } from '../stores/userToken'
+import store from '../store'
 
 const instance = axios.create({
   baseURL: '/api',
@@ -9,11 +9,9 @@ const instance = axios.create({
 // 添加请求拦截器
 instance.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
-  // 只要是http.xxx发起的请求，都会先走这里
-  // const token = useUserTokenStore().token;
-  // config.headers.token = token;
-
-  // return config;
+  const token = store.state.userToken.token
+  config.headers.token = token
+  return config
 }, function (error) {
   // 对请求错误做些什么
   return Promise.reject(error);
