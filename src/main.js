@@ -8,6 +8,8 @@ import './assets/main.css'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
+
+
 const app = createApp(App)
 app.use(ElementPlus, {
     locale: zhCn,
@@ -18,4 +20,5 @@ app.use(ElementPlus, {
     }
 app.use(router)
 app.use(ElementPlus)
+
 app.mount('#app')
