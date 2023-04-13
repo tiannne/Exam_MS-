@@ -27,6 +27,9 @@ const router = createRouter({
       path: "/",
       name: "index",
       component: Index,
+      meta:{
+        auth:true
+      },
       children: [
         {
           path: "home",
@@ -125,11 +128,12 @@ router.beforeEach((to, from, next) => {
     if(store.state.token){
       next()
     }else{
-      router.push('/login')
+      router.push("/login")
     }
   }else{
     next()
   }
+  // console.log(to.meta.auth)
 }) 
 
 export default router;
