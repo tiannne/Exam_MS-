@@ -2,32 +2,32 @@
   <div v-show="showChange">
     <el-row justify="space-between">
       <el-col :span="12" class="colLeft">
-        <el-select v-model="valueCheck" class="m-2" placeholder="选择题型">
+        <el-select v-model="valueType" class="m-2" placeholder="选择题型" @change="changeType">
           <el-option
             v-for="(item, index) in options"
             :key="index"
             :label="item"
-            :value="item"
+            :value="index+1"
           />
         </el-select>
         <el-select
-          v-model="valueSearch"
+          v-model="valueBank"
           filterable
           remote
+          multiple
           reserve-keyword
           placeholder="选择或搜索题库"
           remote-show-suffix
-          :remote-method="remoteMethod"
-          :loading="loading"
+          @change="changeQuestionBank"
         >
           <el-option
-            v-for="item,index in optionsTikuSearch"
-            :key="index"
-            :label="item"
-            :value="item"
+            v-for="item in optionsTikuSearch"
+            :key="item.tikuId"
+            :label="item.title"
+            :value="item.tikuID"
           />
         </el-select>
-        <el-input v-model="ValueTimu" placeholder="题目内容" />
+        <el-input v-model="ValueTitle" placeholder="题目内容" @input="chanengContent" />
       </el-col>
       <el-col :span="4" class="colRight">
         <el-button-group>
@@ -81,20 +81,19 @@
       ref="multipleTableRef"
       :data="tableData"
       style="width: 100%"
-      @selection-change="handleSelectionChange"
       border
     >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column
-        property="name"
+        prop="quType"
         label="题库类型"
         width="120"
         align="center"
       />
-      <el-table-column property="name" label="单选题数量" />
+      <el-table-column prop="content" label="题目内容" />
       <el-table-column
         label="创建时间"
-        prop="date"
+        prop="createTime"
         align="center"
         width="240"
       ></el-table-column>
@@ -102,14 +101,14 @@
 
     <div class="pageChangeBox">
       <el-pagination
-        v-model:current-page="currentPage4"
-        v-model:page-size="pageSize4"
-        :page-sizes="[10, 20, 30, 40]"
+        v-model:current-page="selectCount"
+        v-model:page-size="pageSize"
+        :page-sizes="[5, 10, 15, 20]"
         :small="small"
         :disabled="disabled"
         :background="background"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="400"
+        :total="totalPage"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       >
@@ -121,51 +120,30 @@
 
 <script>
 import { ElMessage, ElMessageBox } from 'element-plus'
+import {initsubject,initQuestionBank} from '../api/shitiguanli'
 export default {
   data() {
     return {
         showChange:true,
-        valueCheck:'',  //输入框1
-        valueSearch:'',//输入框2
-        ValueTimu:'',//输入框3
+        valueType:'',  //输入框1--type
+        valueBank:'',//输入框2--题库id
+        ValueTitle:'',//输入框3 题目
         plhderValue:'10项',  //多少项被选中
       dialogFormVisible: false,
       dialogTitle: "",
-      selectCount:'10',
+      selectCount:1,//当前页数
+      totalPage:0,//数据总条数
+      pageSize:10,//一页显示几条数据
       dialogForm: { value: "" },
-      options: ["单选题", "多选题", "判断题"],
-      optionsTikuSearch:['题库1','题库2','题库3'],
+      options: ["单选题", "多选题", "判断题"],//type 类型
+      optionsTikuSearch:[],//题库类型
       optionstwo: ["加入题库", "从..题库删除", "删除"],
       tableData: [
-        {
-          date: "2016-05-03",
-          name: "Tom",
-        },
-        {
-          date: "2016-05-02",
-          name: "Tom",
-        },
-        {
-          date: "2016-05-04",
-          name: "Tom",
-        },
-        {
-          date: "2016-05-01",
-          name: "Tom",
-        },
-        {
-          date: "2016-05-08",
-          name: "Tom",
-        },
-        {
-          date: "2016-05-06",
-          name: "Tom",
-          address: "No. 189, Grove St, Los Angeles",
-        },
-        {
-          date: "2016-05-07",
-          name: "Tom",
-        },
+          {
+            quType:'111',
+            content:'222',
+            createTime:'333'
+          }
       ],
     };
   },
@@ -205,7 +183,64 @@ export default {
           });
       }
     },
+
+    //公共方法
+     getQuerstion(num=1){
+        //num为起始页数
+        this.selectCount=num
+        let initdata={current: this.selectCount, size: this.pageSize, params: {content: this.ValueTitle, quType: this.valueType,  repoIds: this.valueBank}}
+    initsubject(initdata).then(res=>{
+        const initData=res.data.data.records
+        this.tableData=[]
+        this.selectCount=res.data.data.current
+        this.totalPage=res.data.data.total
+        initData.forEach(item=>{
+            if(item.quType === 1){
+                item.quType='单选题'
+            }else if(item.quType === 2){
+                item.quType='多选题'
+            }else{
+                item.quType='判断题'
+            }
+            this.tableData.push(item)
+        })
+    }) 
+    },
+    //改变题类型 渲染数据
+    changeType(){
+    this.getQuerstion()
+    },
+    //选择题库 渲染数据
+    changeQuestionBank(){
+    this.getQuerstion()
+    },
+    //修改内容 渲染数据
+    chanengContent(){
+    this.getQuerstion()
+    },
+    //点击每页数据多少条
+    handleSizeChange(){
+    this.getQuerstion()
+    },
+    //前往第几页 点击第几页
+    handleCurrentChange(){
+    this.getQuerstion(this.selectCount)
+    }
   },
+  created(){
+    //初始化题数据
+    this.getQuerstion()
+
+    //初始化题库数据
+    let initdata2={current: this.selectCount, size: 1000, params: {}}
+    initQuestionBank(initdata2).then(res=>{
+        console.log(res.data.data.records);
+        const initData=res.data.data.records
+        initData.forEach(item=>{
+            this.optionsTikuSearch.push({title:item.title,tikuID:item.id})
+        })
+    })
+  }
 };
 </script>
 
@@ -235,6 +270,9 @@ export default {
   background: rgb(217, 214, 214);
 }
 .pageChangeBox {
-  margin-top: 60px;
+  margin-top: 40px;
+}
+.m-2{
+    width: 130px;
 }
 </style>

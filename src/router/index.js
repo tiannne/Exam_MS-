@@ -1,6 +1,5 @@
 
 import { createRouter, createWebHistory } from 'vue-router'
-import {info} from '../api/user'
 import store from '../store'
 
 const Index = () => import('../views/Index.vue')
@@ -125,7 +124,7 @@ const router = createRouter({
 /* 全局前置守卫 */
 router.beforeEach((to, from, next) => {
   if(to.meta.auth){
-    if(store.state.token){
+    if(store.state.userToken.token){
       next()
     }else{
       router.push("/login")

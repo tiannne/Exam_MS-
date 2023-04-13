@@ -1,16 +1,13 @@
-import { createStore } from "vuex";
-// import userToken from "./mudoles/userToken";
+import { createStore } from "vuex"
+import userToken from "./modules/userToken.js"
 import createPersistedState from 'vuex-persistedstate'
 
 const store = createStore({
-    plugins:[createPersistedState()],
-    state : {
-        token:''
-      },
-      mutations: {
-       setToken(state,token){
-        state.token = token
-       }
-      }
+  modules:{
+    userToken
+  },
+    plugins:[createPersistedState({
+      paths:['userToken.token']
+    })],
 })
 export default store
