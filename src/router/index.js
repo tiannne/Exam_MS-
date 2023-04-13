@@ -6,6 +6,7 @@ const Home = () => import('../views/Home.vue')
 const Tikuguanli = () => import('../views/Tikuguanli.vue')
 const Kaoshiguanli = () => import('../views/Kaoshiguanli.vue')
 const Shitiguanli = () => import('../views/Shitiguanli.vue')
+const ShitiguanliAdd=()=>import('../views/ShitiguanliAdd.vue')
 
 const router = createRouter({
   /* 环境变量 */
@@ -36,6 +37,11 @@ const router = createRouter({
           name: 'shitiguanli',
           component: Shitiguanli,
         },
+        {
+          path:'shiti/guanli/add',
+            name:'add',
+            component:ShitiguanliAdd
+        }
       ]
     },
     {
