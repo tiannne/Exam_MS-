@@ -81,7 +81,6 @@
       ref="multipleTableRef"
       :data="tableData"
       style="width: 100%"
-      @selection-change="handleSelectionChange"
       border
     >
       <el-table-column type="selection" width="55" align="center" />
@@ -91,7 +90,7 @@
         width="120"
         align="center"
       />
-      <el-table-column property="name" label="单选题数量" />
+      <el-table-column property="name" label="题目内容" />
       <el-table-column
         label="创建时间"
         prop="date"
@@ -236,5 +235,8 @@ export default {
 }
 .pageChangeBox {
   margin-top: 60px;
+}
+.m-2{
+    width: 130px;
 }
 </style>
