@@ -22,7 +22,7 @@
               v-for="(item, index) in optionsTypeCheck"  
               :key="index"
               :label="item"
-              :value="item"
+              :value="index+1"
              
             />
           </el-select>
@@ -37,7 +37,7 @@
               v-for="(item, index) in optionsDifficultyLevel"
               :key="index"
               :label="item"
-              :value="item"
+              :value="index+1"
             />
           </el-select>
         </el-form-item>
@@ -82,7 +82,7 @@
       @selection-change="handleSelectionChange"
       border
     >
-      <el-table-column type="selection" width="60" align="center" label="是否答案"  >
+      <el-table-column type="selection" width="80" align="center" label="是否答案"  >
         <template #default="scope">
             <input type="checkbox" v-model="scope.row.checkType"><span style="margin-left:6px">正确</span>
         </template>
@@ -135,7 +135,7 @@
     </el-table>
     <el-col>
         <el-row>
-            <el-button type="primary">保存</el-button>
+            <el-button type="primary" @click="clickSave">保存</el-button>
             <el-button type="info" @click="clickReturn">返回</el-button>
         </el-row>
     </el-col>
@@ -150,13 +150,14 @@ export default {
       optionsTypeCheck: ["单选题", "多选题", "判断题"],
       optionsDifficultyLevel: ["普通", "较难"],
       optionsFromBank: ["题库1", "题库2", "题库3"],
+
       ruleForm: {
-        questionType: "",
-        difficultyLevel: "",
-        fromBank: "",
-        questionContent: "",
+        questionType: "", //quType
+        difficultyLevel: "",//level
+        fromBank: "",//repoIds
+        questionContent: "",//content
         imgUrl: "",
-        questionAnalysis: "",
+        questionAnalysis: "",//analysis 整题解析
       },
       tableData:[],
        rules : {
@@ -180,6 +181,9 @@ export default {
     },
     clickReturn:function(){
         this.$router.back(-1)
+    },
+    clickSave(){
+      console.log(this.ruleForm);
     }
   }
 };
