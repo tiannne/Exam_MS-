@@ -42,7 +42,7 @@
     </el-row>
     <el-row>
       <el-col>
-        <el-button type="primary" @click="addTi">
+        <el-button type="primary" @click="addQuestion">
           <el-icon><Plus /></el-icon>添加
         </el-button>
       </el-col>
@@ -178,7 +178,7 @@ export default {
     }
   },
   methods: {
-    addTi(){
+    addQuestion(){
         this.$router.push('/shiti/guanli/add')
     },
     handleChange(item2) {
@@ -261,8 +261,9 @@ export default {
     handleCurrentChange(){
     this.getQuerstion(this.selectCount)
     },
+    //点击题跳更新改页
     ContentClick(id){
-        console.log(id);
+        this.$router.push(`/shiti/guanli/update/${id}`)
     },
     //修改提示 获得选中题的id数组
     selectfunction(val){
@@ -282,7 +283,6 @@ export default {
         choice=true//删除
       }
       const data={"repoIds": this.valueBank2,"quIds": this.tiIDList,"remove": choice,}
-      console.log(this.valueBank2);
       if(this.valueBank2.length<=0){
         ElMessage({
               type: 'warning',
@@ -296,7 +296,7 @@ export default {
               type: `${choice?'success':'warning'}`,
               message: `${choice?'添加':'移除'}成功`,
             });
-            // location.reload();      
+            location.reload();      
             }
       })
       this.dialogFormVisible = false
