@@ -12,7 +12,7 @@
         </el-button>
       </el-col>
     </el-row>
-    <el-select v-model="value" class="m-2" placeholder="已选0项">
+    <el-select v-model="value" class="m-2" :placeholder="'已选' + num + '项'" v-if="boolean">
       <el-option value="删除" @click="del" />
     </el-select>
     <el-table
@@ -22,7 +22,7 @@
       @selection-change="handleSelectionChange"
       border
     >
-      <el-table-column type="selection" width="55" align="center"/>
+      <el-table-column type="selection" width="55" align="center" />
       <el-table-column prop="title" label="题库名称" />
       <el-table-column prop="radioCount" label="单选题数量" align="center" />
       <el-table-column prop="multiCount" label="多选题数量" align="center" />
@@ -48,7 +48,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 //
 import { useRouter } from "vue-router";
@@ -61,10 +61,14 @@ const store = useStore();
 //
 const router = useRouter();
 const input = ref();
-const currentPage4 = ref();
+const currentPage4 = ref(1);
 const pageSize4 = ref(10);
 const total = ref();
-
+const num = ref(0);
+const boolean=ref(false)
+//
+const ids = [];
+//
 const tableData = ref([
   {
     title: "",
@@ -74,7 +78,12 @@ const tableData = ref([
     createTime: "",
   },
 ]);
-
+const xuanran = () => {
+  tikuguanli(currentPage4.value, pageSize4.value, { title: input.value }).then((res) => {
+    total.value = res.data.data.total;
+    tableData.value = res.data.data.records;
+  });
+}
 const del = () => {
   ElMessageBox.confirm("确认要删除吗?", "提示", {
     confirmButtonText: "确定",
@@ -86,6 +95,9 @@ const del = () => {
         type: "success",
         message: "删除成功",
       });
+      dele(ids);
+      //渲染数据
+    xuanran()
     })
     .catch(() => {
       ElMessage({
@@ -98,44 +110,38 @@ const add = () => {
   router.push("/tiku/guanli/tikuadd");
 };
 //渲染数据
-tikuguanli(1, 10, { title: "" }, 1681385062869).then((res) => {
-  console.log(res.data.data.records);
-  total.value = res.data.data.total;
-  // for (let i = 0; i < res.data.data.records.length; i++) {
-  //   tableData.value[i] = res.data.data.records[i];
-  // }
- tableData.value = res.data.data.records;
-});
+  xuanran()
 const sousuo = () => {
-  tikuguanli(currentPage4.value, pageSize4.value, { title: input.value }).then((res) => {
-    tableData.value = res.data.data.records;
-  });
+   xuanran()
 };
 
 const yeshu = () => {
-  tikuguanli(currentPage4.value, pageSize4.value, { title: "" }).then(
-    (res) => {
-      tableData.value = res.data.data.records;
-    }
-  );
+  xuanran()
 };
 
 const handleSizeChange = () => {
-   tikuguanli(currentPage4.value, pageSize4.value, { title: "" }).then(
-    (res) => {
-      tableData.value = res.data.data.records;
-    }
-  );
-}
+  xuanran()
+};
 
 const handleCurrentChange = () => {
-   tikuguanli(currentPage4.value, pageSize4.value, { title: "" }).then(
-    (res) => {
-      tableData.value = res.data.data.records;
-    }
-  );
-}
+  xuanran()
+};
 
+const handleSelectionChange = (val) => {
+  // console.log(val.length);
+  // console.log(val[0].id);
+  if (val.length>0) {
+    boolean.value=true
+  } else {
+    boolean.value=false
+  }
+  num.value = val.length;
+  for (let i = 0; i < val.length; i++) {
+    console.log(val[i].id);
+    ids.push(val[i].id);
+  }
+
+};
 </script>
 
 <style scoped>
