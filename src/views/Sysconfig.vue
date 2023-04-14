@@ -38,8 +38,8 @@ export default {
       },
       fileList: [
         {
-          name: "https://lite.yfhl.net/upload/file/2023/04/13/1646394183725613058.jpg",
-          url: "https://lite.yfhl.net/upload/file/2023/04/13/1646394183725613058.jpg",
+          name: "	https://lite.yfhl.net/upload/file/2023/04/14/1646674709460025346.jpg",
+          url: "https://lite.yfhl.net/upload/file/2023/04/14/1646674709460025346.jpg",
         },
       ],
     };

@@ -113,7 +113,7 @@ export default {
     text-align: center;
     line-height: 60px;
     font-size: 20px;
-    color:#999;
+    color:#333;
     padding-top: 4px;
   }
 }

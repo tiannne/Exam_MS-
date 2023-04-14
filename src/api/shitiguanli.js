@@ -10,7 +10,19 @@ function initQuestionBank(data){
     return http.post('/exam/api/repo/paging',data)
 }
 
+//批量添加到/移出题库
+
+function tiAddOrMovueToBank(data){
+    return http.post('/exam/api/repo/batch-action',data)
+}
+function removeQuestion(data){
+    return http.post('/exam/api/qu/qu/delete',data)
+}
+
+//删除
 export{
     initsubject,
-    initQuestionBank
+    initQuestionBank,
+    tiAddOrMovueToBank,
+    removeQuestion
 }
