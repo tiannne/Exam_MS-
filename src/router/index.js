@@ -26,6 +26,7 @@ const router = createRouter({
       path: "/",
       name: "index",
       component: Index,
+      redirect:"/home",
       meta:{
         auth:true
       },
