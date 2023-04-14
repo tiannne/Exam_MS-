@@ -11,7 +11,7 @@ const Tikuadd = () => import('../views/Tikuadd.vue')
 const Kaoshiguanli = () => import('../views/Kaoshiguanli.vue')
 const Shitiguanli = () => import('../views/Shitiguanli.vue')
 const ShitiguanliAdd=()=>import('../views/ShitiguanliAdd.vue')
-
+const ShitiguanliUpdate=()=>import('../views/ShitiguanliUpdate.vue')
 const Sys = () => import('../views/Sys.vue')
 const Sysconfig = () => import('../views/Sysconfig.vue')
 const Sysdepart = () => import('../views/Sysdepart.vue')
@@ -74,8 +74,13 @@ const router = createRouter({
         },
         {
           path:'shiti/guanli/add',
-          name:'add',
+          name:'ShitiguanliAdd',
           component:ShitiguanliAdd
+        },
+        {
+          path:'shiti/guanli/update/:id',
+          name:'ShitiguanliUpdate',
+          component:ShitiguanliUpdate
         },
         {
           path: 'sys/config',
