@@ -81,7 +81,7 @@ export default {
     departAdd() {
       this.dialogFormVisible = false;
       findSave({parentId:0,deptName:this.form.name}).then((res) => {
-        // this.tableData = res.data
+       this.tableData = res.data
         console.log(res.data);
       }).catch((res)=>{
         console.log(res,1111);
@@ -116,7 +116,7 @@ export default {
 
   .findCom {
     width: 200px;
-    height: 38px;
+    height: 38px; 
   }
 
   .dialog-footer {

@@ -69,7 +69,7 @@
           </div>
         </el-header>
 
-        <el-main>
+        <el-main :class="{ success: isSuccess, error: !isSuccess }">
           <RouterView />
         </el-main>
       </el-container>
@@ -84,6 +84,7 @@ export default {
       collapse: true,
       headword: '在线考试系统',
       head: false,
+      isSuccess: true
     }
   },
   methods: {
@@ -96,29 +97,17 @@ export default {
     zheDie() {
       this.collapse = !this.collapse
       this.head = !this.head
+      this.isSuccess = !this.isSuccess
     }
   }
 }
+
 </script>
 
 <style lang="scss" scoped>
-.el-header {
-  display: flex;
-  padding: 0;
-  height: 60px;
-
-  .collapseBtn {
-    width: 60px;
-    height: 60px;
-    text-align: center;
-    line-height: 60px;
-    font-size: 20px;
-    color:#333;
-    padding-top: 4px;
-  }
-}
-
 .el-aside {
+  /* position: fixed; */
+  /* overflow-y: auto; */
   background: #304156;
   height: 100vh;
   /*   text-align: center; */
@@ -146,7 +135,42 @@ export default {
 }
 
 .el-main {
+  transition: linear all 0.2s;
+  position: absolute;
+  left: 64px;
+  right: 0;
+  top: 60px;
+  bottom: 0;
+
   background: #f8f8f8;
+  overflow-y: scroll;
+
+  font-size: 14px;
+
+  &.success {
+    left: 64px;
+  }
+
+  &.error {
+    left: 200px;
+  }
+
+}
+
+.el-header {
+  display: flex;
+  padding: 0;
+  height: 60px;
+
+  .collapseBtn {
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    font-size: 20px;
+    color: #333;
+    padding-top: 4px;
+  }
 }
 
 .el-menu {
