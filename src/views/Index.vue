@@ -79,7 +79,9 @@
         </el-header>
 
         <el-main>
+          <Transition name="rotate">
           <RouterView />
+          </Transition>
         </el-main>
       </el-container>
     </el-container>
