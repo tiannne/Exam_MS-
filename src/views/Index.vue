@@ -13,8 +13,17 @@
             <HomeFilled />
           </el-icon>
         </div>
-        <el-menu :collapse="collapse" :collapse-transition=false background-color="#304156" text-color="#bfcbd9" router
-          :default-active="activeIndex" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
+        <el-menu
+          :collapse="collapse"
+          :collapse-transition="false"
+          background-color="#304156"
+          text-color="#bfcbd9"
+          router
+          :default-active="activeIndex"
+          class="el-menu-vertical-demo"
+          @open="handleOpen"
+          @close="handleClose"
+        >
           <el-menu-item index="/home">
             <el-icon>
               <Edit />
@@ -70,7 +79,9 @@
         </el-header>
 
         <el-main>
-          <RouterView />
+          <Transition name="rotate">
+            <RouterView />
+          </Transition>
         </el-main>
       </el-container>
     </el-container>
@@ -82,9 +93,9 @@ export default {
   data() {
     return {
       collapse: true,
-      headword: '在线考试系统',
+      headword: "在线考试系统",
       head: false,
-    }
+    };
   },
   methods: {
     handleOpen(key, keyPath) {
@@ -94,11 +105,11 @@ export default {
       // console.log(key, keyPath);
     },
     zheDie() {
-      this.collapse = !this.collapse
-      this.head = !this.head
-    }
-  }
-}
+      this.collapse = !this.collapse;
+      this.head = !this.head;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -113,7 +124,7 @@ export default {
     text-align: center;
     line-height: 60px;
     font-size: 20px;
-    color:#333;
+    color: #333;
     padding-top: 4px;
   }
 }
@@ -150,6 +161,35 @@ export default {
 }
 
 .el-menu {
-  border: none
+  border: none;
+}
+.rotate-enter-active {
+  animation: .7s linear in;
+}
+
+@keyframes move {
+  0% {
+    display: none;
+    transform: translateX(-100%);
+  }
+  100% {
+   display: none;
+    transform: translateX(0);
+  }
+}
+@keyframes in {
+  0% {
+    opacity: 0;
+    // display: none;
+    transform: translateX(-100%);
+  }
+  100% {
+  //  display: none;
+  opacity: 1;
+    transform: translateX(0);
+  }
+}
+.rotate-leave-active {
+  animation: .7s linear move ;
 }
 </style>

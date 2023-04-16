@@ -148,7 +148,7 @@ export default {
     return {
         showChange:true,
         valueType:'',  //输入框1--type
-        valueBank:'',//输入框2--题库id
+        valueBank:[],//输入框2--题库id
         ValueTitle:'',//输入框3 题目
         valueBank2:'',//小页面输入框--题库id
         plhderValue:'',  //多少项被选中
