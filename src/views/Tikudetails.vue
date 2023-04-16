@@ -19,17 +19,24 @@
 </template>
 
 <script setup>
-import { reactive} from "vue";
-import { useRouter } from "vue-router";
-import { add } from "../api/tikuguanli";
+import { reactive, ref } from "vue";
 import { ElMessage } from "element-plus";
-
+import { useRouter, useRoute } from "vue-router";
+import { detail,add } from "../api/tikuguanli";
+const id = ref();
+const init = () => {
+  const route = useRoute();
+  console.log(route.params.id);
+  id.value = route.params.id;
+};
+init();
 const router = useRouter();
-
 const form = reactive({
   name: "",
   desc: "",
 });
+
+
 const rules = reactive({
   name: [{ required: true, message: "题库名称不能为空！", trigger: "blur" }],
 });
@@ -45,6 +52,14 @@ const onSubmit = () => {
 const back = () => {
   router.push("/tiku/guanli");
 };
+const xuanran = () => {
+  detail(id.value).then((res) => {
+    console.log(res.data.data);
+    form.name = res.data.data.title;
+    form.desc = res.data.data.remark;
+  });
+};
+xuanran();
 </script>
 
 <style scoped>

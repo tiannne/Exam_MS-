@@ -5,10 +5,10 @@
         <el-input v-model="input1" placeholder="搜索登录名" @input="sousuo" />
       </el-col>
       <el-col :span="4">
-        <el-input v-model="input2" placeholder="搜索姓名" />
+        <el-input v-model="input2" placeholder="搜索姓名" @input="sousuoname" />
       </el-col>
       <el-col :span="5">
-        <el-button type="primary" @click="dialogFormVisible = true">
+        <el-button type="primary" @click="dialogFormVisible = true;kong()">
           <el-icon><Plus /></el-icon>添加
         </el-button>
       </el-col>
@@ -17,7 +17,7 @@
       v-model="value"
       class="m-2"
       :placeholder="'已选' + this.num + '项'"
-      v-if=this.boolean
+      v-if="this.boolean"
     >
       <el-option value="启用" @click="del" />
       <el-option value="禁用" @click="del" />
@@ -31,32 +31,39 @@
         style="max-width: 460px"
       >
         <el-form-item label="用户名">
-          <el-input v-model="formLabelAlign.name" />
+          <el-input v-model="formLabelAlign.userName" />
         </el-form-item>
         <el-form-item label="姓名">
-          <el-input v-model="formLabelAlign.region" />
+          <el-input v-model="formLabelAlign.realName" />
         </el-form-item>
         <el-form-item label="密码">
           <el-input
-            v-model="formLabelAlign.type"
+            v-model="formLabelAlign.password"
             placeholder="不修改请留空"
             type="password"
           />
         </el-form-item>
         <el-form-item label="部门">
-          <el-select
-            v-model="formLabelAlign.region"
-            placeholder="请选择"
-          ></el-select>
+          <el-select v-model="formLabelAlign.departId" placeholder="请选择">
+            <el-option label="66">
+              <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" />
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="角色">
-          <el-input v-model="formLabelAlign.region" placeholder="请选择角色" />
+          <el-input v-model="formLabelAlign.roles" placeholder="请选择角色" />
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取消</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false">
+          <el-button
+            type="primary"
+            @click="
+              dialogFormVisible = false;
+              onSubmit();
+            "
+          >
             确定
           </el-button>
         </span>
@@ -70,7 +77,13 @@
       border
     >
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column prop="userName" label="用户名" align="center" />
+      <el-table-column prop="userName" label="用户名" align="center">
+          <template #default="scope">
+          <div style="cursor: pointer" @click="details(scope.row.id)">
+            {{ scope.row.userName }}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column prop="realName" label="姓名" align="center" />
       <el-table-column prop="roleIds" label="角色" align="center" />
       <el-table-column prop="createTime" label="创建时间" align="center" />
@@ -94,30 +107,95 @@
 
 <script>
 import { reactive } from "vue";
-import { user } from "../api/tikuguanli";
+import { user, list } from "../api/sysuser";
 export default {
   data() {
     return {
+      data: [
+  {
+    label: 'Level one 1',
+    children: [
+      {
+        label: 'Level two 1-1',
+        children: [
+          {
+            label: 'Level three 1-1-1',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    label: 'Level one 2',
+    children: [
+      {
+        label: 'Level two 2-1',
+        children: [
+          {
+            label: 'Level three 2-1-1',
+          },
+        ],
+      },
+      {
+        label: 'Level two 2-2',
+        children: [
+          {
+            label: 'Level three 2-2-1',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    label: 'Level one 3',
+    children: [
+      {
+        label: 'Level two 3-1',
+        children: [
+          {
+            label: 'Level three 3-1-1',
+          },
+        ],
+      },
+      {
+        label: 'Level two 3-2',
+        children: [
+          {
+            label: 'Level three 3-2-1',
+          },
+        ],
+      },
+    ],
+  },
+],
+defaultProps :{
+  children: 'children',
+  label: 'label',
+},
       num: 0,
       total: "",
       currentPage4: 1,
       pageSize4: 10,
       input1: "",
       input2: "",
-      boolean:false,
+      boolean: false,
       dialogFormVisible: false,
+      data: [],
+      new: [],
       formLabelAlign: reactive({
-        name: "",
-        region: "",
-        type: "",
+        userName: "",
+        realName: "",
+        password: "",
+        departId: "",
+        roles: [],
       }),
       tableData: [
         {
-          userName: "tom",
-          realName: "lzl",
-          roleIds: "No. 189",
-          createTime: "2023",
-          state: "0",
+          userName: "",
+          realName: "",
+          roleIds: "",
+          createTime: "",
+          state: "",
         },
       ],
     };
@@ -128,23 +206,27 @@ export default {
     handleSelectionChange(val) {
       console.log(val.length);
       if (val.length > 0) {
-        this.boolean=true
+        this.boolean = true;
       } else {
-        this.boolean=false
+        this.boolean = false;
       }
       this.num = val.length;
     },
     xuanran() {
-      user(this.currentPage4, this.pageSize4, { userName:this.input1 }).then((res) => {
-        // console.log(res.data.data.records);
-        res.data.data.records.forEach((item) => {
-          if (item.state == 0) {
-            item.state = "正常";
-          }
-        });
-        this.tableData = res.data.data.records;
-        this.total = res.data.data.total;
-      });
+      user(this.currentPage4, this.pageSize4, { userName: this.input1 }).then(
+        (res) => {
+          // console.log(res.data.data.records);
+          this.data = res.data.data.records
+          console.log(this.data);
+          res.data.data.records.forEach((item) => {
+            if (item.state == 0) {
+              item.state = "正常";
+            }
+          });
+          this.tableData = res.data.data.records;
+          this.total = res.data.data.total;
+        }
+      );
     },
     handleSizeChange() {
       this.xuanran();
@@ -152,23 +234,44 @@ export default {
     handleCurrentChange() {
       this.xuanran();
     },
-    sousuo(){
-      console.log(666);
-      // user(this.currentPage4, this.pageSize4, {userName:this.input1}).then((res) => {
-      //   console.log(res.data.data.records);
-      //   res.data.data.records.forEach((item) => {
-      //     if (item.state == 0) {
-      //       item.state = "正常";
-      //     }
-      //   });
-      //   this.tableData = res.data.data.records;
-      //   this.total = res.data.data.total;
-      // });
-      this.xuanran()
+    sousuo() {
+      this.xuanran();
+    },
+    sousuoname() {
+      user(this.currentPage4, this.pageSize4, { realName: this.input2 }).then(
+        (res) => {
+          console.log(res.data.data.records);
+          res.data.data.records.forEach((item) => {
+            if (item.state == 0) {
+              item.state = "正常";
+            }
+          });
+          this.tableData = res.data.data.records;
+          this.total = res.data.data.total;
+        }
+      );
+    },
+    details(id) {
+      console.log(id);
+      this.dialogFormVisible = true
+      this.new = this.data.find((v) => v.id == id)
+      console.log(this.new.userName);
+      this.formLabelAlign=this.new
+    },
+     kong() {
+    this.formLabelAlign=[]
+    },
+    onSubmit() {
+      console.log("提交");
     },
   },
+ 
+  
   created() {
     this.xuanran();
+    // list().then((res) => {
+    //   console.log(res);
+    // });
   },
 };
 </script>
