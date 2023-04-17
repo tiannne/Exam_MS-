@@ -13,8 +13,17 @@
             <HomeFilled />
           </el-icon>
         </div>
-        <el-menu :collapse="collapse" :collapse-transition=false background-color="#304156" text-color="#bfcbd9" router
-          :default-active="activeIndex" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
+        <el-menu
+          :collapse="collapse"
+          :collapse-transition="false"
+          background-color="#304156"
+          text-color="#bfcbd9"
+          router
+          :default-active="activeIndex"
+          class="el-menu-vertical-demo"
+          @open="handleOpen"
+          @close="handleClose"
+        >
           <el-menu-item index="/home">
             <el-icon>
               <Edit />
@@ -70,7 +79,9 @@
         </el-header>
 
         <el-main>
+          <Transition name="rotate">
           <RouterView />
+          </Transition>
         </el-main>
       </el-container>
     </el-container>
@@ -82,7 +93,7 @@ export default {
   data() {
     return {
       collapse: true,
-      headword: '在线考试系统',
+      headword: "在线考试系统",
       head: false,
     }
   },
@@ -119,6 +130,8 @@ export default {
 }
 
 .el-aside {
+  /* position: fixed; */
+  /* overflow-y: auto; */
   background: #304156;
   height: 100vh;
   /*   text-align: center; */
@@ -146,10 +159,74 @@ export default {
 }
 
 .el-main {
+  transition: linear all 0.2s;
+  position: absolute;
+  left: 64px;
+  right: 0;
+  top: 60px;
+  bottom: 0;
+
   background: #f8f8f8;
+  overflow-y: scroll;
+
+  font-size: 14px;
+
+  &.success {
+    left: 64px;
+  }
+
+  &.error {
+    left: 200px;
+  }
+
+}
+
+.el-header {
+  display: flex;
+  padding: 0;
+  height: 60px;
+
+  .collapseBtn {
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    font-size: 20px;
+    color: #333;
+    padding-top: 4px;
+  }
 }
 
 .el-menu {
-  border: none
+  border: none;
+}
+.rotate-enter-active {
+  animation: .7s linear in;
+}
+
+@keyframes move {
+  0% {
+    display: none;
+    transform: translateX(-100%);
+  }
+  100% {
+   display: none;
+    transform: translateX(0);
+  }
+}
+@keyframes in {
+  0% {
+    opacity: 0;
+    // display: none;
+    transform: translateX(-100%);
+  }
+  100% {
+  //  display: none;
+  opacity: 1;
+    transform: translateX(0);
+  }
+}
+.rotate-leave-active {
+  animation: .7s linear move ;
 }
 </style>

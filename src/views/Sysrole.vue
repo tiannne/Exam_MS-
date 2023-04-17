@@ -6,42 +6,60 @@
       style="width: 100%"
       border
     >
-      <el-table-column property="UserID" label="角色ID" />
-      <el-table-column label="角色名称" prop="Username"></el-table-column>
+      <el-table-column property="id" label="角色ID" />
+      <el-table-column label="角色名称" prop="roleName"></el-table-column>
     </el-table>
 
     <div class="demo-pagination-block">
-    <el-pagination
-      v-model:current-page="currentPage4"
-      v-model:page-size="pageSize4"
-      :page-sizes="[10, 20, 30, 40]"
-      :small="small"
-      :disabled="disabled"
-      :background="background"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="40"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-    />
-  </div>
+      <el-pagination
+        v-model:current-page="current"
+        v-model:page-size="pageSize"
+        :page-sizes="[10, 20, 30, 40]"
+        :small="small"
+        :disabled="disabled"
+        :background="background"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="40"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
   </div>
 </template>
 
 <script>
+import { initRoleList } from "../api/Sysrole";
 export default {
   data() {
     return {
-      tableData: [
-        {
-          UserID: "kerwin",
-          Username: "超级管理员",
-        },
-        {
-          UserID: "yichen",
-          Username: "学员",
-        },
-      ],
+      tableData: [],
+      current: 1,
+      pageSize: 10,
     };
+  },
+  methods: {
+    Init() {
+      const data = {
+        current: this.current,
+        size: this.pageSize,
+        params: {},
+      };
+      initRoleList(data).then((res) => {
+        console.log(res.data.data);
+        this.tableData = res.data.data.records;
+      });
+    },
+    handleSizeChange() {
+      this.Init();
+      console.log("sizechange");
+    },
+    handleCurrentChange() {
+      this.Init();
+      console.log("current");
+    },
+  },
+  created() {
+    this.Init();
   },
 };
 </script>
@@ -53,7 +71,7 @@ export default {
 :deep(tr) {
   height: 50px;
 }
-.demo-pagination-block{
-    margin-top: 60px;
+.demo-pagination-block {
+  margin-top: 60px;
 }
 </style>

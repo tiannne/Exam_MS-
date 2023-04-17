@@ -15,8 +15,8 @@
             v-model="ruleForm.questionType"
             class="m-2"
             placeholder="题目类型"
-            @change="choiceType(ruleForm.questionType)"
             :rules="rules"
+            disabled
           >
             <el-option
               v-for="(item, index) in optionsTypeCheck"
@@ -48,7 +48,7 @@
           >
             <el-option
               v-for="item in optionsFromBank"
-              :key="item.tikuID"
+              :key="item.id"
               :label="item.title"
               :value="item.tikuID"
             />
@@ -135,7 +135,7 @@
       </el-table>
       <el-col>
         <el-row class="btnflex">
-          <el-button type="primary" @click="clickSave()">保存</el-button>
+          <el-button type="primary" @click="clickSave()">更新</el-button>
           <el-button type="info" @click="clickReturn">返回</el-button>
         </el-row>
       </el-col>
@@ -144,9 +144,8 @@
 </template>
 
 <script>
-import { initQuestionBank,addQuestion } from "../api/shitiguanli";
-import { ElMessage } from 'element-plus'
-
+import { initQuestionBank, addQuestion,questionDetail,questionBankDetail} from "../api/shitiguanli";
+import { ElMessage } from "element-plus";
 
 export default {
   data() {
@@ -195,43 +194,28 @@ export default {
     };
   },
   methods: {
-    choiceType: function (type) {
-      if (type === 3) {
-        this.tableData = [
-          { checkType: true, answerContent: "正确", answerAnalysis: "" },
-          { checkType: false, answerContent: "错误", answerAnalysis: "" },
-        ];
-      } else {
-        this.tableData = [
-          { checkType: false, answerContent: "", answerAnalysis: "" },
-          { checkType: false, answerContent: "", answerAnalysis: "" },
-          { checkType: false, answerContent: "", answerAnalysis: "" },
-          { checkType: false, answerContent: "", answerAnalysis: "" },
-        ];
-      }
-    },
     clickReturn: function () {
       this.$router.back(-1);
     },
 
     clickSave() {
-//-----------------------------------------判断表格内容
+      //-----------------------------------------判断表格内容
       let formEl = this.$refs.ruleFormRef;
       if (!formEl) return;
-       formEl.validate((valid, fields) => {
-         if (valid) {
+      formEl.validate((valid, fields) => {
+        if (valid) {
           console.log("submit!");
         } else {
           console.log("error submit!", fields);
-          return
+          return;
         }
       });
-//-----------------------------------------判断表格内容
+      //-----------------------------------------判断表格内容
 
-//-------------------------------------------判断选择个数
-if(this.ruleForm.questionType==''){
-  return
-}
+      //-------------------------------------------判断选择个数
+      if (this.ruleForm.questionType == "") {
+        return;
+      }
       let num = 0; //计算选中个数
       this.tableData.forEach((item) => {
         if (item.checkType) {
@@ -261,9 +245,9 @@ if(this.ruleForm.questionType==''){
           return false;
         }
       }
-//-------------------------------------------判断选择个数
+      //-------------------------------------------判断选择个数
 
-// ------------------------------------------判断题目内容
+      // ------------------------------------------判断题目内容
       let result = this.tableData.every(
         (item) => item.answerContent.trim() != ""
       ); //判断每项都不为空
@@ -272,7 +256,7 @@ if(this.ruleForm.questionType==''){
         alert("答案内容不能为空");
         return false;
       }
-//---------------------------------------判断题目内容
+      //---------------------------------------判断题目内容
       const answerList = this.tableData.map((item) => {
         return {
           isRight: item.checkType,
@@ -280,6 +264,8 @@ if(this.ruleForm.questionType==''){
           analysis: item.answerAnalysis,
         };
       });
+      let date=new Date()
+      let time =date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate()+' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()
       const data = {
         repoIds: this.ruleForm.fromBank,
         tagList: [], //不知道是什么
@@ -290,18 +276,19 @@ if(this.ruleForm.questionType==''){
         content: this.ruleForm.questionContent,
         analysis: this.ruleForm.questionAnalysis,
         answerList: answerList,
+        createTime: this.ruleForm.createTime,
+        updateTime:time
       };
       console.log(data);
-      addQuestion(data).then(res=>{
-        if(res.data.code===0){
+      addQuestion(data).then((res) => {
+        if (res.data.code === 0) {
           ElMessage({
-              type: "success",
-              message: "添加成功",
-            });
-            this.$router.push('/shiti/guanli')
+            type: "success",
+            message: "更新成功",
+          });
+          this.$router.push('/shiti/guanli')
         }
-      })
-    
+      });
     },
   },
   created() {
@@ -312,6 +299,31 @@ if(this.ruleForm.questionType==''){
       initData.forEach((item) => {
         this.optionsFromBank.push({ title: item.title, tikuID: item.id });
       });
+    });
+    console.log(this.optionsFromBank);
+    //初始化题目数据
+    const QuestionId = this.$route.params.id;
+    questionDetail({ id: QuestionId }).then((res) => {
+      let detailData=res.data.data
+      this.ruleForm={
+        questionType:detailData.quType, //quType
+        difficultyLevel: detailData.level, //level
+        fromBank: detailData.repoIds, //repoIds
+        questionContent: detailData.content, //content
+        imgUrl: "",
+        questionAnalysis: detailData.analysis, //analysis 整题解析
+        createTime:detailData.createTime,
+        updateTime:''
+      }
+    //   console.log(detailData.repoIds);
+    //   questionBankDetail({id:detailData.repoIds[0]}).then(res=>{
+    //     this.ruleForm.fromBank=res.data.data.title
+    //   })
+      //初始表格数据
+      detailData.answerList.forEach(item=>{
+        this.tableData.push({checkType: item.isRight, answerContent:item.content, answerAnalysis: item.analysis})
+      })
+     
     });
   },
 };
@@ -345,3 +357,5 @@ if(this.ruleForm.questionType==''){
     justify-content: center;
 }
 </style>
+
+

@@ -2,11 +2,11 @@
   <div>
     <el-form label-position="left" label-width="100px" :model="formLabelAlign">
       <el-form-item label="系统名称">
-        <el-input v-model="formLabelAlign.SystemName" />
+        <el-input v-model="formLabelAlign.siteName" />
       </el-form-item>
       <el-form-item label="系统Logo">
         <el-upload
-          v-model:file-list="fileList"
+          v-model:file-list="formLabelAlign.backLogo"
           class="upload-demo"
           :before-remove="beforeRemove"
           :on-preview="handlePreview"
@@ -17,45 +17,82 @@
         </el-upload>
       </el-form-item>
       <el-form-item label="版权信息">
-        <el-input v-model="formLabelAlign.CopyrightInfo" />
+        <el-input v-model="formLabelAlign.copyRight" />
       </el-form-item>
-      <div class="save"><el-button type="primary">保存</el-button></div>
+      <div class="save">
+        <el-button type="primary" @click="handleSave">更新</el-button>
+      </div>
     </el-form>
   </div>
 </template>
 
 <script>
 // import { UploadProps, UploadUserFile } from "element-plus";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { ElMessage, ElMessageBox, ElNotification } from "element-plus";
+import { initLogoInfo, RoleListSave } from "../api/Sysconfig";
 
 export default {
   data() {
     return {
       formLabelAlign: {
-        SystemName: "华越在线培训考试系统",
-        Logo: "",
-        CopyrightInfo: "版权@12314esx",
+        siteName: "华越在线培训考试系统",
+        backLogo: [],
+        copyRight: "版权@12314esx",
+        id: "1",
       },
-      fileList: [
-        {
-          name: "	https://lite.yfhl.net/upload/file/2023/04/14/1646674709460025346.jpg",
-          url: "https://lite.yfhl.net/upload/file/2023/04/14/1646674709460025346.jpg",
-        },
-      ],
+      //       fileList: [
+      // {name: '写死的名字', url: 'https://lite.yfhl.net/upload/file/2023/04/15/1647144546288271362.jpg'}
+      //       ],
     };
   },
   methods: {
+    // beforeRemove(uploadFile, uploadFiles) {
     beforeRemove(uploadFile, uploadFiles) {
       return ElMessageBox.confirm(`你是否要删除文件?`).then(
         () => true,
         () => false
       );
     },
+    //点击确定删除
     handleRemove() {
-      UploadProps["onRemove"] = (file, uploadFiles) => {
-        console.log(file, uploadFiles);
-      }
+      // UploadProps["onRemove"] = (file, uploadFiles) => {
+      //   console.log(file, uploadFiles);
+      // }
+      this.formLabelAlign.backLogo = "";
     },
+    //更新
+    handleSave() {
+      this.formLabelAlign.backLogo =
+        this.formLabelAlign.backLogo === ""
+          ? ""
+          : this.formLabelAlign.backLogo[0].url;
+      console.log(this.formLabelAlign.backLogo);
+      RoleListSave(this.formLabelAlign).then((res) => {
+        if (res.data.code === 0) {
+          ElNotification({
+            title: "成功",
+            message: "配置保存成功",
+            type: "success",
+          });
+          // const timer = setInterval(() => {
+          //   this.$router.go(0);
+          //   clearInterval(timer);
+          // }, 500);
+        }
+      });
+    },
+  },
+  beforeCreate() {
+    console.log(1);
+    initLogoInfo({ id: 1 }).then((res) => {
+      console.log(res.data.data);
+      res.data.data.backLogo = [
+        { name: "写死的名字", url: res.data.data.backLogo },
+      ];
+      console.log(res.data.data.backLogo);
+      this.formLabelAlign = res.data.data;
+      console.log(this.formLabelAlign);
+    });
   },
 };
 </script>

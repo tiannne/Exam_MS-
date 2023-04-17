@@ -8,7 +8,7 @@
         <el-input v-model="input2" placeholder="搜索姓名" @input="sousuoname" />
       </el-col>
       <el-col :span="5">
-        <el-button type="primary" @click="dialogFormVisible = true;kong()">
+        <el-button type="primary" @click="dialogFormVisible = true">
           <el-icon><Plus /></el-icon>添加
         </el-button>
       </el-col>
@@ -24,12 +24,7 @@
       <el-option value="删除" @click="del" />
     </el-select>
     <el-dialog v-model="dialogFormVisible" title="添加用户">
-      <el-form
-        :label-position="labelPosition"
-        label-width="60px"
-        :model="formLabelAlign"
-        style="max-width: 460px"
-      >
+      <el-form :label-position="labelPosition" label-width="60px" :model="formLabelAlign" style="max-width: 460px">
         <el-form-item label="用户名">
           <el-input v-model="formLabelAlign.userName" />
         </el-form-item>
@@ -69,13 +64,8 @@
         </span>
       </template>
     </el-dialog>
-    <el-table
-      ref="multipleTableRef"
-      :data="tableData"
-      style="width: 100%"
-      @selection-change="handleSelectionChange"
-      border
-    >
+    <el-table ref="multipleTableRef" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange"
+      border>
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column prop="userName" label="用户名" align="center">
           <template #default="scope">
@@ -106,72 +96,18 @@
 </template>
 
 <script>
-import { reactive } from "vue";
+import { reactive } from 'vue'
 import { user, list } from "../api/sysuser";
 export default {
   data() {
     return {
-      data: [
-  {
-    label: 'Level one 1',
-    children: [
-      {
-        label: 'Level two 1-1',
-        children: [
-          {
-            label: 'Level three 1-1-1',
-          },
-        ],
-      },
-    ],
-  },
-  {
-    label: 'Level one 2',
-    children: [
-      {
-        label: 'Level two 2-1',
-        children: [
-          {
-            label: 'Level three 2-1-1',
-          },
-        ],
-      },
-      {
-        label: 'Level two 2-2',
-        children: [
-          {
-            label: 'Level three 2-2-1',
-          },
-        ],
-      },
-    ],
-  },
-  {
-    label: 'Level one 3',
-    children: [
-      {
-        label: 'Level two 3-1',
-        children: [
-          {
-            label: 'Level three 3-1-1',
-          },
-        ],
-      },
-      {
-        label: 'Level two 3-2',
-        children: [
-          {
-            label: 'Level three 3-2-1',
-          },
-        ],
-      },
-    ],
-  },
-],
-defaultProps :{
-  children: 'children',
-  label: 'label',
-},
+      dialogFormVisible: false,
+      formLabelAlign: reactive({
+        name: '',
+        region: '',
+        type: '',
+      }),
+
       num: 0,
       total: "",
       currentPage4: 1,
@@ -183,11 +119,9 @@ defaultProps :{
       data: [],
       new: [],
       formLabelAlign: reactive({
-        userName: "",
-        realName: "",
-        password: "",
-        departId: "",
-        roles: [],
+        name: "",
+        region: "",
+        type: "",
       }),
       tableData: [
         {
@@ -269,9 +203,6 @@ defaultProps :{
   
   created() {
     this.xuanran();
-    // list().then((res) => {
-    //   console.log(res);
-    // });
   },
 };
 </script>
@@ -280,27 +211,34 @@ defaultProps :{
 .el-col {
   margin-right: 6px;
 }
+
 :deep(.el-table th.el-table__cell) {
   background: rgb(217, 214, 214);
 }
+
 .el-pagination {
   margin-top: 40px;
 }
+
 .el-table {
   margin-top: 10px;
 }
+
 :deep(.el-dialog) {
   width: 500px;
   height: 500px;
 }
+
 .el-form-item {
   margin-bottom: 30px;
 }
+
 .el-select {
   width: 400px;
 }
 .m-2 {
   width: 130px;
   margin-top: 10px;
+
 }
 </style>
