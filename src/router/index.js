@@ -1,10 +1,11 @@
+import { createRouter, createWebHistory } from "vue-router";
+import store from "../store";
 
-import { createRouter, createWebHistory } from 'vue-router'
-import store from '../store'
-
-const Index = () => import('../views/Index.vue')
-const Login = () => import('../views/Login.vue')
+const Index = () => import("../views/Index.vue");
+const Login = () => import("../views/Login.vue");
 // const Home = () => import('../views/Home.vue')
+
+
 const Home = () => import('../views/UpDataInformation.vue')
 const Tikuguanli = () => import('../views/Tikuguanli.vue')
 const Tikuadd = () => import('../views/Tikuadd.vue')
@@ -26,51 +27,58 @@ const router = createRouter({
       path: "/",
       name: "index",
       component: Index,
-      redirect:"/home",
-      meta:{
-        auth:true
+      redirect: "/home",
+      meta: {
+        auth: true,
       },
       children: [
         {
           path: "home",
           name: "home",
           component: Home,
-          meta:{
-            auth:true
-          }
-          
+          meta: {
+            auth: true,
+          },
         },
         {
           path: "tiku/guanli",
           name: "tikuguanli",
           component: Tikuguanli,
-          meta:{
-            auth:true
-          }
+          meta: {
+            auth: true,
+          },
         },
         {
-          path: 'tiku/guanli/tikuadd',
-          name: 'tikuadd',
+          path: "tiku/guanli/tikuadd",
+          name: "tikuadd",
           component: Tikuadd,
-          meta:{
-            auth:true
-          }
+          meta: {
+            auth: true,
+          },
+        },
+        {
+          path: "tiku/guanli/tikudetails/:id",
+          name: "tikudetails",
+          component: Tikudetails,
+          meta: {
+            auth: true,
+          },
         },
         {
           path: "kaoshi/guanli",
           name: "kaoshiguanli",
           component: Kaoshiguanli,
-          meta:{
-            auth:true
-          }
+          meta: {
+            auth: true,
+          },
         },
         {
           path: "shiti/guanli",
           name: "shitiguanli",
           component: Shitiguanli,
-          meta:{
-            auth:true
-          }
+          meta: {
+            auth: true,
+          },
         },
         {
           path:'shiti/guanli/add',
@@ -86,59 +94,59 @@ const router = createRouter({
           path: 'sys/config',
           name: 'sysconfig',
           component: Sysconfig,
-          meta:{
-            auth:true
-          }
+          meta: {
+            auth: true,
+          },
         },
         {
-          path: 'sys/depart',
-          name: 'sysdepart',
+          path: "sys/depart",
+          name: "sysdepart",
           component: Sysdepart,
-          meta:{
-            auth:true
-          }
+          meta: {
+            auth: true,
+          },
         },
         {
-          path: 'sys/role',
-          name: 'sysrole',
+          path: "sys/role",
+          name: "sysrole",
           component: Sysrole,
-          meta:{
-            auth:true
-          }
+          meta: {
+            auth: true,
+          },
         },
         {
-          path: 'sys/user',
-          name: 'sysuser',
+          path: "sys/user",
+          name: "sysuser",
           component: Sysuser,
-          meta:{
-            auth:true
-          }
-        }
-      ]
+          meta: {
+            auth: true,
+          },
+        },
+      ],
     },
     {
-      path: '/login',
-      name: 'login',
+      path: "/login",
+      name: "login",
       component: Login,
-      meta:{
-        auth:false
-      }
-    }
-  ]
-})
+      meta: {
+        auth: false,
+      },
+    },
+  ],
+});
 
 /* 全局前置守卫 */
 router.beforeEach((to, from, next) => {
-  if(to.meta.auth){
-    if(store.state.userToken.token){
-      next()
-    }else{
-      router.push("/login")
+  if (to.meta.auth) {
+    if (store.state.userToken.token) {
+      next();
+    } else {
+      router.push("/login");
     }
-  }else{
-    next()
+  } else {
+    next();
   }
   // console.log(to.meta.auth)
-}) 
+});
 
 export default router;

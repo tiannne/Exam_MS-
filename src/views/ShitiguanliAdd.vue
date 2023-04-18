@@ -48,7 +48,7 @@
           >
             <el-option
               v-for="item in optionsFromBank"
-              :key="item.id"
+              :key="item.tikuID"
               :label="item.title"
               :value="item.tikuID"
             />
@@ -298,6 +298,7 @@ if(this.ruleForm.questionType==''){
               type: "success",
               message: "添加成功",
             });
+            this.$router.push('/shiti/guanli')
         }
       })
     

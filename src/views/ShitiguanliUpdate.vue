@@ -286,6 +286,7 @@ export default {
             type: "success",
             message: "更新成功",
           });
+          this.$router.push('/shiti/guanli')
         }
       });
     },
@@ -299,7 +300,7 @@ export default {
         this.optionsFromBank.push({ title: item.title, tikuID: item.id });
       });
     });
-
+    console.log(this.optionsFromBank);
     //初始化题目数据
     const QuestionId = this.$route.params.id;
     questionDetail({ id: QuestionId }).then((res) => {
