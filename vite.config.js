@@ -2,8 +2,6 @@ import { fileURLToPath, URL } from "node:url";
 
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-//mock
-import { viteMockServe } from "vite-plugin-mock";
 
 export default defineConfig({
   resolve: {

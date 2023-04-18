@@ -1,4 +1,4 @@
-import instance from '../utils/createaxios'
+import instance from "../utils/createaxios";
 
 export const tikuguanli = (current, size, params, t) => {
   return instance({
@@ -13,36 +13,47 @@ export const tikuguanli = (current, size, params, t) => {
   });
 };
 
-export const add = (remark, title) => {
+export const add = (title, remark) => {
   return instance({
     url: "/exam/api/repo/save",
     method: "POST",
     data: {
-      remark,
       title,
+      remark,
     },
   });
 };
 
+export const update = (createTime, id, remark, title, updateTime) => {
+  return instance({
+    url: "/exam/api/repo/save",
+    method: "POST",
+    data: {
+      createTime,
+      id,
+      remark,
+      title,
+      updateTime,
+    },
+  });
+};
 
 export const dele = (ids) => {
   return instance({
     url: "/exam/api/repo/delete",
     method: "POST",
     data: {
-      ids
+      ids,
     },
   });
 };
 
-export const user = (current, size, params) => {
+export const detail = (id) => {
   return instance({
-    url: "/exam/api/sys/user/paging",
+    url: "/exam/api/repo/detail",
     method: "POST",
     data: {
-      current,
-      size,
-      params
+      id,
     },
   });
 };

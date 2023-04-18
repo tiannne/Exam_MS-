@@ -381,11 +381,11 @@ if(this.ruleForm.questionType==''){
 <style lang="scss" scoped>
 .el-form {
   padding: 20px;
-  border: 1px solid #ccc;
+  border: 1px solid #eee;
   background: white;
-  box-shadow: 0px -1px 10px 0px #ccc, /*上边阴影  红色*/ -1px 0px 10px 0px #ccc,
-    /*左边阴影  绿色*/ 1px 0px 10px 0px #ccc,
-    /*右边阴影  蓝色*/ 0px 1px 10px 0px #ccc; /*下边阴影  黄ccc*/
+  box-shadow: 0px -1px 10px 0px #eee, /*上边阴影  红色*/ -1px 0px 10px 0px #eee,
+    /*左边阴影  绿色*/ 1px 0px 10px 0px #eee,
+    /*右边阴影  蓝色*/ 0px 1px 10px 0px #eee; /*下边阴影  黄ccc*/
   margin-bottom: 30px;
 }
 .tableform{
@@ -395,11 +395,11 @@ if(this.ruleForm.questionType==''){
   box-shadow: none;
 }
 .el-table {
-  border: 1px solid #ccc;
+  border: 1px solid #eee;
   background: white;
-  box-shadow: 0px -1px 10px 0px #ccc, /*上边阴影  红色*/ -1px 0px 10px 0px #ccc,
-    /*左边阴影  绿色*/ 1px 0px 10px 0px #ccc,
-    /*右边阴影  蓝色*/ 0px 1px 10px 0px #ccc; /*下边阴影  黄ccc*/
+  box-shadow: 0px -1px 10px 0px #eee, /*上边阴影  红色*/ -1px 0px 10px 0px #eee,
+    /*左边阴影  绿色*/ 1px 0px 10px 0px #eee,
+    /*右边阴影  蓝色*/ 0px 1px 10px 0px #eee; /*下边阴影  黄ccc*/
   margin-bottom: 30px;
 }
 :deep(.el-form-item__label) {

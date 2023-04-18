@@ -5,13 +5,11 @@
         <el-input v-model="input1" placeholder="搜索登录名" @input="sousuo" />
       </el-col>
       <el-col :span="4">
-        <el-input v-model="input2" placeholder="搜索姓名" />
+        <el-input v-model="input2" placeholder="搜索姓名" @input="sousuoname" />
       </el-col>
       <el-col :span="5">
         <el-button type="primary" @click="dialogFormVisible = true">
-          <el-icon>
-            <Plus />
-          </el-icon>添加
+          <el-icon><Plus /></el-icon>添加
         </el-button>
       </el-col>
     </el-row>
@@ -19,7 +17,7 @@
       v-model="value"
       class="m-2"
       :placeholder="'已选' + this.num + '项'"
-      v-if=this.boolean
+      v-if="this.boolean"
     >
       <el-option value="启用" @click="del" />
       <el-option value="禁用" @click="del" />
@@ -28,33 +26,40 @@
     <el-dialog v-model="dialogFormVisible" title="添加用户">
       <el-form :label-position="labelPosition" label-width="60px" :model="formLabelAlign" style="max-width: 460px">
         <el-form-item label="用户名">
-          <el-input v-model="formLabelAlign.name" />
+          <el-input v-model="formLabelAlign.userName" />
         </el-form-item>
         <el-form-item label="姓名">
-          <el-input v-model="formLabelAlign.region" />
+          <el-input v-model="formLabelAlign.realName" />
         </el-form-item>
         <el-form-item label="密码">
           <el-input
-            v-model="formLabelAlign.type"
+            v-model="formLabelAlign.password"
             placeholder="不修改请留空"
             type="password"
           />
-
+>>>>>>> 87582f6c7cc85b6895825e759569bfec9ebffa23
         </el-form-item>
         <el-form-item label="部门">
-          <el-select
-            v-model="formLabelAlign.region"
-            placeholder="请选择"
-          ></el-select>
+          <el-select v-model="formLabelAlign.departId" placeholder="请选择">
+            <el-option label="66">
+              <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" />
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="角色">
-          <el-input v-model="formLabelAlign.region" placeholder="请选择角色" />
+          <el-input v-model="formLabelAlign.roles" placeholder="请选择角色" />
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取消</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false">
+          <el-button
+            type="primary"
+            @click="
+              dialogFormVisible = false;
+              onSubmit();
+            "
+          >
             确定
           </el-button>
         </span>
@@ -63,14 +68,24 @@
     <el-table ref="multipleTableRef" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange"
       border>
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column prop="userName" label="用户名" align="center" />
+      <el-table-column prop="userName" label="用户名" align="center">
+          <template #default="scope">
+          <div style="cursor: pointer" @click="details(scope.row.id)">
+            {{ scope.row.userName }}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column prop="realName" label="姓名" align="center" />
       <el-table-column prop="roleIds" label="角色" align="center" />
       <el-table-column prop="createTime" label="创建时间" align="center" />
       <el-table-column prop="state" label="状态" align="center" />
     </el-table>
 
-
+<<<<<<< HEAD
+    <el-pagination v-model:current-page="currentPage4" v-model:page-size="pageSize4" :page-sizes="[10, 20, 30, 40]"
+      :small="small" :disabled="disabled" :background="background" layout="total, sizes, prev, pager, next, jumper"
+      :total="60" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+=======
     <el-pagination
       v-model:current-page="currentPage4"
       v-model:page-size="pageSize4"
@@ -83,13 +98,22 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
-
+>>>>>>> 87582f6c7cc85b6895825e759569bfec9ebffa23
   </div>
 </template>
 
 <script>
-
-
+<<<<<<< HEAD
+import { reactive } from 'vue'
+export default {
+  data() {
+    return {
+      dialogFormVisible: false,
+      formLabelAlign: reactive({
+        name: '',
+        region: '',
+        type: '',
+=======
 import { reactive } from "vue";
 import { user } from "../api/tikuguanli";
 export default {
@@ -101,49 +125,57 @@ export default {
       pageSize4: 10,
       input1: "",
       input2: "",
-      boolean:false,
+      boolean: false,
       dialogFormVisible: false,
+      data: [],
+      new: [],
       formLabelAlign: reactive({
         name: "",
         region: "",
         type: "",
-
+>>>>>>> 87582f6c7cc85b6895825e759569bfec9ebffa23
       }),
       tableData: [
         {
-          userName: "tom",
-          realName: "lzl",
-          roleIds: "No. 189",
-          createTime: "2023",
-          state: "0",
+          userName: "",
+          realName: "",
+          roleIds: "",
+          createTime: "",
+          state: "",
         },
       ],
     };
   },
   methods: {
-
+<<<<<<< HEAD
+    add() { },
+=======
     add() {},
     sousuo() {},
     handleSelectionChange(val) {
       console.log(val.length);
       if (val.length > 0) {
-        this.boolean=true
+        this.boolean = true;
       } else {
-        this.boolean=false
+        this.boolean = false;
       }
       this.num = val.length;
     },
     xuanran() {
-      user(this.currentPage4, this.pageSize4, { userName:this.input1 }).then((res) => {
-        // console.log(res.data.data.records);
-        res.data.data.records.forEach((item) => {
-          if (item.state == 0) {
-            item.state = "正常";
-          }
-        });
-        this.tableData = res.data.data.records;
-        this.total = res.data.data.total;
-      });
+      user(this.currentPage4, this.pageSize4, { userName: this.input1 }).then(
+        (res) => {
+          // console.log(res.data.data.records);
+          this.data = res.data.data.records
+          console.log(this.data);
+          res.data.data.records.forEach((item) => {
+            if (item.state == 0) {
+              item.state = "正常";
+            }
+          });
+          this.tableData = res.data.data.records;
+          this.total = res.data.data.total;
+        }
+      );
     },
     handleSizeChange() {
       this.xuanran();
@@ -151,24 +183,42 @@ export default {
     handleCurrentChange() {
       this.xuanran();
     },
-    sousuo(){
-      console.log(666);
-      // user(this.currentPage4, this.pageSize4, {userName:this.input1}).then((res) => {
-      //   console.log(res.data.data.records);
-      //   res.data.data.records.forEach((item) => {
-      //     if (item.state == 0) {
-      //       item.state = "正常";
-      //     }
-      //   });
-      //   this.tableData = res.data.data.records;
-      //   this.total = res.data.data.total;
-      // });
-      this.xuanran()
+    sousuo() {
+      this.xuanran();
+    },
+    sousuoname() {
+      user(this.currentPage4, this.pageSize4, { realName: this.input2 }).then(
+        (res) => {
+          console.log(res.data.data.records);
+          res.data.data.records.forEach((item) => {
+            if (item.state == 0) {
+              item.state = "正常";
+            }
+          });
+          this.tableData = res.data.data.records;
+          this.total = res.data.data.total;
+        }
+      );
+    },
+    details(id) {
+      console.log(id);
+      this.dialogFormVisible = true
+      this.new = this.data.find((v) => v.id == id)
+      console.log(this.new.userName);
+      this.formLabelAlign=this.new
+    },
+     kong() {
+    this.formLabelAlign=[]
+    },
+    onSubmit() {
+      console.log("提交");
     },
   },
+ 
+  
   created() {
     this.xuanran();
-
+>>>>>>> 87582f6c7cc85b6895825e759569bfec9ebffa23
   },
 };
 </script>
@@ -198,13 +248,17 @@ export default {
 .el-form-item {
   margin-bottom: 30px;
 }
+<<<<<<< HEAD
 
+.el-select {
+  width: 400px;
+=======
 .el-select {
   width: 400px;
 }
 .m-2 {
   width: 130px;
   margin-top: 10px;
-
+>>>>>>> 87582f6c7cc85b6895825e759569bfec9ebffa23
 }
 </style>

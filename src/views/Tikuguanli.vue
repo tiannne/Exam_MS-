@@ -12,7 +12,12 @@
         </el-button>
       </el-col>
     </el-row>
-    <el-select v-model="value" class="m-2" :placeholder="'已选' + num + '项'" v-if="boolean">
+    <el-select
+      v-model="value"
+      class="m-2"
+      :placeholder="'已选' + num + '项'"
+      v-if="boolean"
+    >
       <el-option value="删除" @click="del" />
     </el-select>
     <el-table
@@ -23,7 +28,13 @@
       border
     >
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column prop="title" label="题库名称" />
+      <el-table-column prop="title" label="题库名称">
+        <template #default="scope">
+          <div style="cursor: pointer" @click="details(scope.row.id)">
+            {{ scope.row.title }}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column prop="radioCount" label="单选题数量" align="center" />
       <el-table-column prop="multiCount" label="多选题数量" align="center" />
       <el-table-column prop="judgeCount" label="判断题数量" align="center" />
@@ -65,7 +76,7 @@ const currentPage4 = ref(1);
 const pageSize4 = ref(10);
 const total = ref();
 const num = ref(0);
-const boolean=ref(false)
+const boolean = ref(false);
 //
 const ids = [];
 //
@@ -79,11 +90,15 @@ const tableData = ref([
   },
 ]);
 const xuanran = () => {
-  tikuguanli(currentPage4.value, pageSize4.value, { title: input.value }).then((res) => {
-    total.value = res.data.data.total;
-    tableData.value = res.data.data.records;
-  });
-}
+  tikuguanli(currentPage4.value, pageSize4.value, { title: input.value }).then(
+    (res) => {
+      console.log(res.data);
+      total.value = res.data.data.total;
+      tableData.value = res.data.data.records;
+      console.log(tableData.value);
+    }
+  );
+};
 const del = () => {
   ElMessageBox.confirm("确认要删除吗?", "提示", {
     confirmButtonText: "确定",
@@ -97,7 +112,7 @@ const del = () => {
       });
       dele(ids);
       //渲染数据
-    xuanran()
+      xuanran();
     })
     .catch(() => {
       ElMessage({
@@ -110,37 +125,41 @@ const add = () => {
   router.push("/tiku/guanli/tikuadd");
 };
 //渲染数据
-  xuanran()
+xuanran();
 const sousuo = () => {
-   xuanran()
+  xuanran();
 };
 
 const yeshu = () => {
-  xuanran()
+  xuanran();
 };
 
 const handleSizeChange = () => {
-  xuanran()
+  xuanran();
 };
 
 const handleCurrentChange = () => {
-  xuanran()
+  xuanran();
 };
 
 const handleSelectionChange = (val) => {
   // console.log(val.length);
   // console.log(val[0].id);
-  if (val.length>0) {
-    boolean.value=true
+  if (val.length > 0) {
+    boolean.value = true;
   } else {
-    boolean.value=false
+    boolean.value = false;
   }
   num.value = val.length;
   for (let i = 0; i < val.length; i++) {
     console.log(val[i].id);
     ids.push(val[i].id);
   }
+};
 
+const details = (id) => {
+  router.push(`/tiku/guanli/tikudetails/${id}`);
+  // console.log(id);
 };
 </script>
 
