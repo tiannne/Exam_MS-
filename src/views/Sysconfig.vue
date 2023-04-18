@@ -8,9 +8,13 @@
         <el-upload
           v-model:file-list="formLabelAlign.backLogo"
           class="upload-demo"
+          :headers='tokenHeader'
+          action="https://lite.yfhl.net/common/api/file/upload"
+          :limit="1"
+          :on-exceed="handleExceed"
           :before-remove="beforeRemove"
-          :on-preview="handlePreview"
           :on-remove="handleRemove"
+          :on-success="uploadSuccess"
           list-type="picture"
         >
           <el-button type="primary">上传图片</el-button>
@@ -27,9 +31,9 @@
 </template>
 
 <script>
-// import { UploadProps, UploadUserFile } from "element-plus";
 import { ElMessage, ElMessageBox, ElNotification } from "element-plus";
 import { initLogoInfo, RoleListSave } from "../api/Sysconfig";
+import store from "../store";
 
 export default {
   data() {
@@ -40,25 +44,31 @@ export default {
         copyRight: "版权@12314esx",
         id: "1",
       },
-      //       fileList: [
-      // {name: '写死的名字', url: 'https://lite.yfhl.net/upload/file/2023/04/15/1647144546288271362.jpg'}
-      //       ],
+      tokenHeader:{}
     };
   },
   methods: {
-    // beforeRemove(uploadFile, uploadFiles) {
     beforeRemove(uploadFile, uploadFiles) {
       return ElMessageBox.confirm(`你是否要删除文件?`).then(
         () => true,
         () => false
       );
     },
+
     //点击确定删除
-    handleRemove() {
-      // UploadProps["onRemove"] = (file, uploadFiles) => {
-      //   console.log(file, uploadFiles);
-      // }
+    handleRemove(uploadFile,uploadFiles) {
       this.formLabelAlign.backLogo = "";
+    },
+    //上传前的钩子函数
+    handleExceed(){
+        ElMessage.error('logo只能上传一张图片')
+
+    },
+    //上传成功时
+    uploadSuccess(){
+      console.log(this.formLabelAlign.backLogo);
+      this.formLabelAlign.backLogo=[{name:this.formLabelAlign.backLogo[0].response.data.url,url:this.formLabelAlign.backLogo[0].response.data.url}]
+      console.log(this.formLabelAlign.backLogo,111);
     },
     //更新
     handleSave() {
@@ -68,22 +78,18 @@ export default {
           : this.formLabelAlign.backLogo[0].url;
       console.log(this.formLabelAlign.backLogo);
       RoleListSave(this.formLabelAlign).then((res) => {
+        console.log(res.data);
         if (res.data.code === 0) {
           ElNotification({
             title: "成功",
             message: "配置保存成功",
             type: "success",
           });
-          // const timer = setInterval(() => {
-          //   this.$router.go(0);
-          //   clearInterval(timer);
-          // }, 500);
         }
       });
     },
   },
   beforeCreate() {
-    console.log(1);
     initLogoInfo({ id: 1 }).then((res) => {
       console.log(res.data.data);
       res.data.data.backLogo = [
@@ -91,7 +97,8 @@ export default {
       ];
       console.log(res.data.data.backLogo);
       this.formLabelAlign = res.data.data;
-      console.log(this.formLabelAlign);
+      // console.log(this.formLabelAlign);
+      this.tokenHeader={token:store.state.userToken.token}
     });
   },
 };
