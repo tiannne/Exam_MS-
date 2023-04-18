@@ -232,13 +232,11 @@ export default {
 .el-form-item {
   margin-bottom: 30px;
 }
-
 .el-select {
   width: 400px;
 }
 .m-2 {
   width: 130px;
   margin-top: 10px;
-
 }
 </style>
