@@ -37,7 +37,6 @@
             placeholder="不修改请留空"
             type="password"
           />
->>>>>>> 87582f6c7cc85b6895825e759569bfec9ebffa23
         </el-form-item>
         <el-form-item label="部门">
           <el-select v-model="formLabelAlign.departId" placeholder="请选择">
@@ -81,11 +80,6 @@
       <el-table-column prop="state" label="状态" align="center" />
     </el-table>
 
-<<<<<<< HEAD
-    <el-pagination v-model:current-page="currentPage4" v-model:page-size="pageSize4" :page-sizes="[10, 20, 30, 40]"
-      :small="small" :disabled="disabled" :background="background" layout="total, sizes, prev, pager, next, jumper"
-      :total="60" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
-=======
     <el-pagination
       v-model:current-page="currentPage4"
       v-model:page-size="pageSize4"
@@ -98,13 +92,12 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
->>>>>>> 87582f6c7cc85b6895825e759569bfec9ebffa23
   </div>
 </template>
 
 <script>
-<<<<<<< HEAD
 import { reactive } from 'vue'
+import { user, list } from "../api/sysuser";
 export default {
   data() {
     return {
@@ -113,12 +106,8 @@ export default {
         name: '',
         region: '',
         type: '',
-=======
-import { reactive } from "vue";
-import { user } from "../api/tikuguanli";
-export default {
-  data() {
-    return {
+      }),
+
       num: 0,
       total: "",
       currentPage4: 1,
@@ -133,7 +122,6 @@ export default {
         name: "",
         region: "",
         type: "",
->>>>>>> 87582f6c7cc85b6895825e759569bfec9ebffa23
       }),
       tableData: [
         {
@@ -147,9 +135,6 @@ export default {
     };
   },
   methods: {
-<<<<<<< HEAD
-    add() { },
-=======
     add() {},
     sousuo() {},
     handleSelectionChange(val) {
@@ -218,7 +203,6 @@ export default {
   
   created() {
     this.xuanran();
->>>>>>> 87582f6c7cc85b6895825e759569bfec9ebffa23
   },
 };
 </script>
@@ -248,17 +232,11 @@ export default {
 .el-form-item {
   margin-bottom: 30px;
 }
-<<<<<<< HEAD
-
-.el-select {
-  width: 400px;
-=======
 .el-select {
   width: 400px;
 }
 .m-2 {
   width: 130px;
   margin-top: 10px;
->>>>>>> 87582f6c7cc85b6895825e759569bfec9ebffa23
 }
 </style>
