@@ -78,7 +78,7 @@
 
 <script>
 import { reactive } from "vue";
-import { user, list } from "../api/sysuser";
+import { user, list } from "../../../api/sysuser";
 import { forEach } from "lodash";
 export default {
   data() {

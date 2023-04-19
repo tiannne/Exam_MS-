@@ -4,25 +4,22 @@ import store from "../store";
 const Index = () => import("../views/Index.vue");
 const Login = () => import("../views/Login.vue");
 // const Home = () => import('../views/Home.vue')
-
-
 const Home = () => import('../views/UpDataInformation.vue')
-const Tikuguanli = () => import('../views/Tikuguanli.vue')
-const Tikudetails = () => import('../views/Tikudetails.vue')
-const Tikuadd = () => import('../views/Tikuadd.vue')
-const Kaoshiguanli = () => import('../views/Kaoshiguanli.vue')
-const Shitiguanli = () => import('../views/Shitiguanli.vue')
-const ShitiguanliAdd=()=>import('../views/ShitiguanliAdd.vue')
 const ExamDetail = () => import('../views/ExamDetail.vue')
 const ExamUpData = () => import('../views/ExamUpData.vue')
-
-const ShitiguanliUpdate=()=>import('../views/ShitiguanliUpdate.vue')
-const Sys = () => import('../views/Sys.vue')
-const Sysconfig = () => import('../views/Sysconfig.vue')
-const Sysdepart = () => import('../views/Sysdepart.vue')
-const Sysrole = () => import('../views/Sysrole.vue')
-const Sysuser = () => import('../views/Sysuser.vue')
 const ExamAddAndUpdata = () => import('../views/ExamAddAndUpdata.vue')
+const Tikuguanli = () => import('../views/examManage/tiku/Tikuguanli.vue')
+const Tikudetails = () => import('../views/examManage/tiku/Tikudetails.vue')
+const Tikuadd = () => import('../views/examManage/tiku/Tikuadd.vue')
+const Kaoshiguanli = () => import('../views/Kaoshiguanli.vue')
+const Shitiguanli = () => import('../views/examManage/shiti/Shitiguanli.vue')
+const ShitiguanliAdd=()=>import('../views/examManage/shiti/ShitiguanliAdd.vue')
+const ShitiguanliUpdate=()=>import('../views/examManage/shiti/ShitiguanliUpdate.vue')
+const Sys = () => import('../views/Sys.vue')
+const Sysconfig = () => import('../views/systemMange/system/Sysconfig.vue')
+const Sysdepart = () => import('../views/systemMange/bumen/Sysdepart.vue')
+const Sysrole = () => import('../views/userMange/rolemange/Sysrole.vue')
+const Sysuser = () => import('../views/userMange/usermange/Sysuser.vue')
 
 const router = createRouter({
   /* 环境变量 */

@@ -176,9 +176,9 @@
 </template>
 
 <script>
-import { initQuestionBank, addQuestion,questionDetail,questionBankDetail} from "../api/shitiguanli";
+import { initQuestionBank, addQuestion,questionDetail,questionBankDetail} from "../../../api/shitiguanli";
 import { ElMessage,ElMessageBox } from "element-plus";
-import store from "../store";
+import store from "../../../store";
 
 export default {
   data() {

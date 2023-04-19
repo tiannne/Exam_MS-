@@ -165,9 +165,9 @@
 </template>
 
 <script>
-import { initQuestionBank,addQuestion } from "../api/shitiguanli";
+import { initQuestionBank,addQuestion } from "../../../api/shitiguanli";
 import { ElMessage, ElMessageBox, ElNotification } from "element-plus";
-import store from "../store";
+import store from "../../../store";
 
 
 

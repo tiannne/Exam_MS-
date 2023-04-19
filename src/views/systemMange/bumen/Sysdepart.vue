@@ -5,7 +5,7 @@
         <el-input class="findCom" v-model="input" placeholder="搜索公司名称" @input="selectDepart" />
       </el-col>
       <!-- 添加按钮 -->
-      <el-col :span="6" @click="dialogFormVisible = true">
+      <el-col :span="6" @click="addMainDepart">
         <el-button class="addBtn" type="primary">
           <el-icon>
             <Plus />
@@ -13,8 +13,8 @@
           添加
         </el-button>
       </el-col>
-      <!-- 弹出表单框 -->
-      <el-dialog width="320px " title="添加部门" v-model="dialogFormVisible" class="dialogsize">
+      <!-- 弹出表单框一 -->
+      <el-dialog width="320px " :title="dialogTitle" v-model="dialogFormVisible" class="dialogsize">
         <el-form :model="form" ref="ruleFormRef" label-width="60px" style="max-width: 260px" :rules="rules">
           <el-form-item label="部门名称 " prop="name">
             <el-input v-model="form.name" autocomplete="off"></el-input>
@@ -41,7 +41,7 @@
             </el-icon></div>
         </el-button>
         <!-- 编辑部门 -->
-        <el-button class="wrap" type="text" size="small" @click="editDepart">
+        <el-button class="wrap" type="text" size="small" @click="editDepart(scope.row)">
           <div class="box"><el-icon>
               <EditPen />
             </el-icon></div>
@@ -62,14 +62,15 @@
 <script>
 import { ElMessage } from 'element-plus'
 import { reactive } from 'vue'
-import { findDepart, finddelete } from '../api/sysdepart'
-import { findPaging, findSave } from '../api/user'
+import { findDepart, finddelete } from '../../../api/sysdepart'
+import { findPaging, findSave } from '../../../api/user'
 
 export default {
   data() {
     return {
       input: '',
       dialogFormVisible: false,
+      dialogTitle: '',
       form: reactive({
         name: ''
       }),
@@ -78,13 +79,17 @@ export default {
       tableData: [],
       rules: {
         name: [
-          { required: true, message: '请输入活动名称', trigger: 'change' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'change' }
+          { required: true, message: '部门名称不能为空！', trigger: 'change' },
+          { min: 3, message: '长度不少于3个字符', trigger: 'change' }
         ]
       }
     }
   },
   methods: {
+    addMainDepart() {
+      this.dialogFormVisible = true
+      this.dialogTitle = '添加部门'
+    },
     /* ==========================初次渲染========================== */
     firstXuanran() {
       findPaging({ current: 1, size: 10, params: {} }).then((res) => {
@@ -93,11 +98,39 @@ export default {
       })
     },
     /* ========================列表编辑部门======================== */
-
+    editDepart(ev) {
+      this.dialogTitle = '编辑部门'
+      this.form.name = ev.deptName
+      this.dialogFormVisible = true
+      if (!formEl) return
+      formEl.validate((valid, fields) => {
+        if (valid) {
+          this.dialogFormVisible = false;
+          this.ideNum = ev.id
+          findDepart({ ids: ev.id }).then((res) => {
+            for (let i = 0; i < this.tableData.length; i++) {
+              if (this.tableData[i].id === ev.id) {
+                // console.log(this.tableData[i],123);
+                // console.log(this.tableData[i].deptName);
+                findSave({ parentId: 0, deptCode: this.deptCode, deptName: this.form.name }).then((res) => {
+                  console.log(res.config.data.deptCode, 123);
+                  this.tableData[i].deptName = res.config.data.deptName
+                })
+              }
+            }
+            this.firstXuanran()
+          }).catch((res) => {
+            console.log(res, '失败');
+          })
+        } else {
+          console.log('error submit!', fields)
+        }
+      })
+    },
     /* ========================列表删除部门======================== */
     delateDepart(ev) {
       //删除信息提示框
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+      this.$confirm('确定删除该部门吗, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -110,7 +143,7 @@ export default {
         this.ideNum = ev.id
         finddelete({ ids: ev.id }).then((res) => {
           // console.log(ev.id);
-          // console.log(res, 111)
+          //console.log(res, 111)
           for (let i = 0; i < this.tableData.length; i++) {
             // let that = this
             if (this.tableData[i].id === ev.id) {
@@ -125,7 +158,6 @@ export default {
           message: '已取消删除'
         });
       });
-
     },
     /* ========================列表搜索部门======================== */
     selectDepart() {

@@ -64,7 +64,7 @@
       <div>前往<el-input style="width: 100px;" v-model="input" />页面</div>
     </el-col>
   </el-row>
-  {{uplaterTabData}}
+
 </template>
 
 <script>
