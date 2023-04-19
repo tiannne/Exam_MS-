@@ -159,8 +159,9 @@ export default {
 }
 
 .el-main {
+  overflow-y: auto;
   transition: linear all 0.2s;
-  position: absolute;
+  // position: absolute;
   left: 64px;
   right: 0;
   top: 60px;
@@ -181,6 +182,10 @@ export default {
 
 }
 
+.el-container{
+  height: 100vh;
+  overflow-y: auto;
+}
 .el-header {
   display: flex;
   padding: 0;

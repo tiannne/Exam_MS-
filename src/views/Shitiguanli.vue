@@ -311,6 +311,7 @@ export default {
     //初始化题库数据
     let initdata2={current: this.selectCount, size: 1000, params: {}}
     initQuestionBank(initdata2).then(res=>{
+      console.log(res.data.data);
         const initData=res.data.data.records
         initData.forEach(item=>{
             this.optionsTikuSearch.push({title:item.title,tikuID:item.id})

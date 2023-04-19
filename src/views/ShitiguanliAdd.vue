@@ -45,6 +45,7 @@
             v-model="ruleForm.fromBank"
             class="m-2"
             placeholder="归属题库"
+            multiple
           >
             <el-option
               v-for="item in optionsFromBank"
@@ -64,14 +65,19 @@
         </el-form-item>
         <el-form-item label="试题图片" prop="imgUrl">
           <el-upload
-            v-model:file-list="fileList"
-            class="upload-demo"
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
-            list-type="picture"
-          >
-            <el-button type="primary">点击上传</el-button>
-          </el-upload>
+          v-model:file-list="fileList"
+          class="upload-demo"
+          :headers='tokenHeader'
+          action="https://lite.yfhl.net/common/api/file/upload"
+          :limit="1"
+          :on-exceed="handleExceed"
+          :before-remove="beforeRemove"
+          :on-remove="handleRemove"
+          :on-success="uploadSuccess"
+          list-type="picture"
+        >
+          <el-button type="primary">上传图片</el-button>
+        </el-upload>
         </el-form-item>
         <el-form-item label="整题解析" prop="questionAnalysis">
           <el-input
@@ -104,7 +110,22 @@
         </el-table-column>
         <el-table-column label="选项图片" width="115" align="center">
           <template #default="scope">
-            <el-button type="primary">点击上传</el-button>
+           <el-form class="tableform">
+            <el-upload
+          v-model:file-list="scope.row.fileList"
+          class="upload-demo"
+          :headers='tokenHeader'
+          action="https://lite.yfhl.net/common/api/file/upload"
+          :limit="1"
+          :on-exceed="handleExceed"
+          :before-remove="beforeRemove"
+          :on-remove="AnswerHandleRemove(scope.$index)"
+          :on-success="AnswerUploadSuccess(scope.$index)"
+          list-type="picture"
+        >
+        <el-button type="primary">上传图片</el-button>
+      </el-upload>
+           </el-form>
           </template>
         </el-table-column>
         <el-table-column label="答案内容" width="500" align="center">
@@ -145,7 +166,9 @@
 
 <script>
 import { initQuestionBank,addQuestion } from "../api/shitiguanli";
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox, ElNotification } from "element-plus";
+import store from "../store";
+
 
 
 export default {
@@ -154,13 +177,8 @@ export default {
       optionsTypeCheck: ["单选题", "多选题", "判断题"],
       optionsDifficultyLevel: ["普通", "较难"],
       optionsFromBank: [],
-
-      fileList: [
-        {
-          name: "	https://lite.yfhl.net/upload/file/2023/04/14/1646674709460025346.jpg",
-          url: "https://lite.yfhl.net/upload/file/2023/04/14/1646674709460025346.jpg",
-        },
-      ],
+      tokenHeader:{},
+      fileList: [],
       ruleForm: {
         questionType: "", //quType
         difficultyLevel: "", //level
@@ -195,18 +213,58 @@ export default {
     };
   },
   methods: {
+    beforeRemove(uploadFile, uploadFiles) {
+      return ElMessageBox.confirm(`你是否要删除文件?`).then(
+        () => true,
+        () => false
+      );
+    },
+
+    //点击确定删除
+    handleRemove(uploadFile,uploadFiles) {
+      this.fileList = [];
+    },
+    //上传前的钩子函数
+    handleExceed(){
+        ElMessage.error('每次只能上传一张图片')
+    },
+    //上传成功时
+    uploadSuccess(){
+      this.fileList=[{name:'试题图片',url:this.fileList[0].response.data.url}]
+    },
+
+    //答案列表 点击确定删除
+    AnswerHandleRemove(index){
+      return (res)=>{
+        console.log(index);
+        this.tableData[index].fileList=[]
+        this.tableData[index].image=''
+        // console.log(this.tableData[index].fileList);
+      }
+    },
+    //答案列表上传成功时的钩子函数
+    AnswerUploadSuccess(index){
+      return (res)=> {
+        console.log(index);
+        this.tableData[index].fileList=[{name:`试题${index+1}`,url:res.data.url}]
+        // console.log(this.tableData[index].fileList);
+        this.tableData[index].image=res.data.url
+        // console.log(this.tableData[index].image);
+      }
+    },
+    //-----------------------------------------------------------------------
     choiceType: function (type) {
       if (type === 3) {
         this.tableData = [
-          { checkType: true, answerContent: "正确", answerAnalysis: "" },
-          { checkType: false, answerContent: "错误", answerAnalysis: "" },
+          { checkType: true, answerContent: "正确", answerAnalysis: "",image:"",fileList: [] },
+          { checkType: false, answerContent: "错误", answerAnalysis: "",image:"",fileList: [] },
         ];
       } else {
         this.tableData = [
-          { checkType: false, answerContent: "", answerAnalysis: "" },
-          { checkType: false, answerContent: "", answerAnalysis: "" },
-          { checkType: false, answerContent: "", answerAnalysis: "" },
-          { checkType: false, answerContent: "", answerAnalysis: "" },
+          { checkType: false, answerContent: "", answerAnalysis: "",image:"", fileList: [] },
+          { checkType: false, answerContent: "", answerAnalysis: "",image:"", fileList: [] },
+          { checkType: false, answerContent: "", answerAnalysis: "",image:"", fileList: [] },
+          { checkType: false, answerContent: "", answerAnalysis: "",image:"", fileList: [] },
         ];
       }
     },
@@ -239,27 +297,27 @@ if(this.ruleForm.questionType==''){
         }
       });
       if (num === 0) {
-        alert("请选择正确答案");
+        ElMessage.warning("请选择正确答案");
         return false;
       }
       if (this.ruleForm.questionType === 1) {
         //单选题
         if (num > 1) {
-          alert("单选题只能有一个答案");
+          ElMessage.warning("单选题只能有一个答案");
           return false;
         }
       }
       if (this.ruleForm.questionType === 2) {
         if (num === 1) {
-          alert("多选题答案不能唯一");
+          ElMessage.warning("多选题答案不能唯一");
           return false;
         }
       }
       if (this.ruleForm.questionType === 3) {
         if (num > 1) {
-          alert("判断题只能有一个答案");
+          ElMessage.warning("判断题只能有一个答案");
           return false;
-        }
+        } 
       }
 //-------------------------------------------判断选择个数
 
@@ -269,7 +327,7 @@ if(this.ruleForm.questionType==''){
       ); //判断每项都不为空
       console.log(!result);
       if (!result) {
-        alert("答案内容不能为空");
+        ElMessage.warning("答案内容不能为空");
         return false;
       }
 //---------------------------------------判断题目内容
@@ -278,13 +336,15 @@ if(this.ruleForm.questionType==''){
           isRight: item.checkType,
           content: item.answerContent,
           analysis: item.answerAnalysis,
+          image:item.image
         };
       });
+      console.log(this.fileList);
+   
       const data = {
         repoIds: this.ruleForm.fromBank,
         tagList: [], //不知道是什么
-        image:
-          "https://lite.yfhl.net/upload/file/2023/04/14/1646674709460025346.jpg", //写死先
+        image: this.fileList.length>0? this.fileList[0].url:'',
         quType: this.ruleForm.questionType,
         level: this.ruleForm.difficultyLevel,
         content: this.ruleForm.questionContent,
@@ -305,6 +365,7 @@ if(this.ruleForm.questionType==''){
     },
   },
   created() {
+    this.tokenHeader={token:store.state.userToken.token}
     //初始化题库
     let initdata = { current: 1, size: 1000, params: {} };
     initQuestionBank(initdata).then((res) => {
@@ -326,6 +387,12 @@ if(this.ruleForm.questionType==''){
     /*左边阴影  绿色*/ 1px 0px 10px 0px #eee,
     /*右边阴影  蓝色*/ 0px 1px 10px 0px #eee; /*下边阴影  黄ccc*/
   margin-bottom: 30px;
+}
+.tableform{
+  padding: 0;
+  border: none;
+  margin-bottom: 0;
+  box-shadow: none;
 }
 .el-table {
   border: 1px solid #eee;
