@@ -64,6 +64,7 @@
       <div>前往<el-input style="width: 100px;" v-model="input" />页面</div>
     </el-col>
   </el-row>
+  {{uplaterTabData}}
 </template>
 
 <script>
@@ -294,7 +295,7 @@ export default {
     searchInput(e) {
       if (e) {
         this.uplaterTabData = this.uplaterTabData.filter((item) => {
-          return item.content.indexOf(e) != -1
+          return item.title.indexOf(e) != -1
         })
       } else {
         this.uplaterTabData = this.tableData
