@@ -13,17 +13,8 @@
             <HomeFilled />
           </el-icon>
         </div>
-        <el-menu
-          :collapse="collapse"
-          :collapse-transition="false"
-          background-color="#304156"
-          text-color="#bfcbd9"
-          router
-          :default-active="activeIndex"
-          class="el-menu-vertical-demo"
-          @open="handleOpen"
-          @close="handleClose"
-        >
+        <el-menu :collapse="collapse" :collapse-transition="false" background-color="#304156" text-color="#bfcbd9" router
+          :default-active="activeIndex" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
           <el-menu-item index="/home">
             <el-icon>
               <Edit />
@@ -76,11 +67,35 @@
               <Expand />
             </el-icon>
           </div>
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item><a href="/">活动管理</a></el-breadcrumb-item>
+            <el-breadcrumb-item>活动列表</el-breadcrumb-item>
+            <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+          </el-breadcrumb>
+          <div class="userWrap">
+            <el-avatar :size="30"></el-avatar>
+            <p class="words">
+              欢迎：admin 
+            </p>
+            <el-dropdown>
+              <span class="el-dropdown-link">
+                <el-icon class="el-icon--right">
+                  <arrow-down />
+                </el-icon>
+              </span>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item>个人中心</el-dropdown-item>
+                  <el-dropdown-item @click="handleToLogout">退出登录</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </div>
         </el-header>
-
         <el-main>
           <Transition name="rotate">
-          <RouterView />
+            <RouterView />
           </Transition>
         </el-main>
       </el-container>
@@ -124,7 +139,7 @@ export default {
     text-align: center;
     line-height: 60px;
     font-size: 20px;
-    color:#333;
+    color: #333;
     padding-top: 4px;
   }
 }
@@ -182,10 +197,11 @@ export default {
 
 }
 
-.el-container{
+.el-container {
   height: 100vh;
   overflow-y: auto;
 }
+
 .el-header {
   display: flex;
   padding: 0;
@@ -200,11 +216,37 @@ export default {
     color: #333;
     padding-top: 4px;
   }
+
+  .el-breadcrumb {
+    line-height: 60px;
+  }
+
+  :deep(.el-dropdown) {
+    border: none;
+    line-height: 60px;
+  }
+
+  .userWrap {
+    position: absolute;
+    right: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    outline: none;
+    .words {
+      line-height: 60px;
+      margin-left: 10px;
+      font-size: 14px;
+      color: #333;
+    }
+  }
+
 }
 
 .el-menu {
   border: none;
 }
+
 .rotate-enter-active {
   animation: .7s linear in;
 }
@@ -214,24 +256,28 @@ export default {
     display: none;
     transform: translateX(-100%);
   }
+
   100% {
-   display: none;
+    display: none;
     transform: translateX(0);
   }
 }
+
 @keyframes in {
   0% {
     opacity: 0;
     // display: none;
     transform: translateX(-100%);
   }
+
   100% {
-  //  display: none;
-  opacity: 1;
+    //  display: none;
+    opacity: 1;
     transform: translateX(0);
   }
 }
+
 .rotate-leave-active {
-  animation: .7s linear move ;
+  animation: .7s linear move;
 }
 </style>
