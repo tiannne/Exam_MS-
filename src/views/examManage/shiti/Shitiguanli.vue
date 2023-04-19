@@ -142,7 +142,7 @@
 
 <script>
 import { ElMessage, ElMessageBox } from 'element-plus'
-import {initsubject,initQuestionBank,tiAddOrMovueToBank,removeQuestion} from '../api/shitiguanli'
+import {initsubject,initQuestionBank,tiAddOrMovueToBank,removeQuestion} from '../../../api/shitiguanli'
 export default {
   data() {
     return {
