@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { initRoleList } from "../api/Sysrole";
+import { initRoleList } from "../../../api/Sysrole";
 export default {
   data() {
     return {

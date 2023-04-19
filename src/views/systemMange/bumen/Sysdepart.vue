@@ -62,8 +62,8 @@
 <script>
 import { ElMessage } from 'element-plus'
 import { reactive } from 'vue'
-import { findDepart, finddelete } from '../api/sysdepart'
-import { findPaging, findSave } from '../api/user'
+import { findDepart, finddelete } from '../../../api/sysdepart'
+import { findPaging, findSave } from '../../../api/user'
 
 export default {
   data() {

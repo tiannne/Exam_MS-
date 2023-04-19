@@ -8,17 +8,17 @@
         <el-input v-model="input2" placeholder="搜索姓名" @input="sousuoname" />
       </el-col>
       <el-col :span="5">
-        <el-button type="primary" @click="dialogFormVisible = true">
-          <el-icon><Plus /></el-icon>添加
+        <el-button type="primary" @click="
+          dialogFormVisible = true;
+        kong();
+                              ">
+          <el-icon>
+            <Plus />
+          </el-icon>添加
         </el-button>
       </el-col>
     </el-row>
-    <el-select
-      v-model="value"
-      class="m-2"
-      :placeholder="'已选' + this.num + '项'"
-      v-if="this.boolean"
-    >
+    <el-select v-model="value" class="m-2" :placeholder="'已选' + this.num + '项'" v-if="this.boolean">
       <el-option value="启用" @click="del" />
       <el-option value="禁用" @click="del" />
       <el-option value="删除" @click="del" />
@@ -32,34 +32,24 @@
           <el-input v-model="formLabelAlign.realName" />
         </el-form-item>
         <el-form-item label="密码">
-          <el-input
-            v-model="formLabelAlign.password"
-            placeholder="不修改请留空"
-            type="password"
-          />
+          <el-input v-model="formLabelAlign.password" placeholder="不修改请留空" type="password" />
         </el-form-item>
         <el-form-item label="部门">
           <el-select v-model="formLabelAlign.departId" placeholder="请选择">
-            <el-option label="66">
-              <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" />
-            </el-option>
+            <el-option v-for="item in bumenarr" :label="item" :value="item" />
           </el-select>
         </el-form-item>
         <el-form-item label="角色">
-          <el-input v-model="formLabelAlign.roles" placeholder="请选择角色" />
+          <el-input v-model="formLabelAlign.roleIds" placeholder="请选择角色" />
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取消</el-button>
-          <el-button
-            type="primary"
-            @click="
-              dialogFormVisible = false;
-              onSubmit();
-            "
-          >
-            确定
+          <el-button type="primary" @click="
+            dialogFormVisible = false;
+          onSubmit();
+                                    ">确定
           </el-button>
         </span>
       </template>
@@ -68,7 +58,7 @@
       border>
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column prop="userName" label="用户名" align="center">
-          <template #default="scope">
+        <template #default="scope">
           <div style="cursor: pointer" @click="details(scope.row.id)">
             {{ scope.row.userName }}
           </div>
@@ -80,32 +70,26 @@
       <el-table-column prop="state" label="状态" align="center" />
     </el-table>
 
-    <el-pagination
-      v-model:current-page="currentPage4"
-      v-model:page-size="pageSize4"
-      :page-sizes="[10, 20, 30, 40]"
-      :small="small"
-      :disabled="disabled"
-      :background="background"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-    />
+    <el-pagination v-model:current-page="currentPage4" v-model:page-size="pageSize4" :page-sizes="[10, 20, 30, 40]"
+      :small="small" :disabled="disabled" :background="background" layout="total, sizes, prev, pager, next, jumper"
+      :total="total" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
   </div>
 </template>
 
 <script>
-import { reactive } from 'vue'
-import { user, list } from "../api/sysuser";
+import { reactive } from "vue";
+import { user, list } from "../../../api/sysuser";
+import { forEach } from "lodash";
 export default {
   data() {
     return {
+      arr: [],
+      bumenarr: [],
       dialogFormVisible: false,
       formLabelAlign: reactive({
-        name: '',
-        region: '',
-        type: '',
+        name: "",
+        region: "",
+        type: "",
       }),
 
       num: 0,
@@ -135,8 +119,8 @@ export default {
     };
   },
   methods: {
-    add() {},
-    sousuo() {},
+    add() { },
+    sousuo() { },
     handleSelectionChange(val) {
       console.log(val.length);
       if (val.length > 0) {
@@ -150,7 +134,7 @@ export default {
       user(this.currentPage4, this.pageSize4, { userName: this.input1 }).then(
         (res) => {
           // console.log(res.data.data.records);
-          this.data = res.data.data.records
+          this.data = res.data.data.records;
           console.log(this.data);
           res.data.data.records.forEach((item) => {
             if (item.state == 0) {
@@ -186,23 +170,37 @@ export default {
       );
     },
     details(id) {
-      console.log(id);
-      this.dialogFormVisible = true
-      this.new = this.data.find((v) => v.id == id)
-      console.log(this.new.userName);
-      this.formLabelAlign=this.new
+      // console.log(id);
+      this.dialogFormVisible = true;
+      this.new = this.data.find((v) => v.id == id);
+      // console.log(this.new.userName);
+      console.log(this.new);
+      this.new.password = [];
+      this.new.departId = "部门";
+      console.log(this.new.roleIds);
+      this.formLabelAlign = this.new;
     },
-     kong() {
-    this.formLabelAlign=[]
+    kong() {
+      this.formLabelAlign = [];
     },
     onSubmit() {
       console.log("提交");
     },
+    bumen() {
+      list().then((res) => {
+        this.arr = res.data.data
+        console.log(this.arr);
+        for (var j = 0; j < this.arr.length; j++) {
+          this.bumenarr.push(this.arr[j].deptName)
+        }
+      });
+      console.log(this.bumenarr);
+    },
   },
- 
-  
+
   created() {
     this.xuanran();
+    this.bumen();
   },
 };
 </script>
@@ -232,9 +230,11 @@ export default {
 .el-form-item {
   margin-bottom: 30px;
 }
+
 .el-select {
   width: 400px;
 }
+
 .m-2 {
   width: 130px;
   margin-top: 10px;

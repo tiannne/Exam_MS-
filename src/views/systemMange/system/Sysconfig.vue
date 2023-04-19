@@ -32,8 +32,8 @@
 
 <script>
 import { ElMessage, ElMessageBox, ElNotification } from "element-plus";
-import { initLogoInfo, RoleListSave } from "../api/Sysconfig";
-import store from "../store";
+import { initLogoInfo, RoleListSave } from "../../../api/Sysconfig";
+import store from "../../../store";
 
 export default {
   data() {
@@ -85,6 +85,9 @@ export default {
             message: "配置保存成功",
             type: "success",
           });
+          setTimeout(()=>{
+            location.reload()
+          },500)
         }
       });
     },

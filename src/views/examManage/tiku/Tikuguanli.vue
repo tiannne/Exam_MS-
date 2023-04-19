@@ -65,8 +65,8 @@ import { ElMessage, ElMessageBox } from "element-plus";
 import { useRouter } from "vue-router";
 //
 import { useStore } from "vuex";
-import { tikuguanli } from "../api/tikuguanli";
-import { dele } from "../api/tikuguanli";
+import { tikuguanli } from "../../../api/tikuguanli";
+import { dele } from "../../../api/tikuguanli";
 
 const store = useStore();
 //
