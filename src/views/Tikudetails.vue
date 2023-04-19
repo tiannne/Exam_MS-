@@ -22,8 +22,12 @@
 import { reactive, ref } from "vue";
 import { ElMessage } from "element-plus";
 import { useRouter, useRoute } from "vue-router";
-import { detail,add } from "../api/tikuguanli";
+import { detail, update } from "../api/tikuguanli";
 const id = ref();
+let createTime = ref();
+let remark = ref();
+let title = ref();
+let updateTime = ref();
 const init = () => {
   const route = useRoute();
   console.log(route.params.id);
@@ -36,12 +40,20 @@ const form = reactive({
   desc: "",
 });
 
-
 const rules = reactive({
   name: [{ required: true, message: "题库名称不能为空！", trigger: "blur" }],
 });
+// const time = new Date();
+// let nowtime = time.toLocaleString();
+// let newtime=nowtime.replace(/\//g,"-");
 const onSubmit = () => {
-  add(form.name, form.desc).then((res) => {
+  // console.log(
+  //   createTime,
+  //   id.value,
+  //  form.desc,
+  //   form.name,
+  //   updateTime);
+ update(createTime, id.value, form.desc, form.name, updateTime).then((res) => {
     ElMessage({
       message: "题库保存成功",
       type: "success",
@@ -57,6 +69,8 @@ const xuanran = () => {
     console.log(res.data.data);
     form.name = res.data.data.title;
     form.desc = res.data.data.remark;
+    createTime = res.data.data.createTime;
+    updateTime = res.data.data.updateTime;
   });
 };
 xuanran();

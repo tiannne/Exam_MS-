@@ -19,7 +19,21 @@ export const add = (title, remark) => {
     method: "POST",
     data: {
       title,
-      remark
+      remark,
+    },
+  });
+};
+
+export const update = (createTime, id, remark, title, updateTime) => {
+  return instance({
+    url: "/exam/api/repo/save",
+    method: "POST",
+    data: {
+      createTime,
+      id,
+      remark,
+      title,
+      updateTime,
     },
   });
 };
