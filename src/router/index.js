@@ -1,12 +1,14 @@
+import { createRouter, createWebHistory } from "vue-router";
+import store from "../store";
 
-import { createRouter, createWebHistory } from 'vue-router'
-import store from '../store'
-
-const Index = () => import('../views/Index.vue')
-const Login = () => import('../views/Login.vue')
+const Index = () => import("../views/Index.vue");
+const Login = () => import("../views/Login.vue");
 // const Home = () => import('../views/Home.vue')
+
+
 const Home = () => import('../views/UpDataInformation.vue')
 const Tikuguanli = () => import('../views/Tikuguanli.vue')
+const Tikudetails = () => import('../views/Tikudetails.vue')
 const Tikuadd = () => import('../views/Tikuadd.vue')
 const Kaoshiguanli = () => import('../views/Kaoshiguanli.vue')
 const Shitiguanli = () => import('../views/Shitiguanli.vue')
@@ -14,6 +16,7 @@ const ShitiguanliAdd=()=>import('../views/ShitiguanliAdd.vue')
 const ExamDetail = () => import('../views/ExamDetail.vue')
 const ExamUpData = () => import('../views/ExamUpData.vue')
 
+const ShitiguanliUpdate=()=>import('../views/ShitiguanliUpdate.vue')
 const Sys = () => import('../views/Sys.vue')
 const Sysconfig = () => import('../views/Sysconfig.vue')
 const Sysdepart = () => import('../views/Sysdepart.vue')
@@ -29,34 +32,42 @@ const router = createRouter({
       path: "/",
       name: "index",
       component: Index,
-      meta:{
-        auth:true
+      redirect: "/home",
+      meta: {
+        auth: true,
       },
       children: [
         {
           path: "home",
           name: "home",
           component: Home,
-          meta:{
-            auth:true
-          }
-          
+          meta: {
+            auth: true,
+          },
         },
         {
           path: "tiku/guanli",
           name: "tikuguanli",
           component: Tikuguanli,
-          meta:{
-            auth:true
-          }
+          meta: {
+            auth: true,
+          },
         },
         {
-          path: 'tiku/guanli/tikuadd',
-          name: 'tikuadd',
+          path: "tiku/guanli/tikuadd",
+          name: "tikuadd",
           component: Tikuadd,
-          meta:{
-            auth:true
-          }
+          meta: {
+            auth: true,
+          },
+        },
+        {
+          path: "tiku/guanli/tikudetails/:id",
+          name: "tikudetails",
+          component: Tikudetails,
+          meta: {
+            auth: true,
+          },
         },
         {
           path: "kaoshi/guanli",
@@ -86,80 +97,85 @@ const router = createRouter({
           path: "kaoshi/guanli/ExamUpData/:id?",
           name: "kaoshiguanliExamUpData",
           component: ExamUpData,
-          meta:{
-            auth:true
+          meta: {
+            auth: true,
           },
         },
         {
           path: "shiti/guanli",
           name: "shitiguanli",
           component: Shitiguanli,
-          meta:{
-            auth:true
-          }
+          meta: {
+            auth: true,
+          },
         },
         {
           path:'shiti/guanli/add',
-          name:'add',
+          name:'ShitiguanliAdd',
           component:ShitiguanliAdd
+        },
+        {
+          path:'shiti/guanli/update/:id',
+          name:'ShitiguanliUpdate',
+          component:ShitiguanliUpdate
         },
         {
           path: 'sys/config',
           name: 'sysconfig',
           component: Sysconfig,
-          meta:{
-            auth:true
-          }
+          meta: {
+            auth: true,
+          },
         },
         {
-          path: 'sys/depart',
-          name: 'sysdepart',
+          path: "sys/depart",
+          name: "sysdepart",
           component: Sysdepart,
-          meta:{
-            auth:true
-          }
+          meta: {
+            auth: true,
+          },
         },
         {
-          path: 'sys/role',
-          name: 'sysrole',
+          path: "sys/role",
+          name: "sysrole",
           component: Sysrole,
-          meta:{
-            auth:true
-          }
+          meta: {
+            auth: true,
+          },
         },
         {
-          path: 'sys/user',
-          name: 'sysuser',
+          path: "sys/user",
+          name: "sysuser",
           component: Sysuser,
-          meta:{
-            auth:true
-          }
-        }
-      ]
+          meta: {
+            auth: true,
+          },
+        },
+      ],
     },
     {
-      path: '/login',
-      name: 'login',
+      path: "/login",
+      name: "login",
       component: Login,
-      meta:{
-        auth:false
-      }
-    }
-  ]
-})
+      meta: {
+        auth: false,
+      },
+    },
+  ],
+});
 
 /* 全局前置守卫 */
 router.beforeEach((to, from, next) => {
-  if(to.meta.auth){
-    if(store.state.userToken.token){
-      next()
-    }else{
-      router.push("/login")
+  if (to.meta.auth) {
+    if (store.state.userToken.token) {
+      next();
+    } else {
+      router.push("/login");
     }
-  }else{
-    next()
+  } else {
+    next();
   }
   // console.log(to.meta.auth)
-}) 
+});
 
 export default router;

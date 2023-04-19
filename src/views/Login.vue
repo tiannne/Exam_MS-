@@ -43,7 +43,7 @@ export default {
                     { required: true, message: '请输入用户名', trigger: 'blur' },
                 ],
                 pass: [
-                    { required: true, message: '请输入用户名', trigger: 'blur' },
+                    { required: true, message: '请输入密码', trigger: 'blur' },
                 ]
             }
         }
@@ -56,12 +56,10 @@ export default {
                     .then((res)=>{
                         if(res.data.code == 0){
                             this.$store.commit('userToken/setToken',res.data.data.token)
-                            this.$router.push('/')
+                            this.$router.push('/home')
                             this.$message.success("恭喜你登录成功")
                         }
-                    })
-                    
-                  
+                    }) 
                 } else {
                     console.log('error submit!!');
                     return false;
