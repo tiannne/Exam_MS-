@@ -2,7 +2,7 @@
   <div>
     <el-row>
       <el-col :span="7">
-        <el-input class="findCom" v-model="input" placeholder="搜索公司名称" @input="findDepart" />
+        <el-input class="findCom" v-model="input" placeholder="搜索公司名称" @input="selectDepart" />
       </el-col>
       <!-- 添加按钮 -->
       <el-col :span="6" @click="dialogFormVisible = true">
@@ -21,7 +21,7 @@
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button @click="departDefault">取 消</el-button>
           <el-button type="primary" @click="departAdd($refs.ruleFormRef)">确 定</el-button>
         </div>
       </el-dialog>
@@ -31,21 +31,23 @@
       :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
       <el-table-column prop="deptName" label="名称" sortable width="180">
       </el-table-column>
-      <el-table-column prop="parentId" label="编码" sortable width="180">
+      <el-table-column prop="deptCode" label="编码" sortable width="180">
       </el-table-column>
-      <el-table-column prop="address" label="操作项">
-
-        <el-button class="wrap" type="text" size="small">
+      <el-table-column prop="address" label="操作项" #default="scope">
+        <!-- 添加子部门 -->
+        <el-button class="wrap" type="text" size="small" @click="addDepart">
           <div class="box"><el-icon>
               <Plus />
             </el-icon></div>
         </el-button>
-        <el-button class="wrap" type="text" size="small">
+        <!-- 编辑部门 -->
+        <el-button class="wrap" type="text" size="small" @click="editDepart">
           <div class="box"><el-icon>
               <EditPen />
             </el-icon></div>
         </el-button>
-        <el-button class="wrap" type="text" size="small">
+        <!-- 删除部门 -->
+        <el-button class="wrap" type="text" size="small" @click="delateDepart(scope.row)">
           <div class="box"><el-icon>
               <Delete />
             </el-icon></div>
@@ -60,17 +62,19 @@
 <script>
 import { ElMessage } from 'element-plus'
 import { reactive } from 'vue'
-import { findPaging, findSave, findDepart, finddelete } from '../api/Sysdepart'
+import { findDepart, finddelete } from '../api/sysdepart'
+import { findPaging, findSave } from '../api/user'
 
 export default {
   data() {
     return {
-      input:'',
-      parentNum: 0,
+      input: '',
       dialogFormVisible: false,
       form: reactive({
         name: ''
       }),
+      deptName: '',
+      idsNum: '',
       tableData: [],
       rules: {
         name: [
@@ -80,56 +84,102 @@ export default {
       }
     }
   },
-
   methods: {
-    findDepart(){
-      this.firstXuanran()
-    },
+    /* ==========================初次渲染========================== */
     firstXuanran() {
-      findPaging().then((res) => {
+      findPaging({ current: 1, size: 10, params: {} }).then((res) => {
+        // console.log(res.data.data.records)
+        this.tableData = res.data.data.records
       })
     },
+    /* ========================列表编辑部门======================== */
+
+    /* ========================列表删除部门======================== */
+    delateDepart(ev) {
+      //删除信息提示框
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!',
+        });
+        //删除操作
+        this.ideNum = ev.id
+        finddelete({ ids: ev.id }).then((res) => {
+          // console.log(ev.id);
+          // console.log(res, 111)
+          for (let i = 0; i < this.tableData.length; i++) {
+            // let that = this
+            if (this.tableData[i].id === ev.id) {
+              this.tableData.splice(i, 1)
+            }
+          }
+          this.firstXuanran()
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+
+    },
+    /* ========================列表搜索部门======================== */
+    selectDepart() {
+      findPaging({ current: 1, size: 10, params: { deptName: this.input } }).then((res) => {
+        console.log(res.data.data.records)
+        this.tableData = res.data.data.records
+      })
+    },
+    /* ==========================添加部门========================== */
     departAdd(formEl) {
       if (!formEl) return
       formEl.validate((valid, fields) => {
         if (valid) {
-          this.parentNum++
           this.dialogFormVisible = false;
-          findSave({ parentId: this.parentNum, deptName: this.form.name }).then((res) => {
+          findSave({ parentId: 0, deptCode: this.deptCode, deptName: this.form.name }).then((res) => {
+            // if (this.tableData.length === 0) {}
+            // console.log(this.tableData.length, '第一个');
             this.tableData.push(JSON.parse(res.config.data))
             ElMessage.success('部门添加成功')
             this.form.name = ''
+            this.firstXuanran()
+            /* } else {
+              if (this.tableData.map((v) => v.deptName).includes(this.form.name)) {
+                ElMessage.error('部门名称重复')
+                this.form.name = ''
+                this.firstXuanran()
+              } else {
+                this.tableData.push(JSON.parse(res.config.data))
+                ElMessage.success('部门添加成功')
+                this.form.name = ''
+                this.firstXuanran()
+              }*/
+
           }).catch((res) => {
-            console.log(res, 1111);
+            console.log(res, '失败');
           })
         } else {
           console.log('error submit!', fields)
         }
       })
+    },
+    /* ==========================取消弹窗========================== */
+    departDefault() {
+      this.dialogFormVisible = false;
+      this.form.name = ''
     }
   },
-  load(tree, treeNode, resolve) {
-    setTimeout(() => {
-      resolve([
-        {
-          id: 31,
-          date: '2016-05-01',
-          name: '林俊杰',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          id: 32,
-          date: '2016-05-01',
-          name: '林俊杰',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }
-      ])
-    }, 1000)
-  },
-created() {
-  this.firstXuanran()
-} 
+  created() {
+    this.firstXuanran()
+  }
 }
 </script>
+
+
 
 <style lang="scss" scoped>
 .el-row {

@@ -8,6 +8,7 @@ const Login = () => import("../views/Login.vue");
 
 const Home = () => import('../views/UpDataInformation.vue')
 const Tikuguanli = () => import('../views/Tikuguanli.vue')
+const Tikudetails = () => import('../views/Tikudetails.vue')
 const Tikuadd = () => import('../views/Tikuadd.vue')
 const Kaoshiguanli = () => import('../views/Kaoshiguanli.vue')
 const Shitiguanli = () => import('../views/Shitiguanli.vue')
