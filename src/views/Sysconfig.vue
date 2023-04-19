@@ -1,11 +1,23 @@
 <template>
  <div>
-  系统配置
+  系统配置1111
+
+
+
+
+
  </div>
 </template>
 
-<script setup>
-
+<script>
+export default{
+    data(){
+        return{
+            dialogVisible:true
+        }
+    }
+}
+    
 </script>
 
 <style lang="scss" scoped>

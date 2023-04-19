@@ -11,12 +11,15 @@ const Tikuadd = () => import('../views/Tikuadd.vue')
 const Kaoshiguanli = () => import('../views/Kaoshiguanli.vue')
 const Shitiguanli = () => import('../views/Shitiguanli.vue')
 const ShitiguanliAdd=()=>import('../views/ShitiguanliAdd.vue')
+const ExamDetail = () => import('../views/ExamDetail.vue')
+const ExamUpData = () => import('../views/ExamUpData.vue')
 
 const Sys = () => import('../views/Sys.vue')
 const Sysconfig = () => import('../views/Sysconfig.vue')
 const Sysdepart = () => import('../views/Sysdepart.vue')
 const Sysrole = () => import('../views/Sysrole.vue')
 const Sysuser = () => import('../views/Sysuser.vue')
+const ExamAddAndUpdata = () => import('../views/ExamAddAndUpdata.vue')
 
 const router = createRouter({
   /* 环境变量 */
@@ -61,7 +64,31 @@ const router = createRouter({
           component: Kaoshiguanli,
           meta:{
             auth:true
-          }
+          },
+        },
+        {
+          path: "kaoshi/guanli/ExamAddAndUpdata/:id?",
+          name: "kaoshiguanliExamAddAndUpdata",
+          component: ExamAddAndUpdata,
+          meta:{
+            auth:true
+          },
+        },
+        {
+          path: "kaoshi/guanli/ExamDetail/:id?",
+          name: "kaoshiguanliExamDetail",
+          component: ExamDetail,
+          meta:{
+            auth:true
+          },
+        },
+        {
+          path: "kaoshi/guanli/ExamUpData/:id?",
+          name: "kaoshiguanliExamUpData",
+          component: ExamUpData,
+          meta:{
+            auth:true
+          },
         },
         {
           path: "shiti/guanli",

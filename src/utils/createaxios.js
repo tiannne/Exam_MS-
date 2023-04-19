@@ -8,8 +8,8 @@ const instance = axios.create({
 //请求拦截器
 instance.interceptors.request.use(function (config) {
     //请求之前添加token
- const token = store.state.token
- config.headers.token = token
+ const token = store.state.userToken.token
+ config.headers.token =token
  return config
 },function (error) {
     // 对请求错误做些什么
