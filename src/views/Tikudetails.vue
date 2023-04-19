@@ -43,17 +43,17 @@ const form = reactive({
 const rules = reactive({
   name: [{ required: true, message: "题库名称不能为空！", trigger: "blur" }],
 });
-// const time = new Date();
-// let nowtime = time.toLocaleString();
-// let newtime=nowtime.replace(/\//g,"-");
+const time = new Date();
+let nowtime = time.toLocaleString();
+let newtime=nowtime.replace(/\//g,"-");
 const onSubmit = () => {
   // console.log(
   //   createTime,
   //   id.value,
   //  form.desc,
   //   form.name,
-  //   updateTime);
- update(createTime, id.value, form.desc, form.name, updateTime).then((res) => {
+  //   newtime);
+ update(createTime, id.value, form.desc, form.name, newtime).then((res) => {
     ElMessage({
       message: "题库保存成功",
       type: "success",
@@ -70,7 +70,7 @@ const xuanran = () => {
     form.name = res.data.data.title;
     form.desc = res.data.data.remark;
     createTime = res.data.data.createTime;
-    updateTime = res.data.data.updateTime;
+    // updateTime = res.data.data.updateTime;
   });
 };
 xuanran();
