@@ -48,6 +48,7 @@ const router = createRouter({
           component: Tikuguanli,
           meta: {
             auth: true,
+            breadcrumb: ['考试管理','题库管理']
           },
         },
         {
@@ -56,6 +57,7 @@ const router = createRouter({
           component: Tikuadd,
           meta: {
             auth: true,
+            breadcrumb: ['考试管理','题库管理','添加题库']
           },
         },
         {
@@ -71,7 +73,8 @@ const router = createRouter({
           name: "kaoshiguanli",
           component: Kaoshiguanli,
           meta:{
-            auth:true
+            auth:true,
+            breadcrumb: ['考试管理','考试管理']
           },
         },
         {
@@ -104,12 +107,16 @@ const router = createRouter({
           component: Shitiguanli,
           meta: {
             auth: true,
+            breadcrumb: ['考试管理','试题管理']
           },
         },
         {
           path:'shiti/guanli/add',
           name:'ShitiguanliAdd',
-          component:ShitiguanliAdd
+          component:ShitiguanliAdd,
+          meta: {
+            breadcrumb: ['考试管理','试题管理','添加试题']
+          },
         },
         {
           path:'shiti/guanli/update/:id',
@@ -122,6 +129,7 @@ const router = createRouter({
           component: Sysconfig,
           meta: {
             auth: true,
+            breadcrumb: ['系统设置','系统配置']
           },
         },
         {
@@ -130,6 +138,7 @@ const router = createRouter({
           component: Sysdepart,
           meta: {
             auth: true,
+            breadcrumb: ['系统设置','部门管理']
           },
         },
         {
@@ -138,6 +147,7 @@ const router = createRouter({
           component: Sysrole,
           meta: {
             auth: true,
+            breadcrumb: ['用户管理','角色管理']
           },
         },
         {
@@ -146,6 +156,7 @@ const router = createRouter({
           component: Sysuser,
           meta: {
             auth: true,
+            breadcrumb: ['用户管理','用户管理']
           },
         },
       ],

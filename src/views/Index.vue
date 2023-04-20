@@ -75,10 +75,8 @@
             </el-icon>
           </div>
           <el-breadcrumb separator="/">
-            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item><a href="/">活动管理</a></el-breadcrumb-item>
-            <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-            <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+            <el-breadcrumb-item to="/home">答题统计</el-breadcrumb-item>
+            <el-breadcrumb-item v-for="item in breadcrumb" :key="item">{{ item }}</el-breadcrumb-item>
           </el-breadcrumb>
           <div class="userWrap">
             <el-avatar :size="30"></el-avatar>
@@ -117,8 +115,14 @@ export default {
       collapse: true,
       headword: "在线考试系统",
       head: false,
+      breadcrumb:[]
     }
   },
+  computed:{
+  breadcrumb(){
+   return this.$route.meta.breadcrumb || [];
+  }
+ },
   methods: {
     handleOpen(key, keyPath) {
       // console.log(key, keyPath);
