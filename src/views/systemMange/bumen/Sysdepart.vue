@@ -13,7 +13,7 @@
           添加
         </el-button>
       </el-col>
-      <!-- 弹出表单框一 -->
+      <!-- 弹出表单框 -->
       <el-dialog width="320px " :title="dialogTitle" v-model="dialogFormVisible" class="dialogsize">
         <el-form :model="form" ref="ruleFormRef" label-width="60px" style="max-width: 260px" :rules="rules">
           <el-form-item label="部门名称 " prop="name">
@@ -97,6 +97,9 @@ export default {
         this.tableData = res.data.data.records
       })
     },
+    /* =======================列表添加子部门======================= */
+    
+
     /* ========================列表编辑部门======================== */
     editDepart(ev) {
       this.dialogTitle = '编辑部门'

@@ -29,9 +29,12 @@
               </el-icon>
               <span>考试管理</span>
             </template>
-            <el-menu-item index="/tiku/guanli">题库管理</el-menu-item>
-            <el-menu-item index="/shiti/guanli">试题管理</el-menu-item>
-            <el-menu-item index="/kaoshi/guanli">考试管理</el-menu-item>
+            <el-menu-item index="/tiku/guanli">
+              <el-icon style="padding-right: 10px;"><Files /></el-icon>题库管理</el-menu-item>
+            <el-menu-item index="/shiti/guanli">
+              <el-icon style="padding-right: 10px;"><Tickets /></el-icon>试题管理</el-menu-item>
+            <el-menu-item index="/kaoshi/guanli">
+              <el-icon style="padding-right: 10px;"><Monitor /></el-icon>考试管理</el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="/sys">
             <template #title>
@@ -40,8 +43,10 @@
               </el-icon>
               <span>系统设置</span>
             </template>
-            <el-menu-item index="/sys/config">系统配置</el-menu-item>
-            <el-menu-item index="/sys/depart">部门管理</el-menu-item>
+            <el-menu-item index="/sys/config">
+              <el-icon style="padding-right: 10px;"><Menu /></el-icon>系统配置</el-menu-item>
+            <el-menu-item index="/sys/depart">
+              <el-icon style="padding-right: 10px;"><Opportunity /></el-icon>部门管理</el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="/users">
             <template #title>
@@ -50,8 +55,10 @@
               </el-icon>
               <span>用户管理</span>
             </template>
-            <el-menu-item index="/sys/role">角色管理</el-menu-item>
-            <el-menu-item index="/sys/user">用户管理</el-menu-item>
+            <el-menu-item index="/sys/role">
+              <el-icon style="padding-right: 10px;"><Avatar /></el-icon>角色管理</el-menu-item>
+            <el-menu-item index="/sys/user">
+              <el-icon style="padding-right: 10px;"><User /></el-icon>用户管理</el-menu-item>
           </el-sub-menu>
         </el-menu>
       </el-aside>

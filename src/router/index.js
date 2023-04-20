@@ -7,15 +7,9 @@ const Login = () => import("../views/Login.vue");
 
 
 const Home = () => import('../views/UpDataInformation.vue')
-<<<<<<< HEAD
-const Tikuguanli = () => import('../views/Tikuguanli.vue')
-const Tikudetails = () => import('../views/Tikudetails.vue')
-const Tikuadd = () => import('../views/Tikuadd.vue')
-=======
 const Tikuguanli = () => import('../views/examManage/tiku/Tikuguanli.vue')
 const Tikudetails = () => import('../views/examManage/tiku/Tikudetails.vue')
 const Tikuadd = () => import('../views/examManage/tiku/Tikuadd.vue')
->>>>>>> 68b1d7b8a331f3d5c7a10d65115feba249b4d2f9
 const Kaoshiguanli = () => import('../views/Kaoshiguanli.vue')
 const Shitiguanli = () => import('../views/examManage/shiti/Shitiguanli.vue')
 const ShitiguanliAdd=()=>import('../views/examManage/shiti/ShitiguanliAdd.vue')
