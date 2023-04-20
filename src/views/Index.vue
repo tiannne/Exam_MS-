@@ -127,14 +127,14 @@ export default {
   data() {
     return {
       collapse: true,
-      username:'',
+      username: '',
       headword: "在线考试系统",
       head: false,
       breadcrumb: []
     }
   },
-  created(){
-    this.username =  window.localStorage.getItem('username')
+  created() {
+    this.username = window.localStorage.getItem('username')
   },
   computed: {
     breadcrumb() {
@@ -261,18 +261,25 @@ export default {
     line-height: 60px;
   }
 
-  :deep(.el-dropdown) {
+  .el-dropdown {
     border: none;
     line-height: 60px;
+    outline: none;
+    border: 0;
+    cursor: pointer;
   }
+
+  .el-dropdown-link:focus {
+    outline: none;
+   }
 
   .userWrap {
     position: absolute;
-    right: 40px;
+    right: 60px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    outline: none;
+
 
     .words {
       line-height: 60px;
@@ -320,4 +327,5 @@ export default {
 
 .rotate-leave-active {
   animation: .7s linear move;
-}</style>
+}
+</style>
