@@ -4,9 +4,10 @@ import store from "../store";
 const Index = () => import("../views/Index.vue");
 const Login = () => import("../views/Login.vue");
 // const Home = () => import('../views/Home.vue')
-
-
 const Home = () => import('../views/UpDataInformation.vue')
+const ExamDetail = () => import('../views/ExamDetail.vue')
+const ExamUpData = () => import('../views/ExamUpData.vue')
+const ExamAddAndUpdata = () => import('../views/ExamAddAndUpdata.vue')
 const Tikuguanli = () => import('../views/examManage/tiku/Tikuguanli.vue')
 const Tikudetails = () => import('../views/examManage/tiku/Tikudetails.vue')
 const Tikuadd = () => import('../views/examManage/tiku/Tikuadd.vue')
@@ -69,6 +70,30 @@ const router = createRouter({
           path: "kaoshi/guanli",
           name: "kaoshiguanli",
           component: Kaoshiguanli,
+          meta:{
+            auth:true
+          },
+        },
+        {
+          path: "kaoshi/guanli/ExamAddAndUpdata/:id?",
+          name: "kaoshiguanliExamAddAndUpdata",
+          component: ExamAddAndUpdata,
+          meta:{
+            auth:true
+          },
+        },
+        {
+          path: "kaoshi/guanli/ExamDetail/:id?",
+          name: "kaoshiguanliExamDetail",
+          component: ExamDetail,
+          meta:{
+            auth:true
+          },
+        },
+        {
+          path: "kaoshi/guanli/ExamUpData/:id?",
+          name: "kaoshiguanliExamUpData",
+          component: ExamUpData,
           meta: {
             auth: true,
           },
