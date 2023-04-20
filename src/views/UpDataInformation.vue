@@ -6,7 +6,7 @@
             <div class="img">
                 <el-avatar :size="90" style="border: 5px solid #e9e9eb"
                     src="https://tse4-mm.cn.bing.net/th/id/OIP-C.g9UbVfyVZX-SfD09JcYr5QHaEK?pid=ImgDet&rs=1" />
-                <h4 style="margin-top: 20px; text-align: center;">欢迎admin</h4>
+                <h4 style="margin-top: 20px; text-align: center;">欢迎：{{ username }}</h4>
             </div>
 
         </el-col>
@@ -53,6 +53,7 @@ export default {
             }
         };
         return {
+            username:'',
             ruleForm: {
                 username: '',
                 pass: '',
@@ -71,10 +72,13 @@ export default {
             },
         };
     },
+    created() {
+        this.username = window.localStorage.getItem('username')
+    },
     methods: {
         submitForm(formEl) {
             if (!formEl) return
-           this.$refs[formEl].validate((valid, fields) => {
+            this.$refs[formEl].validate((valid, fields) => {
                 if (valid) {
                     console.log('submit!')
                 } else {

@@ -30,11 +30,17 @@
               <span>考试管理</span>
             </template>
             <el-menu-item index="/tiku/guanli">
-              <el-icon style="padding-right: 10px;"><Files /></el-icon>题库管理</el-menu-item>
+              <el-icon style="padding-right: 10px;">
+                <Files />
+              </el-icon>题库管理</el-menu-item>
             <el-menu-item index="/shiti/guanli">
-              <el-icon style="padding-right: 10px;"><Tickets /></el-icon>试题管理</el-menu-item>
+              <el-icon style="padding-right: 10px;">
+                <Tickets />
+              </el-icon>试题管理</el-menu-item>
             <el-menu-item index="/kaoshi/guanli">
-              <el-icon style="padding-right: 10px;"><Monitor /></el-icon>考试管理</el-menu-item>
+              <el-icon style="padding-right: 10px;">
+                <Monitor />
+              </el-icon>考试管理</el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="/sys">
             <template #title>
@@ -44,9 +50,13 @@
               <span>系统设置</span>
             </template>
             <el-menu-item index="/sys/config">
-              <el-icon style="padding-right: 10px;"><Menu /></el-icon>系统配置</el-menu-item>
+              <el-icon style="padding-right: 10px;">
+                <Menu />
+              </el-icon>系统配置</el-menu-item>
             <el-menu-item index="/sys/depart">
-              <el-icon style="padding-right: 10px;"><Opportunity /></el-icon>部门管理</el-menu-item>
+              <el-icon style="padding-right: 10px;">
+                <Opportunity />
+              </el-icon>部门管理</el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="/users">
             <template #title>
@@ -56,9 +66,13 @@
               <span>用户管理</span>
             </template>
             <el-menu-item index="/sys/role">
-              <el-icon style="padding-right: 10px;"><Avatar /></el-icon>角色管理</el-menu-item>
+              <el-icon style="padding-right: 10px;">
+                <Avatar />
+              </el-icon>角色管理</el-menu-item>
             <el-menu-item index="/sys/user">
-              <el-icon style="padding-right: 10px;"><User /></el-icon>用户管理</el-menu-item>
+              <el-icon style="padding-right: 10px;">
+                <User />
+              </el-icon>用户管理</el-menu-item>
           </el-sub-menu>
         </el-menu>
       </el-aside>
@@ -81,7 +95,7 @@
           <div class="userWrap">
             <el-avatar :size="30"></el-avatar>
             <p class="words">
-              欢迎：admin 
+              欢迎：{{ username }}
             </p>
             <el-dropdown>
               <span class="el-dropdown-link">
@@ -113,16 +127,20 @@ export default {
   data() {
     return {
       collapse: true,
+      username:'',
       headword: "在线考试系统",
       head: false,
-      breadcrumb:[]
+      breadcrumb: []
     }
   },
-  computed:{
-  breadcrumb(){
-   return this.$route.meta.breadcrumb || [];
-  }
- },
+  created(){
+    this.username =  window.localStorage.getItem('username')
+  },
+  computed: {
+    breadcrumb() {
+      return this.$route.meta.breadcrumb || [];
+    }
+  },
   methods: {
     handleOpen(key, keyPath) {
       // console.log(key, keyPath);
@@ -133,6 +151,17 @@ export default {
     zheDie() {
       this.collapse = !this.collapse
       this.head = !this.head
+    },
+    handleToLogout() {
+      /* 清空状态管理中的token，持久化就会清空后退出登录 */
+      this.$store.commit('userToken/clearToken');
+      /* this.$router.push('/login') */
+      /*刷新页面 */
+      /* window.location.reload(); */
+
+      //跳转且刷新页面
+      window.location.href = '/login';
+
     }
   }
 }
@@ -244,6 +273,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     outline: none;
+
     .words {
       line-height: 60px;
       margin-left: 10px;
@@ -290,5 +320,4 @@ export default {
 
 .rotate-leave-active {
   animation: .7s linear move;
-}
-</style>
+}</style>

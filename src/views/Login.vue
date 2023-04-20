@@ -55,6 +55,8 @@ export default {
                     login(this.ruleForm.username,this.ruleForm.pass)
                     .then((res)=>{
                         if(res.data.code == 0){
+                            window.localStorage.setItem('username', res.data.data.realName);
+                            console.log(res.data.data.realName);
                             this.$store.commit('userToken/setToken',res.data.data.token)
                             this.$router.push('/home')
                             this.$message.success("恭喜你登录成功")
