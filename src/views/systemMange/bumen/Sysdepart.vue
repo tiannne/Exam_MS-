@@ -25,6 +25,18 @@
           <el-button type="primary" @click="departAdd($refs.ruleFormRef)">确 定</el-button>
         </div>
       </el-dialog>
+      <!-- 弹出表单框二 -->
+      <el-dialog width="320px " :title="dialogTitle" v-model="dialogFormVisible2" class="dialogsize">
+        <el-form :model="form" ref="ruleFormRef" label-width="60px" style="max-width: 260px" :rules="rules">
+          <el-form-item label="部门名称 " prop="name">
+            <el-input v-model="form.name" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="departDefault">取 消</el-button>
+          <el-button type="primary" @click="departAdd2($refs.ruleFormRef)">确 定</el-button>
+        </div>
+      </el-dialog>
       <!-- 表格 -->
     </el-row>
     <el-table :data="tableData" style="width: 100%;margin-bottom: 20px;" row-key="id" border default-expand-all
@@ -35,7 +47,7 @@
       </el-table-column>
       <el-table-column prop="address" label="操作项" #default="scope">
         <!-- 添加子部门 -->
-        <el-button class="wrap" type="text" size="small" @click="addDepart">
+        <el-button class="wrap" type="text" size="small" @click="addDepart(scope.row)">
           <div class="box"><el-icon>
               <Plus />
             </el-icon></div>
@@ -54,9 +66,10 @@
         </el-button>
       </el-table-column>
     </el-table>
-    <el-pagination v-model:current-page="currentPage4" v-model:page-size="pageSize4" :page-sizes="[10, 20, 30, 40]"
+    <!-- 分页 -->
+    <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize" :page-sizes="[5, 10, 15, 20]"
       :small="small" :disabled="disabled" :background="background" layout="total, sizes, prev, pager, next, jumper"
-      :total="60" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+      :total="total" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
   </div>
 </template>
 <script>
@@ -68,15 +81,23 @@ import { findPaging, findSave } from '../../../api/user'
 export default {
   data() {
     return {
+      addId:'',
+      /* 以下是分页的响应式数据 */
+      currentPage: 1, //当前页
+      total: 0, //总数
+      list: [], //后台返回的所有结果
+      pageSize: 5, //当前页容量
+      tableData: [],//表格数据
+      /* -------------------- */
       input: '',
       dialogFormVisible: false,
+      dialogFormVisible2: false,
       dialogTitle: '',
       form: reactive({
         name: ''
       }),
       deptName: '',
       idsNum: '',
-      tableData: [],
       rules: {
         name: [
           { required: true, message: '部门名称不能为空！', trigger: 'change' },
@@ -86,44 +107,130 @@ export default {
     }
   },
   methods: {
+    /* ===========================分页============================ */
+    handleSizeChange(val) {   //切换每页条数容量
+      this.currentPage = 1;
+      this.pageSize = val;
+      console.log(this.pageSize, 999);
+      this.getList();
+    },
+    handleCurrentChange(val) {   //切换当前页
+      this.currentPage = val;
+      console.log(this.currentPage, 888);
+      this.getList();
+    },
+    getList() {    //获取数据
+      findPaging({ current: 1, size: 9999, params: {} }).then((res) => {
+        this.list = res.data.data.records;    //总数组
+        this.total = res.data.data.records.length;      //总条数
+      })
+      findPaging({ current: this.currentPage, size: this.pageSize, params: {} }).then((res) => {
+        // console.log('总数组：',res.data.data.records);
+        // console.log('总条组：',res.data.data.records.length);
+
+        this.tableData = this.getNeedArr(this.list, this.pageSize)[this.currentPage - 1]  //当前页的表格数据
+        // console.log(this.tableData);
+      });
+
+    },
+    getNeedArr(array, size) {       //获取所需指定长度分割的数组;参数1为用于分割的总数组,参数2为分割数组后每个小数组的长度
+      console.log(array, size);
+      const length = array.length;
+      //判断不是数组，或者size没有设置，size小于1，就返回空数组
+      if (!length || !size || size < 1) {
+        return [];
+      }
+      //核心部分
+      let index = 0; //用来表示切割元素的范围start
+      let resIndex = 0; //用来递增表示输出数组的下标
+
+      //根据length和size算出输出数组的长度，并且创建它。
+      let result = new Array(Math.ceil(length / size));
+      //进行循环
+      while (index < length) {
+        //循环过程中设置result[0]和result[1]的值。该值根据array.slice切割得到。
+        result[resIndex++] = array.slice(index, (index += size));
+      }
+      //输出新数组
+      console.log(result);
+      return result;
+    },
+    /* ----------------------------------------------------------- */
     addMainDepart() {
       this.dialogFormVisible = true
       this.dialogTitle = '添加部门'
     },
     /* ==========================初次渲染========================== */
     firstXuanran() {
-      findPaging({ current: 1, size: 10, params: {} }).then((res) => {
+      findPaging({ current: 1, size: 9999, params: {} }).then((res) => {
         // console.log(res.data.data.records)
         this.tableData = res.data.data.records
       })
     },
-    /* ========================列表编辑部门======================== */
-    editDepart(ev) {
-      this.dialogTitle = '编辑部门'
-      this.form.name = ev.deptName
-      this.dialogFormVisible = true
+    /* =======================列表添加子部门======================= */
+    addDepart(ev) {
+      this.dialogFormVisible2 = true
+      this.dialogTitle = '添加子部门'
+      this.addId = ev.parentId
+    },
+
+    departAdd2(formEl) {
       if (!formEl) return
       formEl.validate((valid, fields) => {
         if (valid) {
           this.dialogFormVisible = false;
-          this.ideNum = ev.id
-          findDepart({ ids: ev.id }).then((res) => {
-            for (let i = 0; i < this.tableData.length; i++) {
-              if (this.tableData[i].id === ev.id) {
-                // console.log(this.tableData[i],123);
-                // console.log(this.tableData[i].deptName);
-                findSave({ parentId: 0, deptCode: this.deptCode, deptName: this.form.name }).then((res) => {
-                  console.log(res.config.data.deptCode, 123);
-                  this.tableData[i].deptName = res.config.data.deptName
-                })
-              }
-            }
-            this.firstXuanran()
+          findSave({ parentId: this.addId, deptCode: this.deptCode, deptName: this.form.name }).then((res) => {
+            console.log(this.appId)
+            console.log(this.tableData[0].children, '第一个');
+            console.log(res.config, '第er个');
+            this.tableData.children.push(JSON.parse(res.config.data))
+            ElMessage.success('部门添加成功')
+            this.form.name = ''
+            this.getList();
           }).catch((res) => {
             console.log(res, '失败');
           })
         } else {
           console.log('error submit!', fields)
+        }
+      })
+    },
+    /* ========================列表编辑部门======================== */
+    editDepart(ev, formEl) {
+      this.dialogTitle = '编辑部门'
+      this.form.name = ev.deptName
+      this.dialogFormVisible = true
+      if (!formEl) return
+      formEl.validate((valid, fields) => {
+        /* 之前的 */
+        // if (valid) {
+        //   this.dialogFormVisible = false;
+        //   this.ideNum = ev.id
+        //   findDepart({ ids: ev.id }).then((res) => {
+        //     for (let i = 0; i < this.tableData.length; i++) {
+        //       if (this.tableData[i].id === ev.id) {
+        //         // console.log(this.tableData[i],123);
+        //         // console.log(this.tableData[i].deptName);
+        //         findSave({ parentId: 0, deptCode: this.deptCode, deptName: this.form.name }).then((res) => {
+        //           console.log(res.config.data.deptCode, 123);
+        //           this.tableData[i].deptName = res.config.data.deptName
+        //         })
+        //       }
+        //     }
+        //     this.getList();
+        //   }).catch((res) => {
+        //     console.log(res, '失败');
+        //   })
+        // } else {
+        //   console.log('error submit!', fields)
+        // }
+        /* ====================================================== */
+        if (valid, ev) {
+          this.dialogFormVisible = false;
+          this.ideNum = ev.id
+          findSave({ parentId: 0, deptCode: this.deptCode, deptName: this.form.name }).then((res) => {
+            console.log(res);
+          })
         }
       })
     },
@@ -150,7 +257,7 @@ export default {
               this.tableData.splice(i, 1)
             }
           }
-          this.firstXuanran()
+          this.getList();
         })
       }).catch(() => {
         this.$message({
@@ -178,7 +285,7 @@ export default {
             this.tableData.push(JSON.parse(res.config.data))
             ElMessage.success('部门添加成功')
             this.form.name = ''
-            this.firstXuanran()
+            this.getList();
             /* } else {
               if (this.tableData.map((v) => v.deptName).includes(this.form.name)) {
                 ElMessage.error('部门名称重复')
@@ -202,11 +309,13 @@ export default {
     /* ==========================取消弹窗========================== */
     departDefault() {
       this.dialogFormVisible = false;
+      this.dialogFormVisible2 = false;
       this.form.name = ''
     }
   },
   created() {
-    this.firstXuanran()
+    this.firstXuanran();
+    this.getList();
   }
 }
 </script>

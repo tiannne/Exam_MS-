@@ -29,9 +29,18 @@
               </el-icon>
               <span>考试管理</span>
             </template>
-            <el-menu-item index="/tiku/guanli">题库管理</el-menu-item>
-            <el-menu-item index="/shiti/guanli">试题管理</el-menu-item>
-            <el-menu-item index="/kaoshi/guanli">考试管理</el-menu-item>
+            <el-menu-item index="/tiku/guanli">
+              <el-icon style="padding-right: 10px;">
+                <Files />
+              </el-icon>题库管理</el-menu-item>
+            <el-menu-item index="/shiti/guanli">
+              <el-icon style="padding-right: 10px;">
+                <Tickets />
+              </el-icon>试题管理</el-menu-item>
+            <el-menu-item index="/kaoshi/guanli">
+              <el-icon style="padding-right: 10px;">
+                <Monitor />
+              </el-icon>考试管理</el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="/sys">
             <template #title>
@@ -40,8 +49,14 @@
               </el-icon>
               <span>系统设置</span>
             </template>
-            <el-menu-item index="/sys/config">系统配置</el-menu-item>
-            <el-menu-item index="/sys/depart">部门管理</el-menu-item>
+            <el-menu-item index="/sys/config">
+              <el-icon style="padding-right: 10px;">
+                <Menu />
+              </el-icon>系统配置</el-menu-item>
+            <el-menu-item index="/sys/depart">
+              <el-icon style="padding-right: 10px;">
+                <Opportunity />
+              </el-icon>部门管理</el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="/users">
             <template #title>
@@ -50,8 +65,14 @@
               </el-icon>
               <span>用户管理</span>
             </template>
-            <el-menu-item index="/sys/role">角色管理</el-menu-item>
-            <el-menu-item index="/sys/user">用户管理</el-menu-item>
+            <el-menu-item index="/sys/role">
+              <el-icon style="padding-right: 10px;">
+                <Avatar />
+              </el-icon>角色管理</el-menu-item>
+            <el-menu-item index="/sys/user">
+              <el-icon style="padding-right: 10px;">
+                <User />
+              </el-icon>用户管理</el-menu-item>
           </el-sub-menu>
         </el-menu>
       </el-aside>
@@ -68,15 +89,13 @@
             </el-icon>
           </div>
           <el-breadcrumb separator="/">
-            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item><a href="/">活动管理</a></el-breadcrumb-item>
-            <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-            <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+            <el-breadcrumb-item to="/home">答题统计</el-breadcrumb-item>
+            <el-breadcrumb-item v-for="item in breadcrumb" :key="item">{{ item }}</el-breadcrumb-item>
           </el-breadcrumb>
           <div class="userWrap">
             <el-avatar :size="30"></el-avatar>
             <p class="words">
-              欢迎：admin 
+              欢迎：{{ username }}
             </p>
             <el-dropdown>
               <span class="el-dropdown-link">
@@ -108,8 +127,18 @@ export default {
   data() {
     return {
       collapse: true,
+      username: '',
       headword: "在线考试系统",
       head: false,
+      breadcrumb: []
+    }
+  },
+  created() {
+    this.username = window.localStorage.getItem('username')
+  },
+  computed: {
+    breadcrumb() {
+      return this.$route.meta.breadcrumb || [];
     }
   },
   methods: {
@@ -122,6 +151,17 @@ export default {
     zheDie() {
       this.collapse = !this.collapse
       this.head = !this.head
+    },
+    handleToLogout() {
+      /* 清空状态管理中的token，持久化就会清空后退出登录 */
+      this.$store.commit('userToken/clearToken');
+      /* this.$router.push('/login') */
+      /*刷新页面 */
+      /* window.location.reload(); */
+
+      //跳转且刷新页面
+      window.location.href = '/login';
+
     }
   }
 }
@@ -226,18 +266,26 @@ export default {
     line-height: 60px;
   }
 
-  :deep(.el-dropdown) {
+  .el-dropdown {
     border: none;
     line-height: 60px;
+    outline: none;
+    border: 0;
+    cursor: pointer;
   }
+
+  .el-dropdown-link:focus {
+    outline: none;
+   }
 
   .userWrap {
     position: absolute;
-    right: 40px;
+    right: 60px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    outline: none;
+
+
     .words {
       line-height: 60px;
       margin-left: 10px;
