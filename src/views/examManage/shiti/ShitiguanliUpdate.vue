@@ -1,67 +1,25 @@
 <template>
   <div>
     <div>
-      <el-form
-        ref="ruleFormRef"
-        :model="ruleForm"
-        status-icon
-        :rules="rules"
-        label-width="120px"
-        class="demo-ruleForm"
-        border
-      >
+      <el-form ref="ruleFormRef" :model="ruleForm" status-icon :rules="rules" label-width="120px" class="demo-ruleForm"
+        border>
         <el-form-item label="题目类型" prop="questionType">
-          <el-select
-            v-model="ruleForm.questionType"
-            class="m-2"
-            placeholder="题目类型"
-            :rules="rules"
-            disabled
-          >
-            <el-option
-              v-for="(item, index) in optionsTypeCheck"
-              :key="index"
-              :label="item"
-              :value="index + 1"
-            />
+          <el-select v-model="ruleForm.questionType" class="m-2" placeholder="题目类型" :rules="rules" disabled>
+            <el-option v-for="(item, index) in optionsTypeCheck" :key="index" :label="item" :value="index + 1" />
           </el-select>
         </el-form-item>
         <el-form-item label="等级难度" prop="difficultyLevel">
-          <el-select
-            v-model="ruleForm.difficultyLevel"
-            class="m-2"
-            placeholder="等级难度"
-          >
-            <el-option
-              v-for="(item, index) in optionsDifficultyLevel"
-              :key="index"
-              :label="item"
-              :value="index + 1"
-            />
+          <el-select v-model="ruleForm.difficultyLevel" class="m-2" placeholder="等级难度">
+            <el-option v-for="(item, index) in optionsDifficultyLevel" :key="index" :label="item" :value="index + 1" />
           </el-select>
         </el-form-item>
         <el-form-item label="归属题库" prop="fromBank">
-          <el-select
-            v-model="ruleForm.fromBank"
-            class="m-2"
-            placeholder="归属题库"
-            multiple
-          >
-            <el-option
-              v-for="item in optionsFromBank"
-              :key="item.id"
-              :label="item.title"
-              :value="item.tikuID"
-            />
+          <el-select v-model="ruleForm.fromBank" class="m-2" placeholder="归属题库" multiple>
+            <el-option v-for="item in optionsFromBank" :key="item.id" :label="item.title" :value="item.tikuID" />
           </el-select>
         </el-form-item>
         <el-form-item label="题目内容" prop="questionContent">
-          <el-input
-            v-model="ruleForm.questionContent"
-            :rows="4"
-            type="textarea"
-            placeholder="请输入题目内容"
-          />
+          <el-input v-model="ruleForm.questionContent" :rows="4" type="textarea" placeholder="请输入题目内容" />
         </el-form-item>
         <!-- <el-form-item label="试题图片" prop="imgUrl">
           <el-upload
@@ -75,94 +33,50 @@
           </el-upload>
         </el-form-item> -->
         <el-form-item label="试题图片" prop="imgUrl">
-          <el-upload
-          v-model:file-list="fileList"
-          class="upload-demo"
-          :headers='tokenHeader'
-          action="https://lite.yfhl.net/common/api/file/upload"
-          :limit="1"
-          :on-exceed="handleExceed"
-          :before-remove="beforeRemove"
-          :on-remove="handleRemove"
-          :on-success="uploadSuccess"
-          list-type="picture"
-        >
-          <el-button type="primary">上传图片</el-button>
-        </el-upload>
+          <el-upload v-model:file-list="fileList" class="upload-demo" :headers='tokenHeader'
+            action="https://lite.yfhl.net/common/api/file/upload" :limit="1" :on-exceed="handleExceed"
+            :before-remove="beforeRemove" :on-remove="handleRemove" :on-success="uploadSuccess" list-type="picture">
+            <el-button type="primary">上传图片</el-button>
+          </el-upload>
         </el-form-item>
         <el-form-item label="整题解析" prop="questionAnalysis">
-          <el-input
-            v-model="ruleForm.questionAnalysis"
-            :rows="4"
-            type="textarea"
-          />
+          <el-input v-model="ruleForm.questionAnalysis" :rows="4" type="textarea" />
         </el-form-item>
       </el-form>
       <!-- ------------------------------------------------------------------------------------------------------------------- -->
-      <el-table
-        ref="multipleTableRef"
-        :data="tableData"
-        style="width: 100%"
-        @selection-change="handleSelectionChange"
-        border
-      >
-        <el-table-column
-          type="selection"
-          width="80"
-          align="center"
-          label="是否答案"
-        >
+      <el-table ref="multipleTableRef" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange"
+        border>
+        <el-table-column type="selection" width="80" align="center" label="是否答案">
           <template #default="scope">
-            <input type="checkbox" v-model="scope.row.checkType" /><span
-              style="margin-left: 6px"
-              >正确</span
-            >
+            <input type="checkbox" v-model="scope.row.checkType" /><span style="margin-left: 6px">正确</span>
           </template>
         </el-table-column>
         <el-table-column label="选项图片" width="115" align="center">
           <template #default="scope">
             <el-form class="tableform">
-            <el-upload
-          v-model:file-list="scope.row.fileList"
-          class="upload-demo"
-          :headers='tokenHeader'
-          action="https://lite.yfhl.net/common/api/file/upload"
-          :limit="1"
-          :on-exceed="handleExceed"
-          :before-remove="beforeRemove"
-          :on-remove="AnswerHandleRemove(scope.$index)"
-          :on-success="AnswerUploadSuccess(scope.$index)"
-          list-type="picture"
-        >
-        <el-button type="primary">上传图片</el-button>
-      </el-upload>
-           </el-form>
+              <el-upload v-model:file-list="scope.row.fileList" class="upload-demo" :headers='tokenHeader'
+                action="https://lite.yfhl.net/common/api/file/upload" :limit="1" :on-exceed="handleExceed"
+                :before-remove="beforeRemove" :on-remove="AnswerHandleRemove(scope.$index)"
+                :on-success="AnswerUploadSuccess(scope.$index)" list-type="picture">
+                <el-button type="primary">上传图片</el-button>
+              </el-upload>
+            </el-form>
           </template>
         </el-table-column>
         <el-table-column label="答案内容" width="500" align="center">
           <template #default="scope">
-            <el-input
-              :rows="2"
-              type="textarea"
-              placeholder="请输入答案内容"
-              v-model="scope.row.answerContent"
-            />
+            <el-input :rows="2" type="textarea" placeholder="请输入答案内容" v-model="scope.row.answerContent" />
           </template>
         </el-table-column>
         <el-table-column label="答案解析" width="500" align="center">
           <template #default="scope">
-            <el-input
-              :rows="2"
-              type="textarea"
-              placeholder="答案解析"
-              v-model="scope.row.answerAnalysis"
-            />
+            <el-input :rows="2" type="textarea" placeholder="答案解析" v-model="scope.row.answerAnalysis" />
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center">
-          <el-button
-            ><el-icon color="red" size="20"><DeleteFilled /></el-icon
-          ></el-button>
+          <el-button><el-icon color="red" size="20">
+              <DeleteFilled />
+            </el-icon></el-button>
         </el-table-column>
       </el-table>
       <el-col>
@@ -176,8 +90,8 @@
 </template>
 
 <script>
-import { initQuestionBank, addQuestion,questionDetail,questionBankDetail} from "../../../api/shitiguanli";
-import { ElMessage,ElMessageBox } from "element-plus";
+import { initQuestionBank, addQuestion, questionDetail, questionBankDetail } from "../../../api/shitiguanli";
+import { ElMessage, ElMessageBox } from "element-plus";
 import store from "../../../store";
 
 export default {
@@ -186,7 +100,7 @@ export default {
       optionsTypeCheck: ["单选题", "多选题", "判断题"],
       optionsDifficultyLevel: ["普通", "较难"],
       optionsFromBank: [],
-      tokenHeader:{},
+      tokenHeader: {},
       fileList: [
         // {
         //   name: "	https://lite.yfhl.net/upload/file/2023/04/14/1646674709460025346.jpg",
@@ -235,36 +149,37 @@ export default {
     },
 
     //点击确定删除
-    handleRemove(uploadFile,uploadFiles) {
+    handleRemove(uploadFile, uploadFiles) {
       this.fileList = [];
-      this.ruleForm.image=''
+      this.ruleForm.image = ''
     },
     //上传前的钩子函数
-    handleExceed(){
-        ElMessage.error('每次只能上传一张图片')
+    handleExceed() {
+      ElMessage.error('每次只能上传一张图片')
     },
+    
     //上传成功时
-    uploadSuccess(){
-      this.ruleForm.image=this.fileList[0].response.data.url
-      this.fileList=[{name:'试题图片',url:this.fileList[0].response.data.url}]
+    uploadSuccess() {
+      this.ruleForm.image = this.fileList[0].response.data.url
+      this.fileList = [{ name: '试题图片', url: this.fileList[0].response.data.url }]
       alert('上传成功')
     },
     //答案列表 点击确定删除
-    AnswerHandleRemove(index){
-      return (res)=>{
+    AnswerHandleRemove(index) {
+      return (res) => {
         console.log(index);
-        this.tableData[index].fileList=[]
-        this.tableData[index].image=''
+        this.tableData[index].fileList = []
+        this.tableData[index].image = ''
         // console.log(this.tableData[index].fileList);
       }
     },
     //答案列表上传成功时的钩子函数
-    AnswerUploadSuccess(index){
-      return (res)=> {
+    AnswerUploadSuccess(index) {
+      return (res) => {
         console.log(index);
-        this.tableData[index].fileList=[{name:`试题${index+1}`,url:res.data.url}]
+        this.tableData[index].fileList = [{ name: `试题${index + 1}`, url: res.data.url }]
         // console.log(this.tableData[index].fileList);
-        this.tableData[index].image=res.data.url
+        this.tableData[index].image = res.data.url
         // console.log(this.tableData[index].image);
       }
     },
@@ -336,36 +251,36 @@ export default {
           isRight: item.checkType,
           content: item.answerContent,
           analysis: item.answerAnalysis,
-          id:item.id,
-          quId:item.quId,
-          image:item.image
+          id: item.id,
+          quId: item.quId,
+          image: item.image
         };
       });
-      
-      const time = new Date();
-    let nowtime = time.toLocaleString();
-    let newtime=nowtime.replace(/\//g,"-");
-      
 
-      const newFromBank=[]
-      this.ruleForm.fromBank.forEach(item=>{
+      const time = new Date();
+      let nowtime = time.toLocaleString();
+      let newtime = nowtime.replace(/\//g, "-");
+
+
+      const newFromBank = []
+      this.ruleForm.fromBank.forEach(item => {
         newFromBank.push(item)
       })
-      this.ruleForm.fromBank=newFromBank
+      this.ruleForm.fromBank = newFromBank
 
-      
+
       const data = {
         repoIds: this.ruleForm.fromBank,
         tagList: [], //不知道是什么
-        image:this.ruleForm.image,
+        image: this.ruleForm.image,
         quType: this.ruleForm.questionType,
         level: this.ruleForm.difficultyLevel,
         content: this.ruleForm.questionContent,
         analysis: this.ruleForm.questionAnalysis,
         answerList: answerList,
         createTime: this.ruleForm.createTime,
-        updateTime:newtime,
-        id:this.ruleForm.id
+        updateTime: newtime,
+        id: this.ruleForm.id
       };
       console.log(data);
       addQuestion(data).then((res) => {
@@ -381,7 +296,7 @@ export default {
   },
   created() {
     //初始token
-    this.tokenHeader={token:store.state.userToken.token}
+    this.tokenHeader = { token: store.state.userToken.token }
     //初始化题库
     let initdata = { current: 1, size: 1000, params: {} };
     initQuestionBank(initdata).then((res) => {
@@ -394,31 +309,31 @@ export default {
     //初始化题目数据
     const QuestionId = this.$route.params.id;
     questionDetail({ id: QuestionId }).then((res) => {
-      let detailData=res.data.data
+      let detailData = res.data.data
       console.log(res.data);
-      this.fileList=detailData.image===''?[]:[{url:detailData.image,name:'题目照片'}]
-      this.ruleForm={
-        questionType:detailData.quType, //quType
+      this.fileList = detailData.image === '' ? [] : [{ url: detailData.image, name: '题目照片' }]
+      this.ruleForm = {
+        questionType: detailData.quType, //quType
         difficultyLevel: detailData.level, //level
         fromBank: detailData.repoIds, //repoIds
         questionContent: detailData.content, //content
-        image:detailData.image,
+        image: detailData.image,
         questionAnalysis: detailData.analysis, //analysis 整题解析
-        createTime:detailData.createTime,
-        updateTime:detailData.updateTime,
-        id:QuestionId
+        createTime: detailData.createTime,
+        updateTime: detailData.updateTime,
+        id: QuestionId
       }
       // console.log(detailData.repoIds);
       // console.log(this.ruleForm.fromBank);
       //初始表格数据
-      detailData.answerList.forEach(item=>{
-        if(item.image===''){
-          this.tableData.push({checkType: item.isRight, answerContent:item.content, answerAnalysis: item.analysis,image:"", fileList: [],id:item.id,quId:item.quId})
-        }else{
-          this.tableData.push({checkType: item.isRight, answerContent:item.content, answerAnalysis: item.analysis,image:item.image, fileList: [{url:item.image}],id:item.id,quId:item.quId})
+      detailData.answerList.forEach(item => {
+        if (item.image === '') {
+          this.tableData.push({ checkType: item.isRight, answerContent: item.content, answerAnalysis: item.analysis, image: "", fileList: [], id: item.id, quId: item.quId })
+        } else {
+          this.tableData.push({ checkType: item.isRight, answerContent: item.content, answerAnalysis: item.analysis, image: item.image, fileList: [{ url: item.image }], id: item.id, quId: item.quId })
         }
       })
-     console.log(this.tableData);
+      console.log(this.tableData);
     });
   },
 };
@@ -429,33 +344,47 @@ export default {
   padding: 20px;
   border: 1px solid #ccc;
   background: white;
-  box-shadow: 0px -1px 10px 0px #ccc, /*上边阴影  红色*/ -1px 0px 10px 0px #ccc,
-    /*左边阴影  绿色*/ 1px 0px 10px 0px #ccc,
-    /*右边阴影  蓝色*/ 0px 1px 10px 0px #ccc; /*下边阴影  黄ccc*/
+  box-shadow: 0px -1px 10px 0px #ccc,
+    /*上边阴影  红色*/
+    -1px 0px 10px 0px #ccc,
+    /*左边阴影  绿色*/
+    1px 0px 10px 0px #ccc,
+    /*右边阴影  蓝色*/
+    0px 1px 10px 0px #ccc;
+  /*下边阴影  黄ccc*/
   margin-bottom: 30px;
 }
-.tableform{
+
+.tableform {
   padding: 0;
   border: none;
   margin-bottom: 0;
   box-shadow: none;
 }
+
 .el-table {
   border: 1px solid #ccc;
   background: white;
-  box-shadow: 0px -1px 10px 0px #ccc, /*上边阴影  红色*/ -1px 0px 10px 0px #ccc,
-    /*左边阴影  绿色*/ 1px 0px 10px 0px #ccc,
-    /*右边阴影  蓝色*/ 0px 1px 10px 0px #ccc; /*下边阴影  黄ccc*/
+  box-shadow: 0px -1px 10px 0px #ccc,
+    /*上边阴影  红色*/
+    -1px 0px 10px 0px #ccc,
+    /*左边阴影  绿色*/
+    1px 0px 10px 0px #ccc,
+    /*右边阴影  蓝色*/
+    0px 1px 10px 0px #ccc;
+  /*下边阴影  黄ccc*/
   margin-bottom: 30px;
 }
+
 :deep(.el-form-item__label) {
   justify-content: start;
   margin-left: 10px;
   font-weight: 700;
 }
-.btnflex{
-    display: flex;
-    justify-content: center;
+
+.btnflex {
+  display: flex;
+  justify-content: center;
 }
 </style>
 
