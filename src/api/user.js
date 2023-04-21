@@ -14,6 +14,16 @@ export const login = (username, password) => {
     })
 }
 
+//根据id获取考试信息
+export const getIdExam = (data) => {
+    return instance({
+        url: '/exam/api/exam/exam/detail',
+        method: 'POST',
+            data
+    })
+}
+
+
 //获取考试列表
 export const getExamListData = (data)=>{
     return instance({

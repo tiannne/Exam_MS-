@@ -144,6 +144,11 @@ export default {
   }
 }
 
+
+.el-dropdown-link:focus {
+      outline: none;
+    }
+
 .el-aside {
   /* position: fixed; */
   /* overflow-y: auto; */
