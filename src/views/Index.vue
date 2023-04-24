@@ -113,6 +113,13 @@
           </div>
         </el-header>
         <el-main>
+          <!-- ------------------------标签页开始------------------------ -->
+          <el-tabs v-model="editableTabsValue" type="card" editable @edit="handleTabsEdit" :addable="false">
+            <el-tab-pane :key="item.name" v-for="(item, index) in editableTabs" :label="item.title" :name="item.name">
+              {{ item.content }}
+            </el-tab-pane>
+          </el-tabs>
+          <!-- ------------------------标签页结束------------------------ -->
           <Transition name="rotate">
             <RouterView />
           </Transition>
@@ -130,7 +137,20 @@ export default {
       username: '',
       headword: "在线考试系统",
       head: false,
-      breadcrumb: []
+      breadcrumb: [],
+      /* 以下为标签页 */
+      editableTabsValue: '2',
+      editableTabs: [{
+        title: 'Tab 1',
+        name: '1',
+        content: ''
+      }, {
+        title: 'Tab 2',
+        name: '2',
+        content: ''
+      }],
+      tabIndex: 2
+      /* =========== */
     }
   },
   created() {
@@ -142,8 +162,47 @@ export default {
     }
   },
   methods: {
+    /* ============================标签页的方法============================ */
+    handleTabsEdit(targetName, action) {
+      // if (action === 'add') {
+      //   let newTabName = ++this.tabIndex + '';
+      //   this.editableTabs.push({
+      //     title: 'New Tab',
+      //     name: newTabName,
+      //     content: 'New Tab content'
+      //   });
+      //   this.editableTabsValue = newTabName;
+      // }
+      if (action === 'remove') {
+        let tabs = this.editableTabs;
+        let activeName = this.editableTabsValue;
+        if (activeName === targetName) {
+          tabs.forEach((tab, index) => {
+            if (tab.name === targetName) {
+              let nextTab = tabs[index + 1] || tabs[index - 1];
+              if (nextTab) {
+                activeName = nextTab.name;
+              }
+            }
+          });
+        }
+        this.editableTabsValue = activeName;
+        this.editableTabs = tabs.filter(tab => tab.name !== targetName);
+      }
+      this.editableTabs.forEach((item) => {
+        console.log(item, 999);
+        if (item.title === params.data.name) {
+          this.editableTabsValue = item.name;
+          this.editableTabs = this.editableTabsValue.filter((tab) => tab.name !== item.name)
+          return;
+        }
+      })
+      addTab(params.data.name)
+    },
+
+    /* =============================标签页结束============================= */
     handleOpen(key, keyPath) {
-      // console.log(key, keyPath);
+      // console.log(key, keyPath); 
     },
     handleClose(key, keyPath) {
       // console.log(key, keyPath);
@@ -186,8 +245,8 @@ export default {
 
 
 .el-dropdown-link:focus {
-      outline: none;
-    }
+  outline: none;
+}
 
 .el-aside {
   /* position: fixed; */
@@ -276,7 +335,7 @@ export default {
 
   .el-dropdown-link:focus {
     outline: none;
-   }
+  }
 
   .userWrap {
     position: absolute;
