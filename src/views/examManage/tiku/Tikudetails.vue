@@ -82,7 +82,7 @@ xuanran();
   border: 1px solid #ccc;
   background: white;
   height: 266px;
-  box-shadow: 0px -1px 10px 0px #ccc, /*上边阴影  红色*/ -1px 0px 10px 0px #ccc,
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04),
     /*左边阴影  绿色*/ 1px 0px 10px 0px #ccc,
     /*右边阴影  蓝色*/ 0px 1px 10px 0px #ccc; /*下边阴影  黄ccc*/
 }

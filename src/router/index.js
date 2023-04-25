@@ -4,9 +4,10 @@ import store from "../store";
 const Index = () => import("../views/Index.vue");
 const Login = () => import("../views/Login.vue");
 // const Home = () => import('../views/Home.vue')
-
-
 const Home = () => import('../views/UpDataInformation.vue')
+const ExamDetail = () => import('../views/ExamDetail.vue')
+const ExamUpData = () => import('../views/ExamUpData.vue')
+const ExamAddAndUpdata = () => import('../views/ExamAddAndUpdata.vue')
 const Tikuguanli = () => import('../views/examManage/tiku/Tikuguanli.vue')
 const Tikudetails = () => import('../views/examManage/tiku/Tikudetails.vue')
 const Tikuadd = () => import('../views/examManage/tiku/Tikuadd.vue')
@@ -47,6 +48,7 @@ const router = createRouter({
           component: Tikuguanli,
           meta: {
             auth: true,
+            breadcrumb: ['考试管理','题库管理']
           },
         },
         {
@@ -55,6 +57,7 @@ const router = createRouter({
           component: Tikuadd,
           meta: {
             auth: true,
+            breadcrumb: ['考试管理','题库管理','添加题库']
           },
         },
         {
@@ -69,6 +72,31 @@ const router = createRouter({
           path: "kaoshi/guanli",
           name: "kaoshiguanli",
           component: Kaoshiguanli,
+          meta:{
+            auth:true,
+            breadcrumb: ['考试管理','考试管理']
+          },
+        },
+        {
+          path: "kaoshi/guanli/ExamAddAndUpdata/:id?",
+          name: "kaoshiguanliExamAddAndUpdata",
+          component: ExamAddAndUpdata,
+          meta:{
+            auth:true
+          },
+        },
+        {
+          path: "kaoshi/guanli/ExamDetail/:id?",
+          name: "kaoshiguanliExamDetail",
+          component: ExamDetail,
+          meta:{
+            auth:true
+          },
+        },
+        {
+          path: "kaoshi/guanli/ExamUpData/:id?",
+          name: "kaoshiguanliExamUpData",
+          component: ExamUpData,
           meta: {
             auth: true,
           },
@@ -79,12 +107,16 @@ const router = createRouter({
           component: Shitiguanli,
           meta: {
             auth: true,
+            breadcrumb: ['考试管理','试题管理']
           },
         },
         {
           path:'shiti/guanli/add',
           name:'ShitiguanliAdd',
-          component:ShitiguanliAdd
+          component:ShitiguanliAdd,
+          meta: {
+            breadcrumb: ['考试管理','试题管理','添加试题']
+          },
         },
         {
           path:'shiti/guanli/update/:id',
@@ -97,6 +129,7 @@ const router = createRouter({
           component: Sysconfig,
           meta: {
             auth: true,
+            breadcrumb: ['系统设置','系统配置']
           },
         },
         {
@@ -105,6 +138,7 @@ const router = createRouter({
           component: Sysdepart,
           meta: {
             auth: true,
+            breadcrumb: ['系统设置','部门管理']
           },
         },
         {
@@ -113,6 +147,7 @@ const router = createRouter({
           component: Sysrole,
           meta: {
             auth: true,
+            breadcrumb: ['用户管理','角色管理']
           },
         },
         {
@@ -121,6 +156,7 @@ const router = createRouter({
           component: Sysuser,
           meta: {
             auth: true,
+            breadcrumb: ['用户管理','用户管理']
           },
         },
       ],

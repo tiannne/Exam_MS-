@@ -6,7 +6,7 @@
             <div class="img">
                 <el-avatar :size="90" style="border: 5px solid #e9e9eb"
                     src="https://tse4-mm.cn.bing.net/th/id/OIP-C.g9UbVfyVZX-SfD09JcYr5QHaEK?pid=ImgDet&rs=1" />
-                <h4 style="margin-top: 20px; text-align: center;">欢迎admin</h4>
+                <h4 style="margin-top: 20px; text-align: center;">欢迎：{{ username }}</h4>
             </div>
 
         </el-col>
@@ -53,6 +53,7 @@ export default {
             }
         };
         return {
+            username:'',
             ruleForm: {
                 username: '',
                 pass: '',
@@ -71,10 +72,13 @@ export default {
             },
         };
     },
+    created() {
+        this.username = window.localStorage.getItem('username')
+    },
     methods: {
         submitForm(formEl) {
             if (!formEl) return
-           this.$refs[formEl].validate((valid, fields) => {
+            this.$refs[formEl].validate((valid, fields) => {
                 if (valid) {
                     console.log('submit!')
                 } else {
@@ -87,7 +91,7 @@ export default {
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .img {
     margin: auto;
     width: 90px;
@@ -101,7 +105,7 @@ export default {
     height: 300px;
     border: rgb(218, 218, 218) 1px solid;
     border-radius: 5px;
-    box-shadow: 0 7px 9px rgba(0, 0, 0, .12);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
     margin: 20px;
 }
 
@@ -110,8 +114,10 @@ export default {
     height: 400px;
     border: rgb(218, 218, 218) 1px solid;
     border-radius: 5px;
-    box-shadow: 0 7px 9px rgba(0, 0, 0, .12);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
     margin: 20px;
     padding: 30px 50px 0px 50px;
 }
+
+
 </style>

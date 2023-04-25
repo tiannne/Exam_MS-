@@ -14,6 +14,83 @@ export const login = (username, password) => {
     })
 }
 
+//根据id获取考试信息
+export const getIdExam = (data) => {
+    return instance({
+        url: '/exam/api/exam/exam/detail',
+        method: 'POST',
+            data
+    })
+}
+
+
+//获取考试列表
+export const getExamListData = (data)=>{
+    return instance({
+        url:'/exam/api/exam/exam/paging',
+        method:'POST',
+        data
+    })
+}
+
+// 获取部门列表
+export const getdepartTree = ()=>{
+    return instance({
+        url:'exam/api/sys/depart/tree',
+        method:'POST',
+    })
+}
+
+//提交试卷
+export const setExamSave = (data)=>{
+    return instance({
+        url:'/exam/api/exam/exam/save',
+        method:'POST',
+        data
+    })
+}
+
+
+// 获取考试状态列表
+export const getExamRepoApi = (data)=>{
+    return instance({
+        url:'/exam/api/repo/paging',
+        method:'POST',
+        data
+    })
+}
+
+export const getExampaging = (data)=>{
+    return instance({
+        url:'/exam/api/user/exam/paging',
+        method:'POST',
+        data
+    })
+}
+
+export const getExamXiangQing = (data)=>{
+    return instance({
+        url:'/exam/api/paper/paper/paging',
+        method:'POST',
+        data
+    })
+}
+
+//状态接口
+export const setExamStore =(ids,state) =>{
+    return instance({
+        url:'/exam/api/exam/exam/state',
+        method:'POST',
+        data:{
+            ids,
+            state
+        }
+    })
+}
+
+export const setExamDel  = (data) => instance({url:'/exam/api/exam/exam/delete',method:'POST',data})
+
+
 //身份校验
 export const info = (token) => {
     return instance({
@@ -25,6 +102,9 @@ export const info = (token) => {
     })
 }
 
+export const getlist =()=>{
+    
+}
 //初始化渲染部门
 export const findPaging = (data) => {
     return instance({
