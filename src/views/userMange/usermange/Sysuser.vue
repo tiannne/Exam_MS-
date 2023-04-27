@@ -8,23 +8,36 @@
         <el-input v-model="input2" placeholder="搜索姓名" @input="sousuoname" />
       </el-col>
       <el-col :span="5">
-        <el-button type="primary" @click="
-          dialogFormVisible = true;
-        kong();
-                              ">
+        <el-button
+          type="primary"
+          @click="
+            dialogFormVisible = true;
+            kong();
+          "
+        >
           <el-icon>
-            <Plus />
-          </el-icon>添加
+            <Plus /> </el-icon
+          >添加
         </el-button>
       </el-col>
     </el-row>
-    <el-select v-model="value" class="m-2" :placeholder="'已选' + this.num + '项'" v-if="this.boolean">
-      <el-option value="启用" @click="del" />
-      <el-option value="禁用" @click="del" />
-      <el-option value="删除" @click="del" />
+    <el-select
+      v-model="value"
+      class="m-2"
+      :placeholder="'已选' + this.num + '项'"
+      v-if="this.boolean"
+    >
+      <el-option value="启用" @click="dele" />
+      <el-option value="禁用" @click="dele" />
+      <el-option value="删除" @click="dele" />
     </el-select>
     <el-dialog v-model="dialogFormVisible" title="添加用户">
-      <el-form :label-position="labelPosition" label-width="60px" :model="formLabelAlign" style="max-width: 460px">
+      <el-form
+        :label-position="labelPosition"
+        label-width="60px"
+        :model="formLabelAlign"
+        style="max-width: 460px"
+      >
         <el-form-item label="用户名">
           <el-input v-model="formLabelAlign.userName" />
         </el-form-item>
@@ -32,30 +45,60 @@
           <el-input v-model="formLabelAlign.realName" />
         </el-form-item>
         <el-form-item label="密码">
-          <el-input v-model="formLabelAlign.password" placeholder="不修改请留空" type="password" />
+          <el-input
+            v-model="formLabelAlign.password"
+            placeholder="不修改请留空"
+            type="password"
+          />
         </el-form-item>
         <el-form-item label="部门">
-          <el-select v-model="formLabelAlign.departId" placeholder="请选择">
-            <el-option v-for="item in bumenarr" :label="item" :value="item" />
-          </el-select>
+          <!-- <el-select v-model="formLabelAlign.departId" placeholder="请选择" >
+            <el-option v-for="item,index in bumenarr" :label="item.deptName" :value="item.id"  :key="index"/>
+          </el-select> -->
+
+          <el-tree-select
+            v-model="formLabelAlign.departId"
+            :data="bumenarr"
+            :render-after-expand="false"
+          />
         </el-form-item>
         <el-form-item label="角色">
-          <el-input v-model="formLabelAlign.roleIds" placeholder="请选择角色" />
+          <el-select
+            v-model="formLabelAlign.roleIds"
+            class="m-2"
+            placeholder="请选择角色"
+            style="width: 100%"
+          >
+            <el-option
+              v-for="(item, index) in roleIdsList"
+              :key="index"
+              :label="item.roleName"
+              :value="item.id"
+            />
+          </el-select>
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取消</el-button>
-          <el-button type="primary" @click="
-            dialogFormVisible = false;
-          onSubmit();
-                                    ">确定
+          <el-button
+            type="primary"
+            @click="
+              dialogFormVisible = false;
+              onSubmit();
+            "
+            >确定
           </el-button>
         </span>
       </template>
     </el-dialog>
-    <el-table ref="multipleTableRef" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange"
-      border>
+    <el-table
+      ref="multipleTableRef"
+      :data="tableData"
+      style="width: 100%"
+      @selection-change="handleSelectionChange"
+      border
+    >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column prop="userName" label="用户名" align="center">
         <template #default="scope">
@@ -70,28 +113,33 @@
       <el-table-column prop="state" label="状态" align="center" />
     </el-table>
 
-    <el-pagination v-model:current-page="currentPage4" v-model:page-size="pageSize4" :page-sizes="[10, 20, 30, 40]"
-      :small="small" :disabled="disabled" :background="background" layout="total, sizes, prev, pager, next, jumper"
-      :total="total" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+    <el-pagination
+      v-model:current-page="currentPage4"
+      v-model:page-size="pageSize4"
+      :page-sizes="[10, 20, 30, 40]"
+      :small="small"
+      :disabled="disabled"
+      :background="background"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    />
   </div>
 </template>
 
 <script>
 import { reactive } from "vue";
-import { user, list } from "../../../api/sysuser";
-import { forEach } from "lodash";
+import { user, list,del } from "../../../api/sysuser";
+import { initRoleList, save } from "../../../api/Sysrole";
+import {ElMessage,ElMessageBox} from 'element-plus'
 export default {
   data() {
     return {
+      roleIdsList: [],
+      ids: [],
       arr: [],
       bumenarr: [],
-      dialogFormVisible: false,
-      formLabelAlign: reactive({
-        name: "",
-        region: "",
-        type: "",
-      }),
-
       num: 0,
       total: "",
       currentPage4: 1,
@@ -100,12 +148,14 @@ export default {
       input2: "",
       boolean: false,
       dialogFormVisible: false,
-      data: [],
+      f: [],
       new: [],
       formLabelAlign: reactive({
-        name: "",
-        region: "",
-        type: "",
+        userName: "",
+        realName: "",
+        password: "",
+        departId:"",
+        roleIds: [],
       }),
       tableData: [
         {
@@ -119,8 +169,8 @@ export default {
     };
   },
   methods: {
-    add() { },
-    sousuo() { },
+    add() {},
+    sousuo() {},
     handleSelectionChange(val) {
       console.log(val.length);
       if (val.length > 0) {
@@ -129,6 +179,11 @@ export default {
         this.boolean = false;
       }
       this.num = val.length;
+      for (let i = 0; i < val.length; i++) {
+        console.log(val[i].id);
+        this.ids.push(val[i].id);
+        console.log(this.ids);
+      }
     },
     xuanran() {
       user(this.currentPage4, this.pageSize4, { userName: this.input1 }).then(
@@ -173,34 +228,120 @@ export default {
       // console.log(id);
       this.dialogFormVisible = true;
       this.new = this.data.find((v) => v.id == id);
-      // console.log(this.new.userName);
       console.log(this.new);
-      this.new.password = [];
-      this.new.departId = "部门";
-      console.log(this.new.roleIds);
-      this.formLabelAlign = this.new;
+      this.formLabelAlign.departId=this.new.departId,
+      this.formLabelAlign.password=null
+      this.formLabelAlign.realName=this.new.realName
+      this.formLabelAlign.roleIds=this.new.roleIds
+      this.formLabelAlign.userName=this.new.userName
+      this.formLabelAlign.createTime=this.new.createTime
+      this.formLabelAlign.updateTime=this.new.updateTime
+      this.formLabelAlign.salt=this.new.salt
+      this.formLabelAlign.state=this.new.state
+      this.formLabelAlign.id=this.new.id
+
+      console.log(this.formLabelAlign);
     },
     kong() {
       this.formLabelAlign = [];
     },
     onSubmit() {
-      console.log("提交");
+      if(this.formLabelAlign.createTime){
+        const obj={
+        roles:[this.formLabelAlign.roleIds],
+        departId:this.formLabelAlign.departId,
+        password:this.formLabelAlign.password,
+        realName:this.formLabelAlign.realName,
+        roleIds:this.formLabelAlign.roleIds,
+        userName:this.formLabelAlign.userName,
+        createTime:this.formLabelAlign.createTime,
+        updateTime:this.formLabelAlign.updateTime,
+        salt:this.formLabelAlign.salt,
+        state:this.formLabelAlign.state,
+        id:this.formLabelAlign.id
+      }
+      save(obj).then(res=>{
+        console.log(res);
+      })
+      }else{
+      this.formLabelAlign.roleIds=[this.formLabelAlign.roleIds]
+      console.log(this.formLabelAlign);
+      const obj={
+        departId:this.formLabelAlign.departId,
+        password:this.formLabelAlign.password,
+        realName:this.formLabelAlign.realName,
+        roles:this.formLabelAlign.roleIds,
+        userName:this.formLabelAlign.userName
+      }
+      save(obj).then(res=>{
+        console.log(res);
+      })
+      }
+      
     },
     bumen() {
       list().then((res) => {
-        this.arr = res.data.data
+        this.arr = res.data.data;
         console.log(this.arr);
+
+
+
         for (var j = 0; j < this.arr.length; j++) {
-          this.bumenarr.push(this.arr[j].deptName)
+          this.bumenarr.push({
+            value: this.arr[j].id,
+            label: this.arr[j].deptName,
+            children: [],
+          });
+
+          for (var i = 0; i < this.arr[j].children.length; i++) {
+            this.bumenarr[j].children.push({
+              value: this.arr[j].children[i].id,
+              label: this.arr[j].children[i].deptName,
+            });
+          }
         }
       });
       console.log(this.bumenarr);
     },
+    dele() {
+      ElMessageBox.confirm("确认要删除吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          ElMessage({
+            type: "success",
+            message: "删除成功",
+          });
+          del(this.ids)
+          //渲染数据
+          this.xuanran();
+        })
+        .catch(() => {
+          ElMessage({
+            type: "info",
+            message: "删除已取消",
+          });
+        });
+    },
   },
-
   created() {
     this.xuanran();
     this.bumen();
+
+    const data = {
+      current: 1,
+      size: 10,
+      params: {},
+    };
+    initRoleList(data).then((res) => {
+      console.log(res.data.data.records);
+      this.roleIdsList = res.data.data.records;
+    });
+  },
+  updated() {
+    window.localStorage.setItem("userNum", this.total);
   },
 };
 </script>

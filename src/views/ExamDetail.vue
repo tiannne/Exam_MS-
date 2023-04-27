@@ -1,4 +1,5 @@
 <template>
+    <div>
     <el-input v-model="input" placeholder="请输入要查找的名字" style="width: 240px; height: 40px; margin: 30px 0px;" />
 
     <el-table ref="tableRef" row-key="date" :data="tableData1" style="width: 100%">
@@ -50,6 +51,7 @@
 
         </template>
     </el-dialog>
+</div>
 </template>
 
 <script>
@@ -130,7 +132,7 @@ export default {
 
 .elZong {
     padding: 15px;
-    box-shadow: 0 2px 4px rgba(0, 201, 57, 0.12), 0 0 6px rgba(0, 0, 0, .04)
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
         /* border: 1px solid salmon; */
 }
 </style>

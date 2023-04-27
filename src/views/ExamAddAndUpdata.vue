@@ -1,4 +1,5 @@
 <template>
+    <div>
     <h1 style="margin: 20px 0px;">组卷信息</h1>
     <div class="hreadStyle">
         <el-row style="margin: 20px 0px;">
@@ -135,6 +136,7 @@
         <el-button type="primary" style="margin: 30px 0px;" @click="submintFrom('numberValidateForm')">保存</el-button>
     </el-form>
     <br>
+</div>
 </template>
 <script>
 import { getExamRepoApi, getdepartTree, setExamSave } from "../api/user.js"
@@ -303,7 +305,7 @@ export default {
 }
 
 .hreadStyle {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, .12);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
     border: 1px solid rgb(228, 228, 228);
     border-radius: 10px;
     padding: 40px;
