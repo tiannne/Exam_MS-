@@ -4,6 +4,11 @@ function findDepart(data) {
  return http.post('/exam/api/sys/config/detail', data)
 }
 
+//二次搜索部门
+function findDetail(data) {
+ return http.post('/exam/api/sys/depart/detail', data)
+}
+
 //搜索部门
 function findPaging(data) {
  return http.post('/exam/api/sys/depart/paging', data)
@@ -23,5 +28,6 @@ export {
  findDepart,
  findSave,
  findPaging,
- finddelete
+ finddelete,
+ findDetail
 }

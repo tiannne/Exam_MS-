@@ -1,4 +1,5 @@
 <template>
+    <div>
     <el-input v-model="input" placeholder="请输入要查找的名字" style="width: 240px; height: 40px; margin: 30px 0px;" />
 
     <el-table ref="tableRef" row-key="date" :data="tableData1" style="width: 100%">
@@ -50,6 +51,7 @@
 
         </template>
     </el-dialog>
+</div>
 </template>
 
 <script>

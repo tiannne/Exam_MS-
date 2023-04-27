@@ -1,4 +1,5 @@
 <template>
+  <div>
   <el-cascader :options="options" @change="UpDataOpenType" size="large">
     <template #default="{ node, data }">
       <span>{{ data.label }}</span>
@@ -64,7 +65,7 @@
       <div>前往<el-input style="width: 100px;" v-model="input" />页面</div>
     </el-col>
   </el-row>
-
+</div>
 </template>
 
 <script>

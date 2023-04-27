@@ -8,7 +8,7 @@ const store = createStore({
     userToken
   },
   plugins: [createPersistedState({
-    paths: ['userToken.token']
+    paths: ['userToken.token','userToken.departNum']
   })],
 })
 export default store
