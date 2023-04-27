@@ -306,6 +306,7 @@ export default {
   created() {
     this.firstXuanran();
     this.getList();
+    this.$store.commit('userToken/departNum',this.total)
   },
   updated(){
     console.log(this.total,'表格数据数量');
