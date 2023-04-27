@@ -113,13 +113,13 @@
           </div>
         </el-header>
         <el-main>
-          <!-- ------------------------标签页开始------------------------ -->
+          <!-- ------------------------标签页开始-------------------------->
           <el-tabs v-model="editableTabsValue" type="card" editable @edit="handleTabsEdit" :addable="false">
             <el-tab-pane :key="item.name" v-for="(item, index) in editableTabs" :label="item.title" :name="item.name">
               {{ item.content }}
             </el-tab-pane>
           </el-tabs>
-          <!-- ------------------------标签页结束------------------------ -->
+          <!-- ------------------------标签页结束-------------------------->
           <Transition name="rotate">
             <RouterView />
           </Transition>

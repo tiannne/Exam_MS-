@@ -1,14 +1,34 @@
 <template>
     <el-row>
         <el-col class="div1" :span="7">
-            <h3 style="margin: 15px;">个人资料</h3>
+            <h4 style="margin: 15px;">个人资料</h4>
             <el-divider border-style="solid" />
             <div class="img">
                 <el-avatar :size="90" style="border: 5px solid #e9e9eb"
                     src="https://tse4-mm.cn.bing.net/th/id/OIP-C.g9UbVfyVZX-SfD09JcYr5QHaEK?pid=ImgDet&rs=1" />
                 <h4 style="margin-top: 20px; text-align: center;">欢迎：{{ username }}</h4>
             </div>
-
+            <!-- -------------------------答题详情--------------------------->
+            <div style="margin-top: 60px;">
+                <h4 class="title">数量统计</h4>
+                <el-card class="box-card" shadow="hover">
+                    <ul>
+                        <li>
+                            <h3>题库数</h3>
+                            <h1>{{ tikuNum }}</h1>
+                        </li>
+                        <li>
+                            <h3>部门数</h3>
+                            <h1>{{ departNum }}</h1>
+                        </li>
+                        <li>
+                            <h3>用户数</h3>
+                            <h1>{{ userNum }}</h1>
+                        </li>
+                    </ul>
+                </el-card>
+            </div>
+            <!-- -----------------------答题详情结束------------------------->
         </el-col>
         <el-col class="div2" :span="15">
             <el-tabs model-value="first" class="demo-tabs" @tab-click="handleClick">
@@ -53,7 +73,10 @@ export default {
             }
         };
         return {
-            username:'',
+            userNum:0,
+            tikuNum:0,
+            departNum:0,
+            username: '',
             ruleForm: {
                 username: '',
                 pass: '',
@@ -74,6 +97,10 @@ export default {
     },
     created() {
         this.username = window.localStorage.getItem('username')
+        // this.departNum = window.localStorage.getItem('departNum')
+        this.departNum = this.$store.state.userToken.departNum
+        this.userNum = window.localStorage.getItem('userNum')
+        this.tikuNum = window.localStorage.getItem('tikuNum')
     },
     methods: {
         submitForm(formEl) {
@@ -102,7 +129,7 @@ export default {
 
 .div1 {
     width: 100%;
-    height: 300px;
+    height: 270px;
     border: rgb(218, 218, 218) 1px solid;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
@@ -119,5 +146,40 @@ export default {
     padding: 30px 50px 0px 50px;
 }
 
+//答题详情
+.title {
+ padding: 22px 0 0 20px;
+}
 
-</style>
+.box-card {
+    background: #0a84ff;
+    margin-top: 15px;
+    width: 100%;
+    height: 79px;
+
+    ul {
+        list-style: none;
+        display: flex;
+        justify-content: space-around;
+        margin-top: -10px;
+
+        li {
+            height: 100%;
+            width: 30%;
+            text-align: center;
+
+            // background-color: aquamarine;
+            h3 {
+                color: #afd5fa;
+                line-height: 30px;
+                font-size: 16px;
+            }
+
+            h1 {
+                color: #fff;
+                line-height: 30px;
+                font-size: 22px;
+            }
+        }
+    }
+}</style>

@@ -256,6 +256,9 @@ export default {
     this.xuanran();
     this.bumen();
   },
+  updated(){
+    window.localStorage.setItem('userNum',this.total)
+  }
 };
 </script>
 

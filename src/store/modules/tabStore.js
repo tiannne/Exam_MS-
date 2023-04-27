@@ -7,7 +7,7 @@ export default new Vuex.Store({
   state: {
     id: '123456',
     openedTab: ['首页','home'],
-    activeTab: ''
+    activeTab: '',
   },
   mutations: {
     //将name参数加入到openedTab数组中

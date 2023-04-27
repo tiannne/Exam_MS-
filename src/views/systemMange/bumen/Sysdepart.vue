@@ -173,9 +173,6 @@ export default {
       this.dialogFormVisible2 = true
       this.dialogTitle = '添加子部门'
       this.addId = ev
-      // console.log(this.addId,1);
-      // console.log(ev.parentId,2);
-      //console.log(ev,3);
       console.log(this.addId)
     },
 
@@ -309,6 +306,11 @@ export default {
   created() {
     this.firstXuanran();
     this.getList();
+  },
+  updated(){
+    console.log(this.total,'表格数据数量');
+    //window.localStorage.setItem('departNum',this.total)
+    this.$store.commit('userToken/departNum',this.total)
   }
 }
 </script>
