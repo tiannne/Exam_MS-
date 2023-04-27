@@ -131,6 +131,13 @@
           </div>
         </el-header>
         <el-main>
+          <!-- ------------------------标签页开始-------------------------->
+          <el-tabs v-model="editableTabsValue" type="card" editable @edit="handleTabsEdit" :addable="false">
+            <el-tab-pane :key="item.name" v-for="(item, index) in editableTabs" :label="item.title" :name="item.name">
+              {{ item.content }}
+            </el-tab-pane>
+          </el-tabs>
+          <!-- ------------------------标签页结束-------------------------->
           <Transition name="rotate">
             <RouterView />
           </Transition>
@@ -153,8 +160,8 @@ export default {
       username: "",
       headword: "在线考试系统",
       head: false,
-      breadcrumb: [],
-    };
+      breadcrumb: []
+    }
   },
   created() {
     this.username = window.localStorage.getItem("username");
@@ -162,11 +169,11 @@ export default {
   computed: {
     breadcrumb() {
       return this.$route.meta.breadcrumb || [];
-    },
+    }
   },
   methods: {
     handleOpen(key, keyPath) {
-      // console.log(key, keyPath);
+      // console.log(key, keyPath); 
     },
     handleClose(key, keyPath) {
       // console.log(key, keyPath);

@@ -1,8 +1,13 @@
 const state = {
-    token: ''
+    token: '',
+    departNum: 0
 }
 const actions = {}
 const mutations = {
+    //改变部门数量
+    departNum(state, num) {
+        state.departNum = num
+    },
     setToken(state, token) {
         state.token = token
     },

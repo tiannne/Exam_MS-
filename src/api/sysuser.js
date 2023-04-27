@@ -19,3 +19,13 @@ export const list = () => {
     data: {},
   });
 };
+
+export const del = (ids) => {
+  return instance({
+    url: "/exam/api/sys/user/delete",
+    method: "POST",
+    data: {
+      ids
+    },
+  });
+};

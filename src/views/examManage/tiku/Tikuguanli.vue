@@ -8,25 +8,17 @@
     <el-row>
       <el-col>
         <el-button type="primary" @click="add">
-          <el-icon><Plus /></el-icon>添加
+          <el-icon>
+            <Plus />
+          </el-icon>添加
         </el-button>
       </el-col>
     </el-row>
-    <el-select
-      v-model="value"
-      class="m-2"
-      :placeholder="'已选' + num + '项'"
-      v-if="boolean"
-    >
+    <el-select v-model="value" class="m-2" :placeholder="'已选' + num + '项'" v-if="boolean">
       <el-option value="删除" @click="del" />
     </el-select>
-    <el-table
-      ref="multipleTableRef"
-      :data="tableData"
-      style="width: 100%"
-      @selection-change="handleSelectionChange"
-      border
-    >
+    <el-table ref="multipleTableRef" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange"
+      border>
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column prop="title" label="题库名称">
         <template #default="scope">
@@ -41,25 +33,15 @@
       <el-table-column prop="createTime" label="创建时间" align="center" />
     </el-table>
     <div>
-      <el-pagination
-        v-model:current-page="currentPage4"
-        v-model:page-size="pageSize4"
-        :page-sizes="[10, 20, 30, 40]"
-        :small="small"
-        :disabled="disabled"
-        :background="background"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        @click="yeshu"
-      />
+      <el-pagination v-model:current-page="currentPage4" v-model:page-size="pageSize4" :page-sizes="[10, 20, 30, 40]"
+        :small="small" :disabled="disabled" :background="background" layout="total, sizes, prev, pager, next, jumper"
+        :total="total" @size-change="handleSizeChange" @current-change="handleCurrentChange" @click="yeshu" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onUpdated } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 //
 import { useRouter } from "vue-router";
@@ -161,12 +143,16 @@ const details = (id) => {
   router.push(`/tiku/guanli/tikudetails/${id}`);
   // console.log(id);
 };
+onUpdated(() => {
+  window.localStorage.setItem('tikuNum', total.value)
+})
 </script>
 
 <style scoped>
 .el-row {
   margin-bottom: 10px;
 }
+
 .el-input {
   width: auto;
 }
@@ -174,6 +160,7 @@ const details = (id) => {
 .btn {
   margin: 20px 0;
 }
+
 .el-pagination {
   margin-top: 40px;
 }
@@ -181,9 +168,11 @@ const details = (id) => {
 .el-icon {
   margin-right: 5px;
 }
+
 :deep(.el-table th.el-table__cell) {
   background: rgb(217, 214, 214);
 }
+
 .m-2 {
   width: 130px;
   margin-bottom: 10px;
