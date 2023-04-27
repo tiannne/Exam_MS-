@@ -29,3 +29,12 @@ export const del = (ids) => {
     },
   });
 };
+
+export const update = (obj) => {
+  return instance({
+    url: "/exam/api/sys/user/update",
+    method: "POST",
+    data: obj,
+  });
+};
+
