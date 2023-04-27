@@ -41,13 +41,13 @@
     </el-row>
     <el-table :data="tableData" style="width: 100%;margin-bottom: 20px;" row-key="id" border default-expand-all
       :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
-      <el-table-column prop="deptName" label="名称" sortable width="180">
+      <el-table-column prop="deptName" label="名称" sortable width="350">
       </el-table-column>
-      <el-table-column prop="deptCode" label="编码" sortable width="180">
+      <el-table-column prop="deptCode" label="编码" sortable width="350">
       </el-table-column>
       <el-table-column prop="address" label="操作项" #default="scope">
         <!-- 添加子部门 -->
-        <el-button class="wrap" type="text" size="small" @click="addDepart(scope.row)">
+        <el-button class="wrap" type="text" size="small" @click="addDepart(scope.row.id)">
           <div class="box"><el-icon>
               <Plus />
             </el-icon></div>
@@ -75,13 +75,14 @@
 <script>
 import { ElMessage } from 'element-plus'
 import { reactive } from 'vue'
-import { findDepart, finddelete } from '../../../api/sysdepart'
+import { findDepart, finddelete, findDetail } from '../../../api/sysdepart'
 import { findPaging, findSave } from '../../../api/user'
 
 export default {
   data() {
     return {
-      addId:'',
+      addId: '',
+      editName: '',
       /* 以下是分页的响应式数据 */
       currentPage: 1, //当前页
       total: 0, //总数
@@ -171,22 +172,22 @@ export default {
     addDepart(ev) {
       this.dialogFormVisible2 = true
       this.dialogTitle = '添加子部门'
-      this.addId = ev.parentId
+      this.addId = ev
+      // console.log(this.addId,1);
+      // console.log(ev.parentId,2);
+      //console.log(ev,3);
+      console.log(this.addId)
     },
 
     departAdd2(formEl) {
       if (!formEl) return
       formEl.validate((valid, fields) => {
         if (valid) {
-          this.dialogFormVisible = false;
+          this.dialogFormVisible2 = false;
           findSave({ parentId: this.addId, deptCode: this.deptCode, deptName: this.form.name }).then((res) => {
-            console.log(this.appId)
-            console.log(this.tableData[0].children, '第一个');
-            console.log(res.config, '第er个');
-            this.tableData.children.push(JSON.parse(res.config.data))
-            ElMessage.success('部门添加成功')
-            this.form.name = ''
             this.getList();
+            ElMessage.success('子部门添加成功')
+            this.form.name = ''
           }).catch((res) => {
             console.log(res, '失败');
           })
@@ -196,41 +197,33 @@ export default {
       })
     },
     /* ========================列表编辑部门======================== */
-    editDepart(ev, formEl) {
+    editDepart(ev) {
       this.dialogTitle = '编辑部门'
       this.form.name = ev.deptName
-      this.dialogFormVisible = true
+      this.dialogFormVisible2 = true
+      console.log(ev.id);
+      this.addId = ev.id
+    },
+    departAdd2(formEl) {
       if (!formEl) return
       formEl.validate((valid, fields) => {
-        /* 之前的 */
-        // if (valid) {
-        //   this.dialogFormVisible = false;
-        //   this.ideNum = ev.id
-        //   findDepart({ ids: ev.id }).then((res) => {
-        //     for (let i = 0; i < this.tableData.length; i++) {
-        //       if (this.tableData[i].id === ev.id) {
-        //         // console.log(this.tableData[i],123);
-        //         // console.log(this.tableData[i].deptName);
-        //         findSave({ parentId: 0, deptCode: this.deptCode, deptName: this.form.name }).then((res) => {
-        //           console.log(res.config.data.deptCode, 123);
-        //           this.tableData[i].deptName = res.config.data.deptName
-        //         })
-        //       }
-        //     }
-        //     this.getList();
-        //   }).catch((res) => {
-        //     console.log(res, '失败');
-        //   })
-        // } else {
-        //   console.log('error submit!', fields)
-        // }
-        /* ====================================================== */
-        if (valid, ev) {
-          this.dialogFormVisible = false;
-          this.ideNum = ev.id
-          findSave({ parentId: 0, deptCode: this.deptCode, deptName: this.form.name }).then((res) => {
-            console.log(res);
+        if (valid) {
+          this.dialogFormVisible2 = false;
+          findDetail({ id: this.addId }).then((res) => {
+            console.log(res.data.data.deptName, '编辑部门res');
+            this.editName = this.form.name
+            findSave({ deptCode: res.data.data.deptCode, deptName: this.editName, deptType: res.data.data.deptType, id: res.data.data.id, parentId: res.data.data.parentId, sort: 8 }).then((res2) => {
+              this.firstXuanran();
+              ElMessage.success('部门编辑成功')
+              this.form.name = ''
+            }).catch((res2) => {
+              console.log(res2, '失败');
+            })
+          }).catch((res) => {
+            console.log(res, '失败');
           })
+        } else {
+          console.log('error submit!', fields)
         }
       })
     },
