@@ -57,8 +57,8 @@
     <el-col :span="3">
       <el-cascader style="width: 130px;" :options="footSelect" @change="funFootselect"></el-cascader>
     </el-col>
-    <el-col :span="6">
-      <el-pagination background layout="prev, pager, next" :total="40" />
+    <el-col :span="9">
+      <el-pagination @current-change="fenYe" background layout="prev, pager, next" :total="zongTiaoShu" />
     </el-col>
     <el-col :span="6">
       <div>前往<el-input style="width: 100px;" v-model="input" />页面</div>
@@ -73,6 +73,7 @@ export default {
   name: 'Kaoshiguanli',
   data() {
     return {
+      zongTiaoShu:'',
       mstartTime: '',
       mendTime: '',
       searchInput: '',
@@ -181,6 +182,10 @@ export default {
     }
   },
   methods: {
+    fenYe(event){
+      // console.log(event)
+      this.getExamListDataVue({ current: event, params: { title: '' }, size: this.footMachSelect })
+    },
     handleDetail(index,row){
       this.$router.push({name:'kaoshiguanliExamDetail',params:{id:row.id||undefined}})
     },
@@ -287,7 +292,8 @@ export default {
       getExamListData(data).then((res) => {
         this.tableData = res.data.data.records
         this.uplaterTabData = this.tableData
-
+        console.log(res.data.data.total)
+        this.zongTiaoShu = res.data.data.total
       })
     }
   },

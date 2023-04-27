@@ -252,7 +252,6 @@ export default {
         submintFrom(formEl) {
             this.numberValidateForm.departIds = this.footList
             this.numberValidateForm.repoList = this.repoList
-            // console.log(this.numberValidateForm)
             this.$refs[formEl].validate((valid) => {
                 if (valid) {
                     this.dialogVisible = true

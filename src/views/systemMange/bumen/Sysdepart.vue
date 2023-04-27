@@ -47,9 +47,9 @@
       </el-table-column>
       <el-table-column prop="address" label="操作项" #default="scope">
         <!-- 添加子部门 -->
-        <el-button class="wrap" type="text" size="small" @click="addDepart(scope.row)">
+        <el-button class="wrap" type="text" size="small" @click="addDepart(scope.row.id)">
           <div class="box"><el-icon>
-              <Plus />
+              <Plus />jjj
             </el-icon></div>
         </el-button>
         <!-- 编辑部门 -->
@@ -171,18 +171,20 @@ export default {
     addDepart(ev) {
       this.dialogFormVisible2 = true
       this.dialogTitle = '添加子部门'
-      this.addId = ev.parentId
+      this.addId = ev
+      // console.log(this.addId)
     },
 
     departAdd2(formEl) {
+      // console.log(this.addId)
       if (!formEl) return
       formEl.validate((valid, fields) => {
         if (valid) {
           this.dialogFormVisible = false;
           findSave({ parentId: this.addId, deptCode: this.deptCode, deptName: this.form.name }).then((res) => {
-            console.log(this.appId)
-            console.log(this.tableData[0].children, '第一个');
-            console.log(res.config, '第er个');
+            // console.log(this.addId)
+            // console.log(this.tableData[0].children, '第一个');
+            // console.log(res.config, '第er个');
             this.tableData.children.push(JSON.parse(res.config.data))
             ElMessage.success('部门添加成功')
             this.form.name = ''
@@ -194,6 +196,8 @@ export default {
           console.log('error submit!', fields)
         }
       })
+      // console.log(this.addId)
+
     },
     /* ========================列表编辑部门======================== */
     editDepart(ev, formEl) {
