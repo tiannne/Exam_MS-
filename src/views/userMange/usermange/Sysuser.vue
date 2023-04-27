@@ -8,9 +8,10 @@
         <el-input v-model="input2" placeholder="搜索姓名" @input="sousuoname" />
       </el-col>
       <el-col :span="5">
-        <el-button type="primary" @click="dialogFormVisible = true;
-        kong();
-                                      ">
+        <el-button type="primary"
+          @click="dialogFormVisible = true;
+          kong();
+                                                                                                                                                                                                                ">
           <el-icon>
             <Plus />
           </el-icon>添加
@@ -20,7 +21,7 @@
     <el-select v-model=" value " class="m-2" :placeholder=" '已选' + this.num + '项' " v-if=" this.boolean ">
       <el-option value="启用" @click=" dele " />
       <el-option value="禁用" @click=" dele " />
-      <el-option value="删除" @click="dele" />
+      <el-option value="删除" @click=" dele " />
     </el-select>
     <el-dialog v-model=" dialogFormVisible " title="添加用户">
       <el-form :label-position=" labelPosition " label-width="60px" :model=" formLabelAlign " style="max-width: 460px">
@@ -76,16 +77,17 @@
       :small=" small " :disabled=" disabled " :background=" background " layout="total, sizes, prev, pager, next, jumper"
       :total=" total " @size-change=" handleSizeChange " @current-change=" handleCurrentChange " />
   </div>
+  <button @click=" test ">更新</button>
 </template>
 
 <script>
 import { reactive } from "vue";
-import { user, list, del } from "../../../api/sysuser";
+import { user, list, del, update } from "../../../api/sysuser";
 import { ElMessage, ElMessageBox } from "element-plus";
 export default {
   data() {
     return {
-      ids:[],
+      ids: [],
       arr: [],
       bumenarr: [],
       dialogFormVisible: false,
@@ -122,6 +124,22 @@ export default {
     };
   },
   methods: {
+    test() {
+      update({
+        createTime: "2023-04-26 11:03:12",
+        departId: "",
+        id: "1651059321518948353",
+        password: "admin",
+        realName: "admin",
+        roleIds: "sa",
+        salt: "uMrWgj",
+        state: 0,
+        updateTime: "2023-04-26 19:03:12",
+        userName: "admin",
+      }).then(res => {
+        console.log(res);
+      })
+    },
     add() { },
     sousuo() { },
     handleSelectionChange(val) {
@@ -226,32 +244,34 @@ export default {
         console.log(this.bumenarr);
       });
     },
-    dele1() {
-      del(this.ids)
-    },
+    // dele1() {
+    //   del(this.ids)
+    // },
     dele() {
-    ElMessageBox.confirm("确认要删除吗?", "提示", {
-      confirmButtonText: "确定",
-      cancelButtonText: "取消",
-      type: "warning",
-    })
-      .then(() => {
-        ElMessage({
-          type: "success",
-          message: "删除成功",
-        });
-        this.dele1();
-        //渲染数据
-        this.xuanran();
+      ElMessageBox.confirm("确认要删除吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
       })
-      .catch(() => {
-        ElMessage({
-          type: "info",
-          message: "删除已取消",
+        .then(() => {
+          ElMessage({
+            type: "success",
+            message: "删除成功",
+          });
+          // this.dele1();
+          // console.log(this.ids);
+          del(this.ids)
+          //渲染数据
+          this.xuanran();
+        })
+        .catch(() => {
+          ElMessage({
+            type: "info",
+            message: "删除已取消",
+          });
         });
-      });
     }
-},
+  },
   created() {
     this.xuanran();
     this.bumen();
