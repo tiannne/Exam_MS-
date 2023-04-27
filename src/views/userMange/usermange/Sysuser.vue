@@ -11,7 +11,7 @@
         <el-button type="primary"
           @click="dialogFormVisible = true;
           kong();
-                                                                                                                                                                                                                ">
+                                                                                                                                                                                                                          ">
           <el-icon>
             <Plus />
           </el-icon>添加
@@ -35,8 +35,8 @@
           <el-input v-model=" formLabelAlign.password " placeholder="不修改请留空" type="password" />
         </el-form-item>
         <el-form-item label="部门">
-          <el-select v-model="formLabelAlign.departId" placeholder="请选择">
-            <el-option v-for="item in bumenarr" :label="item" :value="item" />
+          <el-select v-model=" formLabelAlign.departId " placeholder="请选择">
+            <el-option v-for=" item  in  bumenarr " :label=" item " :value=" item " />
           </el-select>
         </el-form-item>
         <el-form-item label="角色">
@@ -58,8 +58,8 @@
       border>
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column prop="userName" label="用户名" align="center">
-        <template #default="scope">
-          <div style="cursor: pointer" @click="details(scope.row.id)">
+        <template #default=" scope ">
+          <div style="cursor: pointer" @click=" details(scope.row.id) ">
             {{ scope.row.userName }}
           </div>
         </template>
@@ -79,13 +79,8 @@
 
 <script>
 import { reactive } from "vue";
-<<<<<<< HEAD
 import { user, list, del, update } from "../../../api/sysuser";
 import { ElMessage, ElMessageBox } from "element-plus";
-=======
-import { user, list } from "../../../api/sysuser";
-import { forEach } from "lodash";
->>>>>>> 510567622ab9b761860a08d40e927b4bf7e7cb9e
 export default {
   data() {
     return {
@@ -221,15 +216,12 @@ export default {
           this.bumenarr.push(this.arr[j].deptName)
         }
       });
-<<<<<<< HEAD
+
     },
     // dele1() {
     //   del(this.ids)
     // },
-=======
-      console.log(this.bumenarr);
-    },
->>>>>>> 510567622ab9b761860a08d40e927b4bf7e7cb9e
+
     dele() {
       ElMessageBox.confirm("确认要删除吗?", "提示", {
         confirmButtonText: "确定",
@@ -259,8 +251,8 @@ export default {
     this.xuanran();
     this.bumen();
   },
-  updated(){
-    window.localStorage.setItem('userNum',this.total)
+  updated() {
+    window.localStorage.setItem('userNum', this.total)
   }
 };
 </script>
