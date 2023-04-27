@@ -35,9 +35,11 @@
           <el-input v-model="formLabelAlign.password" placeholder="不修改请留空" type="password" />
         </el-form-item>
         <el-form-item label="部门">
-          <el-select v-model="formLabelAlign.departId" placeholder="请选择">
-            <el-option v-for="item in bumenarr" :label="item" :value="item" />
-          </el-select>
+
+
+          <el-tree-select v-model="formLabelAlign.departId" :data="bumenarr" :render-after-expand="false"  :placeholder="bumenValue"/>
+
+
         </el-form-item>
         <el-form-item label="角色">
           <el-input v-model="formLabelAlign.roleIds" placeholder="请选择角色" />
@@ -59,7 +61,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column prop="userName" label="用户名" align="center">
         <template #default="scope">
-          <div style="cursor: pointer" @click="details(scope.row.id)">
+          <div style="cursor: pointer" @click="details(scope.row.id,scope.$index)">
             {{ scope.row.userName }}
           </div>
         </template>
@@ -79,7 +81,6 @@
 <script>
 import { reactive } from "vue";
 import { user, list } from "../../../api/sysuser";
-import { forEach } from "lodash";
 export default {
   data() {
     return {
@@ -91,7 +92,7 @@ export default {
         region: "",
         type: "",
       }),
-
+      bumenValue:"",
       num: 0,
       total: "",
       currentPage4: 1,
@@ -100,7 +101,7 @@ export default {
       input2: "",
       boolean: false,
       dialogFormVisible: false,
-      data: [],
+      f: [],
       new: [],
       formLabelAlign: reactive({
         name: "",
@@ -133,9 +134,9 @@ export default {
     xuanran() {
       user(this.currentPage4, this.pageSize4, { userName: this.input1 }).then(
         (res) => {
-          // console.log(res.data.data.records);
+          console.log(res.data.data.records,1);
           this.data = res.data.data.records;
-          console.log(this.data);
+          console.log(this.data,2);
           res.data.data.records.forEach((item) => {
             if (item.state == 0) {
               item.state = "正常";
@@ -169,32 +170,54 @@ export default {
         }
       );
     },
-    details(id) {
-      // console.log(id);
+    details(id,index) {
+      this.formLabelAlign.departId=this.data[index].departId
+      console.log(1);
+      console.log(this.bumenarr);
+      this.bumenarr[0].children.forEach(item=>{
+        if(item.value===this.data[index].departId){
+          console.log(item.label);
+          this.bumenValue=item.label
+          console.log(item.label);
+          console.log(this.bumenValue);
+        }
+      })
+
       this.dialogFormVisible = true;
       this.new = this.data.find((v) => v.id == id);
-      // console.log(this.new.userName);
-      console.log(this.new);
+      // console.log(this.new);
       this.new.password = [];
-      this.new.departId = "部门";
+      this.new.departId =this.data[index].departId;
       console.log(this.new.roleIds);
       this.formLabelAlign = this.new;
+      this.formLabelAlign.departId=this.data.departId
+     
     },
     kong() {
       this.formLabelAlign = [];
     },
     onSubmit() {
-      console.log("提交");
+      console.log(this.formLabelAlign.departId);
     },
     bumen() {
       list().then((res) => {
         this.arr = res.data.data
-        console.log(this.arr);
-        for (var j = 0; j < this.arr.length; j++) {
-          this.bumenarr.push(this.arr[j].deptName)
+        console.log(this.arr,'arr');
+        
+        const obj={
+          value:this.arr[0].id,
+          label:this.arr[0].deptName,
+          children:[]
         }
+        for(let i=0;i<this.arr[0].children.length;i++){
+          obj.children.push({
+            value:this.arr[0].children[i].id,
+            label:this.arr[0].children[i].deptName
+          })
+        }
+        this.bumenarr=[obj]
+        console.log(this.bumenarr);
       });
-      console.log(this.bumenarr);
     },
   },
 
