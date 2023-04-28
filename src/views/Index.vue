@@ -91,13 +91,13 @@
           </div>
           <el-breadcrumb separator="/">
             <el-breadcrumb-item to="/home">答题统计</el-breadcrumb-item>
-            <el-breadcrumb-item v-for="item in breadcrumb" :key="item">{{ item }}</el-breadcrumb-item>
+            <el-breadcrumb-item v-for="item in breadcrumb" :key="item">{{
+              item
+            }}</el-breadcrumb-item>
           </el-breadcrumb>
           <div class="userWrap">
             <el-avatar :size="30"></el-avatar>
-            <p class="words">
-              欢迎：{{ username }}
-            </p>
+            <p class="words">欢迎：{{ username }}</p>
             <el-dropdown>
               <span class="el-dropdown-link">
                 <el-icon class="el-icon--right">
@@ -106,8 +106,10 @@
               </span>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item>个人中心</el-dropdown-item>
-                  <el-dropdown-item @click="handleToLogout">退出登录</el-dropdown-item>
+                  <el-dropdown-item @click="handleSelf">个人中心</el-dropdown-item>
+                  <el-dropdown-item @click="handleToLogout"
+                    >退出登录</el-dropdown-item
+                  >
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -129,6 +131,11 @@
           <Transition name="rotate">
             <RouterView />
           </Transition>
+          <!-- <router-view v-slot="{ Component }">
+            <transition name="fade" mode="out-in">
+              <component :is="Component" />
+            </transition>
+          </router-view> -->
         </el-main>
       </el-container>
     </el-container>
@@ -161,7 +168,7 @@ export default {
     this.collapse = window.localStorage.getItem('coolapseBoolean')
   },
   created() {
-    this.username = window.localStorage.getItem('username')
+    this.username = window.localStorage.getItem("username");
   },
   computed: {
     breadcrumb() {
@@ -209,17 +216,19 @@ export default {
     },
     handleToLogout() {
       /* 清空状态管理中的token，持久化就会清空后退出登录 */
-      this.$store.commit('userToken/clearToken');
+      this.$store.commit("userToken/clearToken");
       /* this.$router.push('/login') */
       /*刷新页面 */
       /* window.location.reload(); */
 
       //跳转且刷新页面
-      window.location.href = '/login';
-
+      window.location.href = "/login";
+    },
+    handleSelf(){
+      this.$router.push('/home')
     }
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -238,7 +247,6 @@ export default {
     padding-top: 4px;
   }
 }
-
 
 .el-dropdown-link:focus {
   outline: none;
@@ -294,7 +302,6 @@ export default {
   &.error {
     left: 200px;
   }
-
 }
 
 .el-container {
@@ -340,7 +347,6 @@ export default {
     justify-content: space-between;
     align-items: center;
 
-
     .words {
       line-height: 60px;
       margin-left: 10px;
@@ -348,7 +354,6 @@ export default {
       color: #333;
     }
   }
-
 }
 
 .el-menu {
@@ -356,7 +361,7 @@ export default {
 }
 
 .rotate-enter-active {
-  animation: .7s linear in;
+  animation: 0.7s linear in;
 }
 
 @keyframes move {
@@ -367,25 +372,27 @@ export default {
 
   100% {
     display: none;
-    transform: translateX(0);
+    transform: translateX(-100%);
   }
 }
 
 @keyframes in {
   0% {
-    opacity: 0;
-    // display: none;
+    // opacity: 0;
+    display: block;
     transform: translateX(-100%);
   }
 
   100% {
     //  display: none;
-    opacity: 1;
+    // opacity: 1;
     transform: translateX(0);
   }
 }
 
 .rotate-leave-active {
-  animation: .7s linear move;
+  animation: 0.7s linear move;
 }
+
+
 </style>

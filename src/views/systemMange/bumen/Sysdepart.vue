@@ -49,7 +49,7 @@
         <!-- 添加子部门 -->
         <el-button class="wrap" type="text" size="small" @click="addDepart(scope.row.id)">
           <div class="box"><el-icon>
-              <Plus />
+              <Plus />jjj
             </el-icon></div>
         </el-button>
         <!-- 编辑部门 -->
@@ -177,6 +177,7 @@ export default {
     },
 
     departAdd2(formEl) {
+      // console.log(this.addId)
       if (!formEl) return
       formEl.validate((valid, fields) => {
         if (valid) {
@@ -192,6 +193,8 @@ export default {
           console.log('error submit!', fields)
         }
       })
+      // console.log(this.addId)
+
     },
     /* ========================列表编辑部门======================== */
     editDepart(ev) {

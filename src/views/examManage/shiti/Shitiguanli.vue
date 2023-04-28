@@ -1,5 +1,5 @@
 <template>
-  <div v-show="showChange">
+  <div>
     <el-row justify="space-between">
       <el-col :span="12" class="colLeft">
         <el-select v-model="valueType" class="m-2" placeholder="选择题型" @change="changeType">
@@ -137,7 +137,6 @@
       </el-pagination>
     </div>
   </div>
-  <router-view v-show="!showChange"></router-view>
 </template>
 
 <script>
@@ -146,7 +145,6 @@ import {initsubject,initQuestionBank,tiAddOrMovueToBank,removeQuestion} from '..
 export default {
   data() {
     return {
-        showChange:true,
         valueType:'',  //输入框1--type
         valueBank:[],//输入框2--题库id
         ValueTitle:'',//输入框3 题目

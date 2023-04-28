@@ -1,4 +1,5 @@
 <template>
+    <div>
     <h1 style="margin: 20px 0px;">组卷信息</h1>
     <div class="hreadStyle">
         <el-row style="margin: 20px 0px;">
@@ -135,6 +136,7 @@
         <el-button type="primary" style="margin: 30px 0px;" @click="submintFrom('numberValidateForm')">保存</el-button>
     </el-form>
     <br>
+</div>
 </template>
 <script>
 import { getExamRepoApi, getdepartTree, setExamSave } from "../api/user.js"

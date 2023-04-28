@@ -23,6 +23,14 @@ export const getIdExam = (data) => {
     })
 }
 
+//验证token
+export const jiaoYanToken = (token) => {
+    return instance({
+        url: `/exam/api/sys/user/info?token=${token}`,
+        method: 'POST',    
+    })
+}
+
 
 //获取考试列表
 export const getExamListData = (data)=>{
