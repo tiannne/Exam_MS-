@@ -11,7 +11,7 @@
         <el-button type="primary"
           @click="dialogFormVisible = true;
           kong();
-                                                                                                                                                                                                                          ">
+                                                                                                                                                                                                                                    ">
           <el-icon>
             <Plus />
           </el-icon>添加
@@ -36,7 +36,7 @@
         </el-form-item>
         <el-form-item label="部门">
           <el-select v-model=" formLabelAlign.departId " placeholder="请选择">
-            <el-option v-for=" item  in  bumenarr " :label=" item " :value=" item " />
+            <el-option v-for=" item in bumenarr " :label=" item " :value=" item " />
           </el-select>
         </el-form-item>
         <el-form-item label="角色">
@@ -104,11 +104,6 @@ export default {
       dialogFormVisible: false,
       f: [],
       new: [],
-      formLabelAlign: reactive({
-        name: "",
-        region: "",
-        type: "",
-      }),
       tableData: [
         {
           userName: "",
