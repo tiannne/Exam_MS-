@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import store from "../store";
+import { jiaoYanToken } from "../api/user"
 
 const Index = () => import("../views/Index.vue");
 const Login = () => import("../views/Login.vue");
@@ -175,15 +176,17 @@ const router = createRouter({
 /* 全局前置守卫 */
 router.beforeEach((to, from, next) => {
   if (to.meta.auth) {
-    if (store.state.userToken.token) {
-      next();
-    } else {
-      router.push("/login");
-    }
+    jiaoYanToken(store.state.userToken.token).then((res)=>{
+      console.log(res.data.code)
+      if(res.data.code == 0){
+        next()
+      }else{
+        router.push("/login");
+      }
+    })
   } else {
     next();
   }
-  // console.log(to.meta.auth)
 });
 
 export default router;

@@ -134,7 +134,7 @@
         <el-button type="primary" style="margin: 30px 0px;" @click="submintFrom('numberValidateForm')">保存</el-button>
     </el-form>
     <br>
-    {{ tableData }}
+    <!-- {{ tableData }} -->
 </template>
 <script>
 import { getExamRepoApi, getdepartTree, setExamSave ,getIdExam} from "../api/user.js"
@@ -252,7 +252,6 @@ export default {
         submintFrom(formEl) {
             this.numberValidateForm.departIds = this.footList
             this.numberValidateForm.repoList = this.repoList
-            // console.log(this.numberValidateForm)
             this.$refs[formEl].validate((valid) => {
                 if (valid) {
                     this.dialogVisible = true
