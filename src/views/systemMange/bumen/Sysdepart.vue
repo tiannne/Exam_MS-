@@ -37,6 +37,18 @@
           <el-button type="primary" @click="departAdd2($refs.ruleFormRef)">确 定</el-button>
         </div>
       </el-dialog>
+       <!-- 弹出表单框三 -->
+       <el-dialog width="320px " :title="dialogTitle" v-model="dialogFormVisible3" class="dialogsize">
+        <el-form :model="form" ref="ruleFormRef" label-width="60px" style="max-width: 260px" :rules="rules">
+          <el-form-item label="部门名称 " prop="name">
+            <el-input v-model="form.name" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="departDefault">取 消</el-button>
+          <el-button type="primary" @click="departAdd3($refs.ruleFormRef)">确 定</el-button>
+        </div>
+      </el-dialog>
       <!-- 表格 -->
     </el-row>
     <el-table :data="tableData" style="width: 100%;margin-bottom: 20px;" row-key="id" border default-expand-all
@@ -49,7 +61,7 @@
         <!-- 添加子部门 -->
         <el-button class="wrap" type="text" size="small" @click="addDepart(scope.row.id)">
           <div class="box"><el-icon>
-              <Plus />jjj
+              <Plus />
             </el-icon></div>
         </el-button>
         <!-- 编辑部门 -->
@@ -93,6 +105,7 @@ export default {
       input: '',
       dialogFormVisible: false,
       dialogFormVisible2: false,
+      dialogFormVisible3: false,
       dialogTitle: '',
       form: reactive({
         name: ''
@@ -166,24 +179,25 @@ export default {
       findPaging({ current: 1, size: 9999, params: {} }).then((res) => {
         // console.log(res.data.data.records)
         this.tableData = res.data.data.records
+        this.list = res.data.data.records;    //总数组
+        this.total = res.data.data.records.length;      //总条数
       })
     },
     /* =======================列表添加子部门======================= */
     addDepart(ev) {
-      this.dialogFormVisible2 = true
+      this.dialogFormVisible3 = true
       this.dialogTitle = '添加子部门'
       this.addId = ev
       console.log(this.addId)
     },
-
-    departAdd2(formEl) {
+    departAdd3(formEl) {
       // console.log(this.addId)
       if (!formEl) return
       formEl.validate((valid, fields) => {
         if (valid) {
-          this.dialogFormVisible2 = false;
+          this.dialogFormVisible3 = false;
           findSave({ parentId: this.addId, deptCode: this.deptCode, deptName: this.form.name }).then((res) => {
-            this.getList();
+            this.firstXuanran();
             ElMessage.success('子部门添加成功')
             this.form.name = ''
           }).catch((res) => {
@@ -250,7 +264,7 @@ export default {
               this.tableData.splice(i, 1)
             }
           }
-          this.getList();
+          this.firstXuanran();
         })
       }).catch(() => {
         this.$message({
@@ -278,7 +292,7 @@ export default {
             this.tableData.push(JSON.parse(res.config.data))
             ElMessage.success('部门添加成功')
             this.form.name = ''
-            this.getList();
+            this.firstXuanran();
             /* } else {
               if (this.tableData.map((v) => v.deptName).includes(this.form.name)) {
                 ElMessage.error('部门名称重复')
