@@ -30,27 +30,15 @@
               </el-icon>
               <span>考试管理</span>
             </template>
-<<<<<<< HEAD
-            <el-menu-item index="/tiku/guanli" @click="addTab(editableTabsValue)">
+            <el-menu-item index="/tiku/guanli">
               <el-icon style="padding-right: 10px;">
                 <Files />
               </el-icon>题库管理</el-menu-item>
-            <el-menu-item index="/shiti/guanli" @click="addTab(editableTabsValue)">
+            <el-menu-item index="/shiti/guanli">
               <el-icon style="padding-right: 10px;">
                 <Tickets />
               </el-icon>试题管理</el-menu-item>
-            <el-menu-item index="/kaoshi/guanli" @click="addTab(editableTabsValue)">
-=======
-            <el-menu-item index="/tiku/guanli"  @click="addTab">
-              <el-icon style="padding-right: 10px;">
-                <Files />
-              </el-icon>题库管理</el-menu-item>
-            <el-menu-item index="/shiti/guanli"  @click="addTab">
-              <el-icon style="padding-right: 10px;">
-                <Tickets />
-              </el-icon>试题管理</el-menu-item>
-            <el-menu-item index="/kaoshi/guanli"  @click="addTab">
->>>>>>> c38a0559adfe395dc895e9d6f7b0ad99a52bd62d
+            <el-menu-item index="/kaoshi/guanli">
               <el-icon style="padding-right: 10px;">
                 <Monitor />
               </el-icon>考试管理</el-menu-item>
@@ -62,19 +50,11 @@
               </el-icon>
               <span>系统设置</span>
             </template>
-<<<<<<< HEAD
-            <el-menu-item index="/sys/config" @click="addTab(editableTabsValue)">
+            <el-menu-item index="/sys/config">
               <el-icon style="padding-right: 10px;">
                 <Menu />
               </el-icon>系统配置</el-menu-item>
-            <el-menu-item index="/sys/depart" @click="addTab(editableTabsValue)">
-=======
-            <el-menu-item index="/sys/config"  @click="addTab">
-              <el-icon style="padding-right: 10px;">
-                <Menu />
-              </el-icon>系统配置</el-menu-item>
-            <el-menu-item index="/sys/depart"  @click="addTab">
->>>>>>> c38a0559adfe395dc895e9d6f7b0ad99a52bd62d
+            <el-menu-item index="/sys/depart">
               <el-icon style="padding-right: 10px;">
                 <Opportunity />
               </el-icon>部门管理</el-menu-item>
@@ -86,19 +66,12 @@
               </el-icon>
               <span>用户管理</span>
             </template>
-<<<<<<< HEAD
-            <el-menu-item index="/sys/role" @click="addTab(editableTabsValue)">
+            <el-menu-item index="/sys/role" @click="addTab">
               <el-icon style="padding-right: 10px;">
                 <Avatar />
               </el-icon>角色管理</el-menu-item>
-            <el-menu-item index="/sys/user" @click="addTab(editableTabsValue)">
-=======
-            <el-menu-item index="/sys/role"  @click="addTab">
-              <el-icon style="padding-right: 10px;">
-                <Avatar />
-              </el-icon>角色管理</el-menu-item>
-            <el-menu-item index="/sys/user"  @click="addTab">
->>>>>>> c38a0559adfe395dc895e9d6f7b0ad99a52bd62d
+            <el-menu-item index="/sys/user" @click="addTab">
+
               <el-icon style="padding-right: 10px;">
                 <User />
               </el-icon>用户管理</el-menu-item>
@@ -142,26 +115,9 @@
           </div>
         </el-header>
         <el-main>
-          <!-- ------------------------标签页开始-------------------------->
-          <!-- <div style="margin-bottom: 20px;">
-            <el-button size="small" @click="addTab(editableTabsValue)">
-              add tab
-            </el-button>
-          </div> -->
-          <!-- <el-tabs v-model="editableTabsValue" type="card" closable @tab-remove="removeTab">
-            <el-tab-pane v-for="(item, index) in editableTabs" :key="item.name" :label="item.title" :name="item.name">
-              {{ item.content }}
-            </el-tab-pane>
-          </el-tabs> -->
-          <!-- ------------------------标签页结束-------------------------->
           <Transition name="rotate">
             <RouterView />
           </Transition>
-          <!-- <router-view v-slot="{ Component }">
-            <transition name="fade" mode="out-in">
-              <component :is="Component" />
-            </transition>
-          </router-view> -->
         </el-main>
       </el-container>
     </el-container>
@@ -202,34 +158,6 @@ export default {
     }
   },
   methods: {
-    /* ============================标签页的方法============================ */
-    addTab(targetName) {
-      console.log(targetName);
-      // let newTabName = ++this.tabIndex + '';
-      // this.editableTabs.push({
-      //   title: 'New Tab',
-      //   name: newTabName,
-      //   content: 'New Tab content'
-      // });
-      // this.editableTabsValue = newTabName;
-    },
-    removeTab(targetName) {
-      let tabs = this.editableTabs;
-      let activeName = this.editableTabsValue;
-      if (activeName === targetName) {
-        tabs.forEach((tab, index) => {
-          if (tab.name === targetName) {
-            let nextTab = tabs[index + 1] || tabs[index - 1];
-            if (nextTab) {
-              activeName = nextTab.name;
-            }
-          }
-        });
-      }
-      this.editableTabsValue = activeName;
-      this.editableTabs = tabs.filter(tab => tab.name !== targetName);
-    },
-    /* =============================标签页结束============================= */
     handleOpen(key, keyPath) {
       // console.log(key, keyPath); 
     },
