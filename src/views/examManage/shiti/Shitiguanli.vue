@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row justify="space-between">
-      <el-col :span="12" class="colLeft">
+      <el-col :span="8" class="colLeft">
         <el-select v-model="valueType" class="m-2" placeholder="选择题型" @change="changeType">
           <el-option
             v-for="(item, index) in options"

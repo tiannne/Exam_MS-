@@ -32,7 +32,7 @@
     <el-table-column prop="title" label="考试名称" width="145">
     </el-table-column>
     <el-table-column label="考试类型" width="145">
-      <template #default="scope">{{ scope.row.openType == 1 ? '完全公开' : '指定部门' }}</template>
+      <template #default="scope">{{ scope.row.openType == 2 ? '完全公开' : '指定部门' }}</template>
     </el-table-column>
     <el-table-column label="考试时间" width="220">
       <template #default="scope">{{ ExamTime(scope.row.endTime, scope.row.startTime) }}</template>

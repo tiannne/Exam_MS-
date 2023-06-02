@@ -47,7 +47,7 @@
         <el-form-item label="密码">
           <el-input
             v-model="formLabelAlign.password"
-            placeholder="不修改请留空"
+            placeholder="必填"
             type="password"
           />
         </el-form-item>
@@ -262,6 +262,8 @@ export default {
       }
       save(obj).then(res=>{
         console.log(res);
+        
+        this.xuanran()
       })
       }else{
       this.formLabelAlign.roleIds=[this.formLabelAlign.roleIds]
@@ -275,6 +277,7 @@ export default {
       }
       save(obj).then(res=>{
         console.log(res);
+        this.xuanran()
       })
       }
       

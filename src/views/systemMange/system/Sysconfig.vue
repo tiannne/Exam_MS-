@@ -96,7 +96,7 @@ export default {
     initLogoInfo({ id: 1 }).then((res) => {
       console.log(res.data.data);
       res.data.data.backLogo = [
-        { name: "写死的名字", url: res.data.data.backLogo },
+        { name: "Logo", url: res.data.data.backLogo },
       ];
       console.log(res.data.data.backLogo);
       this.formLabelAlign = res.data.data;
