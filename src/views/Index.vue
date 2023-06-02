@@ -6,25 +6,17 @@
           <el-icon>
             <HomeFilled />
           </el-icon>
-          {{ headword }}
+
         </div>
         <div class="headword" style="" v-else>
           <el-icon>
             <HomeFilled />
           </el-icon>
+          {{ headword }}
         </div>
-        <el-menu
-          :collapse="collapse"
-          :collapse-transition="false"
-          background-color="#304156"
-          text-color="#bfcbd9"
-          router
-          :default-active="activeIndex"
-          class="el-menu-vertical-demo"
-          @open="handleOpen"
-          @close="handleClose"
-        >
-          <el-menu-item index="/home">
+        <el-menu :collapse="collapse" :collapse-transition="false" background-color="#304156" text-color="#bfcbd9" router
+          :default-active="activeIndex" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
+          <el-menu-item index="/home" @click="addTab(editableTabsValue)">
             <el-icon>
               <Edit />
             </el-icon>
@@ -39,20 +31,17 @@
               <span>考试管理</span>
             </template>
             <el-menu-item index="/tiku/guanli">
-              <el-icon style="padding-right: 10px">
-                <Files /> </el-icon
-              >题库管理</el-menu-item
-            >
+              <el-icon style="padding-right: 10px;">
+                <Files />
+              </el-icon>题库管理</el-menu-item>
             <el-menu-item index="/shiti/guanli">
-              <el-icon style="padding-right: 10px">
-                <Tickets /> </el-icon
-              >试题管理</el-menu-item
-            >
+              <el-icon style="padding-right: 10px;">
+                <Tickets />
+              </el-icon>试题管理</el-menu-item>
             <el-menu-item index="/kaoshi/guanli">
-              <el-icon style="padding-right: 10px">
-                <Monitor /> </el-icon
-              >考试管理</el-menu-item
-            >
+              <el-icon style="padding-right: 10px;">
+                <Monitor />
+              </el-icon>考试管理</el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="/sys">
             <template #title>
@@ -62,15 +51,13 @@
               <span>系统设置</span>
             </template>
             <el-menu-item index="/sys/config">
-              <el-icon style="padding-right: 10px">
-                <Menu /> </el-icon
-              >系统配置</el-menu-item
-            >
+              <el-icon style="padding-right: 10px;">
+                <Menu />
+              </el-icon>系统配置</el-menu-item>
             <el-menu-item index="/sys/depart">
-              <el-icon style="padding-right: 10px">
-                <Opportunity /> </el-icon
-              >部门管理</el-menu-item
-            >
+              <el-icon style="padding-right: 10px;">
+                <Opportunity />
+              </el-icon>部门管理</el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="/users">
             <template #title>
@@ -79,16 +66,15 @@
               </el-icon>
               <span>用户管理</span>
             </template>
-            <el-menu-item index="/sys/role">
-              <el-icon style="padding-right: 10px">
-                <Avatar /> </el-icon
-              >角色管理</el-menu-item
-            >
-            <el-menu-item index="/sys/user">
-              <el-icon style="padding-right: 10px">
-                <User /> </el-icon
-              >用户管理</el-menu-item
-            >
+            <el-menu-item index="/sys/role" @click="addTab">
+              <el-icon style="padding-right: 10px;">
+                <Avatar />
+              </el-icon>角色管理</el-menu-item>
+            <el-menu-item index="/sys/user" @click="addTab">
+
+              <el-icon style="padding-right: 10px;">
+                <User />
+              </el-icon>用户管理</el-menu-item>
           </el-sub-menu>
         </el-menu>
       </el-aside>
@@ -122,30 +108,16 @@
               <template #dropdown>
                 <el-dropdown-menu>
                   <el-dropdown-item @click="handleSelf">个人中心</el-dropdown-item>
-                  <el-dropdown-item @click="handleToLogout"
-                    >退出登录</el-dropdown-item
-                  >
+                  <el-dropdown-item @click="handleToLogout">退出登录</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
           </div>
         </el-header>
         <el-main>
-          <!-- ------------------------标签页开始-------------------------->
-          <el-tabs v-model="editableTabsValue" type="card" editable @edit="handleTabsEdit" :addable="false">
-            <el-tab-pane :key="item.name" v-for="(item, index) in editableTabs" :label="item.title" :name="item.name">
-              {{ item.content }}
-            </el-tab-pane>
-          </el-tabs>
-          <!-- ------------------------标签页结束-------------------------->
           <Transition name="rotate">
             <RouterView />
           </Transition>
-          <!-- <router-view v-slot="{ Component }">
-            <transition name="fade" mode="out-in">
-              <component :is="Component" />
-            </transition>
-          </router-view> -->
         </el-main>
       </el-container>
     </el-container>
@@ -156,12 +128,26 @@
 export default {
   data() {
     return {
-      collapse: true,
-      username: "",
+      collapse: false,
+      username: '',
       headword: "在线考试系统",
       head: false,
-      breadcrumb: []
+      breadcrumb: [],
+      /* 以下为标签页 */
+      editableTabsValue: '2',
+      editableTabs: [{
+        title: 'Tab 1',
+        name: '1',
+      }, {
+        title: 'Tab 2',
+        name: '2',
+      }],
+      tabIndex: 2
+      /* =========== */
     }
+  },
+  beforeCreate() {
+    this.collapse = window.localStorage.getItem('coolapseBoolean')
   },
   created() {
     this.username = window.localStorage.getItem("username");
@@ -179,8 +165,9 @@ export default {
       // console.log(key, keyPath);
     },
     zheDie() {
-      this.collapse = !this.collapse;
-      this.head = !this.head;
+      this.collapse = !this.collapse
+      this.head = !this.head
+      window.localStorage.setItem('coolapseBoolean', this.collapse)
     },
     handleToLogout() {
       /* 清空状态管理中的token，持久化就会清空后退出登录 */
@@ -192,7 +179,7 @@ export default {
       //跳转且刷新页面
       window.location.href = "/login";
     },
-    handleSelf(){
+    handleSelf() {
       this.$router.push('/home')
     }
   },
@@ -361,6 +348,4 @@ export default {
 .rotate-leave-active {
   animation: 0.7s linear move;
 }
-
-
 </style>
